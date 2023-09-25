@@ -15,8 +15,15 @@ public class Card {
         faceUp = !faceUp;
     }
 
-
     public boolean isFaceUp() {
         return faceUp;
+    }
+
+    public Value getValue() {
+        return value;
+    }
+
+    public Suit getSuit() {
+        return suit;
     }
 }

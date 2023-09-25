@@ -8,19 +8,31 @@ public class Foundation {
     private Suit suit;
     private Stack<Card> cards;
 
+    public Foundation() {
+        initFoundation();
+    }
+
+    private void initFoundation(){
+        for (Suit suit : Suit.values()) {
+           this.suit = suit;
+           this.cards = new Stack<>();
+        }
+    }
+
     public boolean isFull(){
-        if(cards.lastElement().equals(Value.KING)){
+        if(cards.lastElement().getValue().equals(Value.KING)){
             return true;
         } else return false;
     }
 
-    public boolean addCard(Card card){
-        return cards.add(card);
+    public Card addCard(Card card){
+        return cards.push(card);
     }
 
     public Card removeCard(){
         return cards.pop();
     }
+
 
 
 }

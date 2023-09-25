@@ -3,25 +3,37 @@ package Base;
 import java.util.*;
 
 public class Deck {
-    private ArrayList<Card> deck;
+    private Stack<Card> deck;
 
     public Deck(){
-        initDeck();
-        shuffle();
+        this.deck = new Stack<>();
     }
 
-    private void initDeck() {
-        deck = new ArrayList<>();
+    public void initDeck() {
         for (Value value : Value.values()) {
             for (Suit suit : Suit.values()) {
                 Card card = new Card(suit, value);
-                deck.add(card);
+                deck.push(card);
             }
         }
     }
 
-    private void shuffle() {
-        Collections.shuffle(deck);
+    public void shuffle(int seed) {
+        Random rn = new Random(seed);
+        Collections.shuffle(deck, rn);
     }
+
+    public Card getLast(){
+        return deck.peek();
+    }
+
+    public void addCard(Card card){
+        deck.push(card);
+    }
+
+    public Card sendCard(){
+        return deck.pop();
+    }
+
 
 }
