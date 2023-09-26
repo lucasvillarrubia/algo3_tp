@@ -19,13 +19,15 @@ public class Tableau {
 
     public boolean sendCard(Deck origin, Deck destination){
        //origin.getLast().getValue().compareTo(destination.getLast().getValue());
+        Card movedCard = origin.sendCard();
         int origen = origin.getLast().getValue().ordinal();
         int destino = destination.getLast().getValue().ordinal();
         boolean sameSuit = origin.getLast().getSuit().getColor().equals(destination.getLast().getSuit().getColor());
         if (sameSuit || (destino - origen) != 1){
+            origin.addCard(movedCard);
             return false;
         } else {
-            destination.addCard(origin.sendCard());
+            destination.addCard(movedCard);
         }
         return true;
     }

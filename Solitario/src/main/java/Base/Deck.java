@@ -34,6 +34,21 @@ public class Deck {
     public Card sendCard(){
         return deck.pop();
     }
+    
+    public boolean isEmpty () {
+        return deck.empty();
+    }
+    
+    public int cardCount () {
+        return deck.size();
+    }
+
+    
+
+
+    // Esto va en otro lado
+    // public void resetDeck(){
+    // }
 
 
 }
