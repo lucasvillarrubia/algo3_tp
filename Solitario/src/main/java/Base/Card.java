@@ -18,6 +18,10 @@ public class Card {
     public boolean isFaceUp() {
         return faceUp;
     }
+    
+    public boolean isTheSameAs(Card card) {
+        return (this.suit.equals(card.getSuit()) && this.value.equals(card.getValue()));
+    }
 
     public Value getValue() {
         return value;
