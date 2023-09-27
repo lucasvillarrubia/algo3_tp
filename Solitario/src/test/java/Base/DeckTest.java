@@ -34,13 +34,14 @@ public class DeckTest {
         }
         
         @Test
-        public void removedCard (Card card) {
+        public void removedCard () {
                 //arrange
+                Card cardPrueba = new Card(Suit.HEART, Value.NINE);
                 Deck deck = new Deck();
                 //act
-                deck.addCard(card);
+                deck.addCard(cardPrueba);
                 //assert
-                assertTrue(deck.getLast().isTheSameAs(card));
+                assertTrue(deck.getLast().isTheSameAs(cardPrueba));
         }
         
         @Test
@@ -57,7 +58,7 @@ public class DeckTest {
         }
         
         @Test
-        public void wrongCardAdditionRejected (Card card) {
+        public void wrongCardAdditionRejected () {
                 //arrange
                 Deck deck = new Deck();
                 Card lastCardInDeck = new Card(Suit.CLUBS, Value.JACK);
@@ -76,9 +77,9 @@ public class DeckTest {
                 //arrange
                 Deck deck = new Deck();
                 //act
-                deck.sendCard();
+                Card cardNull = deck.sendCard();
                 //assert
-                assertTrue(deck.isEmpty());
+                assertTrue(cardNull == null);
         }
 
 

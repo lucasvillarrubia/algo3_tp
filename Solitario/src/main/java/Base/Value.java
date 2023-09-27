@@ -5,10 +5,13 @@ public enum Value {
     SIX(6), SEVEN(7), EIGHT(8), NINE(9), TEN(10),
     JACK(11), QUEEN(12), KING(13);
 
-    private int cardValue;
+    private int number;
 
-    Value (int value) {
-        this.cardValue = value;
+    Value (int cardNumber) {
+        this.number = cardNumber;
+    }
+    public int getNumber(){
+        return this.number;
     }
 
 }
