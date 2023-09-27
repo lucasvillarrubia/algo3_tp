@@ -1,26 +1,25 @@
 package Klondike;
 
-import Base.Card;
-import Base.Deck;
-import Base.Game;
-import Base.Tableau;
+import Base.*;
+
+import java.util.Stack;
 
 public class Klondike extends Game {
 
     //logica de juego segun reglas Klondike
-    private final int cantColumnas = 7;
+    private final int cantColumns = 7;
     private Deck waste = new Deck();
 
-    public Klondike() {
-        super();
+    public Klondike(int seed) {
+        super(seed);
     }
 
     @Override
     public void initTableau(Tableau tableau, Deck deck) {
-        for(int i = 0; i<cantColumnas; i++){
+        for(int i = 0; i<cantColumns; i++){
             Deck pile = new Deck();
-            for(int j = cantColumnas; j >0 ; j--){
-                Card card = deck.getLast();
+            for(int j = cantColumns; j >0 ; j--){
+                Card card = deck.sendCard();
                 if(j==i){
                     card.flip();
                 }
@@ -29,6 +28,9 @@ public class Klondike extends Game {
             tableau.addPile(pile);
         }
     }
+
+
+
 
     // Otra función según Klondike, una vez que se termina el mazo, se puede "reiniciar"
     // Que es volver a poner todas las cartas del waste en el mismo orden sin mezclar.

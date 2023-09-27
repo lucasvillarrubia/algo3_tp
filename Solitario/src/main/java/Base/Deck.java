@@ -32,6 +32,9 @@ public class Deck {
     }
 
     public Card sendCard(){
+        if(deck.empty()){
+            return null;
+        }
         return deck.pop();
     }
     

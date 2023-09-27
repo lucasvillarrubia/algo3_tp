@@ -12,6 +12,8 @@ public class CardTest {
         Card card = new Card(Suit.HEART, Value.ACE);
         //assert
         assertFalse(card.isFaceUp());
+        assertEquals(card.getSuit(), Suit.HEART);
+        assertEquals(card.getValue(), Value.ACE);
     }
 
     @Test
@@ -21,6 +23,13 @@ public class CardTest {
         assertTrue(card.isFaceUp());
     }
 
+
+    @Test
+    public void compareTwoCards(){
+        Card card1= new Card(Suit.SPADES, Value.SEVEN);
+        Card card2= new Card(Suit.SPADES, Value.SEVEN);
+        assertTrue(card1.isTheSameAs(card2));
+    }
 
 
 }

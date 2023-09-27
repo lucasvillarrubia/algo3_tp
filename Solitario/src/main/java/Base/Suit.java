@@ -1,7 +1,10 @@
 package Base;
 
 public enum Suit {
-    HEART("Red"), DIAMOND("Red"), SPADES("Black"), CLUBS("Black");
+    HEART("Red"),
+    DIAMOND("Red"),
+    SPADES("Black"),
+    CLUBS("Black");
     private String color;
     Suit (String color) {
         this.color = color;

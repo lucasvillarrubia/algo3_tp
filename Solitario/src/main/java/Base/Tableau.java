@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Tableau {
 
-    //columna de cartas apiladas con la primera de frente y el resto hacia abajo
+    //columnas de cartas apiladas con la primera de frente y el resto hacia abajo
 
     private ArrayList<Deck> tableau;
 
