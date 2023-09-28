@@ -2,11 +2,9 @@ package Klondike;
 
 import Base.*;
 
-import java.util.Stack;
 
 public class Klondike extends Game {
 
-    //logica de juego segun reglas Klondike
     private final int cantColumns = 7;
     private Deck waste = new Deck();
 
@@ -15,12 +13,13 @@ public class Klondike extends Game {
     }
 
     @Override
-    public void initTableau(Tableau tableau, Deck deck) {
-        for(int i = 0; i<cantColumns; i++){
+    public void initTableau(Tableau tableau, Stock stock) {
+        for(int i = 1; i< cantColumns; i++){
             Deck pile = new Deck();
-            for(int j = cantColumns; j >0 ; j--){
-                Card card = deck.sendCard();
-                if(j==i){
+            for(int j = cantColumns; j >1 ; j--){
+                stock.showCard();
+                Card card = stock.drawCard();
+                if(j==i+1){
                     card.flip();
                 }
                 pile.addCard(card);
@@ -31,6 +30,30 @@ public class Klondike extends Game {
 
 
 
+    @Override
+    public boolean isGameWon() {
+        boolean tableauIsEmpty = tableau.isEmpty();
+        boolean wasteIsEmpty = waste.isEmpty();
+        boolean foundationsComplete = areAllFoundationsComplete();
+        return tableauIsEmpty && wasteIsEmpty && foundationsComplete && cantMovements>0;
+    }
+
+
+    @Override
+    public boolean areAllFoundationsComplete () {
+        boolean allComplete = true;
+        for (Foundation foundation: foundations) {
+            if (!foundation.isFull()) {
+                allComplete = false;
+            }
+        }
+        return allComplete;
+    }
+
+
+    public boolean play(Card card, Tableau source){
+        return false;
+    }
 
     // Otra función según Klondike, una vez que se termina el mazo, se puede "reiniciar"
     // Que es volver a poner todas las cartas del waste en el mismo orden sin mezclar.

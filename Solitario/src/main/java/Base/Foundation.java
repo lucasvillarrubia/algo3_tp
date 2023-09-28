@@ -15,24 +15,34 @@ public class Foundation {
 
 
     public boolean isFull(){
-        if(cards.lastElement().getValue().equals(Value.KING)){
+        if (cards.isEmpty()) return false;
+        if(cards.peek().getValue().equals(Value.KING)){
             return true;
         } else return false;
     }
 
-    public Card addCard(Card card){
-        Card topCard = getTopCard();
-        if(topCard == null || card.getValue().getNumber() > topCard.getValue().getNumber() ){
-            return cards.push(card);
+    public boolean canMove(Card card){
+        if(cards.empty()){
+            return (card.getValue() == Value.ACE && card.getSuit() == suit);
+        } else {
+            Card topCard = cards.get(cards.size() - 1);
+            return (card.getSuit()==suit && card.getValue().getNumber() == topCard.getValue().getNumber() + 1);
         }
-        return null;
+    }
+
+    public boolean addCard(Card card){
+        Card topCard = getTopCard();
+        if(canMove(card)){
+           cards.push(card);
+           return true;
+        }
+        return false;
     }
 
     public Card getTopCard(){
         if(cards.isEmpty()) {
             return null;
-        }else{
-            return cards.peek();}
+        }else return cards.peek();
     }
 
 
@@ -45,4 +55,6 @@ public class Foundation {
     }
 
 
+
 }
+

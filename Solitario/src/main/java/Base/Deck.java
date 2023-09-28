@@ -3,27 +3,26 @@ package Base;
 import java.util.*;
 
 public class Deck {
-    private Stack<Card> deck;
+    protected Stack<Card> deck;
 
     public Deck(){
         this.deck = new Stack<>();
     }
 
-    public void initDeck() {
-        for (Value value : Value.values()) {
-            for (Suit suit : Suit.values()) {
-                Card card = new Card(suit, value);
-                deck.push(card);
-            }
-        }
-    }
-
-    public void shuffle(int seed) {
-        Random rn = new Random(seed);
-        Collections.shuffle(deck, rn);
-    }
+//    public void initDeck() {
+//        for (Value value : Value.values()) {
+//            for (Suit suit : Suit.values()) {
+//                Card card = new Card(suit, value);
+//                deck.push(card);
+//            }
+//        }
+//    }
 
     public Card getLast(){
+        if(deck.empty()) {
+            return null;
+        }
+        deck.peek().flip();
         return deck.peek();
     }
 
@@ -31,12 +30,14 @@ public class Deck {
         deck.push(card);
     }
 
-    public Card sendCard(){
-        if(deck.empty()){
+    public Card drawCard(){
+        if(deck.empty()) {
             return null;
         }
+        deck.peek().flip();
         return deck.pop();
     }
+
     
     public boolean isEmpty () {
         return deck.empty();
@@ -45,13 +46,5 @@ public class Deck {
     public int cardCount () {
         return deck.size();
     }
-
-    
-
-
-    // Esto va en otro lado
-    // public void resetDeck(){
-    // }
-
 
 }

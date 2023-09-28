@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class Tableau {
 
-    //columnas de cartas apiladas con la primera de frente y el resto hacia abajo
-
     private ArrayList<Deck> tableau;
 
 
@@ -13,25 +11,56 @@ public class Tableau {
         this.tableau = new ArrayList<>() ;
     }
 
-    public void addPile(Deck pile){
-        this.tableau.add(pile);
+    public void addPile(Deck deck){
+        this.tableau.add(deck);
     }
 
-    public boolean sendCard(Deck origin, Deck destination){
-       //origin.getLast().getValue().compareTo(destination.getLast().getValue());
-        Card movedCard = origin.sendCard();
-        int origen = origin.getLast().getValue().ordinal();
-        int destino = destination.getLast().getValue().ordinal();
-        boolean sameSuit = origin.getLast().getSuit().getColor().equals(destination.getLast().getSuit().getColor());
-        if (sameSuit || (destino - origen) != 1){
-            origin.addCard(movedCard);
-            return false;
-        } else {
-            destination.addCard(movedCard);
+
+
+    public Deck getDeck(int pos) { return this.tableau.get(pos); }
+
+    public boolean isEmpty(){
+        boolean allEmpty = true;
+        for (Deck deck: tableau){
+            if (!deck.isEmpty()) {
+                allEmpty = false;
+            }
         }
-        return true;
+        return allEmpty;
     }
 
+
+    public boolean swapCard(Deck origin, Deck destination){
+        if(origin.isEmpty()) return false;
+        int originValue = origin.getLast().getValue().getNumber();
+        String originColor = origin.getLast().getSuit().getColor();
+        Card movedCard = origin.drawCard();
+        System.out.println("esta vacia el origen " + origin.isEmpty());
+        if (destination.isEmpty()) {
+            System.out.println(destination.isEmpty());
+            if (movedCard.getValue() == Value.KING) {
+                destination.addCard(movedCard);
+                System.out.println("Entro en la 1");
+                return true;
+            }
+            else {
+                origin.addCard(movedCard);
+                System.out.println("Entro en la 2");
+                return false;
+            }
+        }
+        int destinationValue = destination.getLast().getValue().getNumber();
+        String destinationColor = destination.getLast().getSuit().getColor();
+        if ((originColor.compareTo(destinationColor) != 0)  && ((destinationValue - originValue) == 1)){
+            destination.addCard(movedCard);
+            System.out.println("Entro en la 3");
+            return true;
+        } else {
+            origin.addCard(movedCard);
+        }
+        System.out.println("Entro en la 4");
+        return false;
+    }
 
 
 }

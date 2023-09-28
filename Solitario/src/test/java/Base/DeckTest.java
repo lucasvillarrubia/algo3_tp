@@ -8,80 +8,78 @@ public class DeckTest {
 
 
         @Test
-        public void addedCardToEmptyDeck () {
+        public void initEmptyDeck(){
+                Deck deck = new Deck();
+                assertTrue(deck.isEmpty());
+        }
+
+        @Test
+        public void addedCardToEmptyDeckTest() {
+                Deck deck = new Deck();
+                Card card = new Card(Suit.SPADES, Value.SEVEN);
+                deck.addCard(card);
+                assertFalse(deck.isEmpty());
+                assertEquals(deck.getLast(), card);
+        }
+
+        @Test
+        public void addedCardToDeckTest() {
                 //arrange
                 Deck emptyDeck = new Deck();
                 Card card = new Card(Suit.SPADES, Value.SEVEN);
+                Card anotherCard = new Card(Suit.CLUBS, Value.FIVE);
+                Card extraCard = new Card(Suit.HEART, Value.ACE);
                 //act
                 emptyDeck.addCard(card);
-                //assert
-                assertFalse(emptyDeck.isEmpty());
-        }
-        
-        // Por las reglas de Klondike, en una columna (mazo) vacía sólo
-        // se pueden poner Reyes [K] primero 
-
-        @Test
-        public void wrongCardCouldntMakeItToEmptyDeck () {
-                //arrange
-                Deck emptyDeck = new Deck();
-                Card card = new Card(Suit.CLUBS, Value.QUEEN); 
-                //act
-
+                emptyDeck.addCard(extraCard);
+                emptyDeck.addCard(anotherCard);
                 emptyDeck.addCard(card);
+
                 //assert
                 assertFalse(emptyDeck.isEmpty());
+                assertEquals(emptyDeck.getLast(), card);
         }
-        
+
         @Test
-        public void removedCard () {
-                //arrange
+        public void removedCardTest() {
+                Card cardPrueba1 = new Card(Suit.HEART, Value.FIVE);
+                Card cardPrueba2 = new Card(Suit.DIAMOND, Value.NINE);
+                Card cardPrueba3 = new Card(Suit.CLUBS, Value.NINE);
+                Card cardPrueba4 = new Card(Suit.HEART, Value.TWO);
+
+                Deck deck = new Deck();
+                deck.addCard(cardPrueba1);
+                deck.addCard(cardPrueba2);
+                deck.addCard(cardPrueba3);
+                deck.addCard(cardPrueba4);
+                deck.drawCard();
+                assertTrue(deck.getLast().isTheSameAs(cardPrueba3));
+        }
+
+        @Test
+        public void deckRemovesCardAndNowIsEmpty () {
                 Card cardPrueba = new Card(Suit.HEART, Value.NINE);
                 Deck deck = new Deck();
-                //act
                 deck.addCard(cardPrueba);
-                //assert
-                assertTrue(deck.getLast().isTheSameAs(cardPrueba));
-        }
-        
-        @Test
-        public void goodCardAdditionAccepted () {
-                //arrange
-                Deck deck = new Deck();
-                Card lastCardInDeck = new Card(Suit.DIAMOND, Value.EIGHT);
-                Card goodCard = new Card(Suit.CLUBS, Value.SEVEN);
-                //act
-                deck.addCard(lastCardInDeck);
-                deck.addCard(goodCard);
-                //assert
-                assertTrue(deck.getLast().isTheSameAs(goodCard));
-        }
-        
-        @Test
-        public void wrongCardAdditionRejected () {
-                //arrange
-                Deck deck = new Deck();
-                Card lastCardInDeck = new Card(Suit.CLUBS, Value.JACK);
-                Card wrongCard = new Card(Suit.DIAMOND, Value.ACE);
-                //act
-                deck.addCard(lastCardInDeck);
-                deck.addCard(wrongCard);
-                //assert
-                assertFalse(deck.getLast().isTheSameAs(wrongCard));
-        }
-        
-        // Este test está mal por donde lo mires, pero no se me ocurre en
-        // DÓNDE verificar que el mazo no manda una carta si está vacío
-        @Test
-        public void emptyDeckDoesntSendCard () {
-                //arrange
-                Deck deck = new Deck();
-                //act
-                Card cardNull = deck.sendCard();
-                //assert
-                assertTrue(cardNull == null);
+                deck.drawCard();
+                assertTrue(deck.isEmpty());
         }
 
+
+
+        @Test
+        public void emptyDeckDoesntSendCardTest() {
+                Deck deck = new Deck();
+                Card cardNull = deck.drawCard();
+                assertNull(cardNull);
+        }
+
+        @Test
+        public void emptyDeckDoesntHaveAnyCardTest() {
+                Deck deck = new Deck();
+                Card cardNull = deck.getLast();
+                assertNull(cardNull);
+        }
 
 
 
