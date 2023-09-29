@@ -8,7 +8,7 @@ public class DeckTest {
 
 
         @Test
-        public void initEmptyDeck(){
+        public void initEmptyDeckTest(){
                 Deck deck = new Deck();
                 assertTrue(deck.isEmpty());
         }
@@ -57,7 +57,7 @@ public class DeckTest {
         }
 
         @Test
-        public void deckRemovesCardAndNowIsEmpty () {
+        public void deckRemovesCardAndNowIsEmptyTest() {
                 Card cardPrueba = new Card(Suit.HEART, Value.NINE);
                 Deck deck = new Deck();
                 deck.addCard(cardPrueba);

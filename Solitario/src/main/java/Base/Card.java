@@ -1,8 +1,8 @@
 package Base;
 
 public class Card {
-    private Suit suit;
-    private Value value;
+    private final Suit suit;
+    private final Value value;
     private boolean faceUp;
 
     public Card(Suit palo, Value valor) {

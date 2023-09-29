@@ -4,36 +4,34 @@ import java.util.Stack;
 
 public class Foundation {
 
-    //es en donde se van a ir apilando las cartas de la A a la K  (de menor a mayor)
     private Suit suit;
-    private Stack<Card> cards;
+    private Deck cards;
 
     public Foundation(Suit suit) {
         this.suit = suit;
-        this.cards = new Stack<>();
+        this.cards = new Deck();
     }
 
 
     public boolean isFull(){
         if (cards.isEmpty()) return false;
-        if(cards.peek().getValue().equals(Value.KING)){
+        if(cards.getLast().getValue().equals(Value.KING)){
             return true;
         } else return false;
     }
 
     public boolean canMove(Card card){
-        if(cards.empty()){
+        if(cards.isEmpty()){
             return (card.getValue() == Value.ACE && card.getSuit() == suit);
         } else {
-            Card topCard = cards.get(cards.size() - 1);
+            Card topCard = cards.getLast();
             return (card.getSuit()==suit && card.getValue().getNumber() == topCard.getValue().getNumber() + 1);
         }
     }
 
     public boolean addCard(Card card){
-        Card topCard = getTopCard();
         if(canMove(card)){
-           cards.push(card);
+           cards.addCard(card);
            return true;
         }
         return false;
@@ -42,12 +40,12 @@ public class Foundation {
     public Card getTopCard(){
         if(cards.isEmpty()) {
             return null;
-        }else return cards.peek();
+        }else return cards.getLast();
     }
 
 
     public Card removeCard(){
-        return cards.pop();
+        return cards.drawCard();
     }
 
     public Suit getSuit(){

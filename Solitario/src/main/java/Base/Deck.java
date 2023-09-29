@@ -9,15 +9,6 @@ public class Deck {
         this.deck = new Stack<>();
     }
 
-//    public void initDeck() {
-//        for (Value value : Value.values()) {
-//            for (Suit suit : Suit.values()) {
-//                Card card = new Card(suit, value);
-//                deck.push(card);
-//            }
-//        }
-//    }
-
     public Card getLast(){
         if(deck.empty()) {
             return null;
@@ -43,8 +34,13 @@ public class Deck {
         return deck.empty();
     }
     
-    public int cardCount () {
-        return deck.size();
+//    public int cardCount () {
+//        return deck.size();
+//    }
+
+    public void shuffle(int seed) {
+        Random rn = new Random(seed);
+        Collections.shuffle(deck, rn);
     }
 
 }

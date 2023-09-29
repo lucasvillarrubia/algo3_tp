@@ -1,49 +1,59 @@
 package Base;
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Game {
-    protected boolean gameOver;
-    protected boolean gameWon;
-    protected int cantMovements;
-    protected List<Foundation> foundations;
-    protected Stock stock;
-    protected Tableau tableau;
+public class Game {
+    private boolean gameOver;
+    private boolean gameWon;
+    private int cantMovements;
+    private List<Foundation> foundations;
+    private Deck stock;
+    private Tableau tableau;
+
+    private GameType gameType;
 
 
-    public Game(int seed) {
+    public Game(int seed, GameType gametype) {
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
-        this.stock = new Stock();
-        stock.initStock();
+        this.stock = new Deck();
         this.foundations = new ArrayList<>();
-        this.tableau = new Tableau();
-        initTableau(this.tableau, this.stock);
 
         for (Suit suit : Suit.values()) {
             foundations.add(new Foundation(suit));
         }
+
+        this.gameType = gametype;
+        this.stock = gametype.initStock(seed);
+        this.tableau = gametype.initTableau(stock);
     }
 
-    public abstract void initTableau(Tableau tableau, Stock stock);
 
-    public abstract boolean isGameWon();
+    public GameType getGameType() {
+        return gameType;
+    }
 
-    public abstract boolean areAllFoundationsComplete();
+
+    public boolean gameStatus(){
+        return false;
+    }
+
 
     public int getCantMovements(){
         return cantMovements;
     }
 
-    public int sumarMovimiento(){
-        return cantMovements + 1;
+    public int addMovement(){
+        return cantMovements++;
     }
-    
 
-
+    public void move(Deck from, Deck to) {
+        gameType.move(from, to);
+    }
 
 
 }
