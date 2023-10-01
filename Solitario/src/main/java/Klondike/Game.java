@@ -106,10 +106,10 @@ public class Game {
     }
 
     public void showStockCard() {
-        waste.addCard(stock.drawCard());
         if (stock.isEmpty()) {
             resetStock();
         }
+        waste.addCard(stock.drawCard());
     }
 
     public Foundation getFoundationBySuit (Suit suit) {
@@ -120,6 +120,18 @@ public class Game {
             }
         }
         return foundation;
+    }
+
+    public Tableau getTableau () {
+        return this.tableau;
+    }
+
+    public Deck getStock () {
+        return this.stock;
+    }
+
+    public Deck getWaste () {
+        return this.waste;
     }
 
     public boolean areAllFoundationsFull () {
@@ -159,12 +171,12 @@ public class Game {
     }
 
     public boolean moveSequenceInTableau(int fromDeckPos, int toDeckPos, int cardIndex) {
-        List cardsToMove = tableau.getDeck(fromDeckPos).subList(cardIndex, tableau.getDeck(fromDeckPos).size());
+        List<Card> cardsToMove = tableau.getDeck(fromDeckPos).subList(cardIndex, tableau.getDeck(fromDeckPos).size());
         if (tableau.canReceive(tableau.getDeck(fromDeckPos).get(cardIndex), toDeckPos)) {
             tableau.addCardSequence(cardsToMove, toDeckPos);
-//            for (int i = 0; i <) {
-//
-//            }
+            for (int i = 0; i < cardIndex; i++) {
+                tableau.drawCard(fromDeckPos);
+            }
             return true;
         }
         else {

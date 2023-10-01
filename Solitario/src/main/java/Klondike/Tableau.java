@@ -78,6 +78,13 @@ public class Tableau {
         return tableau.get(from).remove(tableau.get(from).size() - 1);
     }
 
+    public void addCardSequence (List<Card> cards, int toDeck) {
+        if (!cards.isEmpty()) {
+            for (Card card : cards) {
+                addCard(card, toDeck);
+            }
+        }
+    }
 
     // sinoooo
 
