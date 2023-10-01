@@ -5,7 +5,7 @@ public enum Suit {
     DIAMOND("Red"),
     SPADES("Black"),
     CLUBS("Black");
-    private String color;
+    private final String color;
     Suit (String color) {
         this.color = color;
     }

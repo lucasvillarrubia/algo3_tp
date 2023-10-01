@@ -2,11 +2,12 @@ package Klondike;
 
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import org.junit.Test;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -116,5 +117,23 @@ public class TableauTest {
         //assert
         assertTrue(tableau.getDeck(0).isEmpty());
     }
+
+    @Test
+    public void testAddCardSequenceValid() {
+        Tableau tableau = new Tableau(3);
+        tableau.addCard(new Card(Suit.HEART, Value.KING), 0);
+        tableau.addCard(new Card(Suit.SPADES, Value.QUEEN), 1);
+        List<Card> cardsToAdd = new ArrayList<>();
+        cardsToAdd.add(new Card(Suit.HEART, Value.ACE));
+        cardsToAdd.add(new Card(Suit.HEART, Value.TWO));
+        cardsToAdd.add(new Card(Suit.DIAMOND, Value.THREE));
+        tableau.addCardSequence(cardsToAdd, 2);
+        List<Card> deck = tableau.getDeck(2);
+        assertEquals(3, deck.size());
+        assertEquals(Value.ACE, deck.get(0).getValue());
+        assertEquals(Value.TWO, deck.get(1).getValue());
+        assertEquals(Value.THREE, deck.get(2).getValue());
+    }
+
 
 }

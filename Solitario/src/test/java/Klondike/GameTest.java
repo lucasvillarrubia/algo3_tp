@@ -18,25 +18,30 @@ public class GameTest {
         Game klondike = new Game(1);
         assertFalse(klondike.gameStatus());
         assertFalse(klondike.isGameWon());
+        assertNotNull(klondike.getStock());
         assertEquals(klondike.getCantMovements(),0);
-
     }
 
     @Test
     public void initOneStepToWinGameTest() {
         ArrayList<Foundation> foundations = new ArrayList<>();
+        Foundation foundation = new Foundation(Suit.CLUBS);
+        foundations.add(foundation);
         Deck deck = new Deck();
         Tableau tableau = new Tableau(3);
         Game game = new Game(foundations, deck, tableau);
         assertNotNull(game);
         assertFalse(game.gameStatus());
+        assertNotNull(game.getStock());
         assertFalse(game.isGameWon());
         assertEquals(0, game.getCantMovements());
-
+        assertNotNull(game.getWaste());
+        assertNotNull(game.getTableau());
+        assertNotNull(game.getFoundationBySuit(Suit.CLUBS));
     }
 
     @Test
-    public void moveFromTableauToFoundationComplete () {
+    public void moveFromTableauToFoundationCompleteTest() {
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
@@ -47,14 +52,14 @@ public class GameTest {
         Tableau tableau = new Tableau(1);
         tableau.getDeck(0).add(three);
         Game game = new Game(foundations, new Deck(), tableau);
-        game.moveFromTableauToFoundation(0);
         assertTrue(game.moveFromTableauToFoundation(0));
         assertTrue(game.getTableau().getDeck(0).isEmpty());
+        assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.HEART).getTopCard(), three);
     }
 
     @Test
-    public void moveFromTableauToFoundationFailed () {
+    public void moveFromTableauToFoundationFailedTest() {
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card wrongCard = new Card(Suit.HEART, Value.KING);
@@ -68,11 +73,12 @@ public class GameTest {
         game.moveFromTableauToFoundation(0);
         assertFalse(game.moveFromTableauToFoundation(0));
         assertEquals(game.getTableau().getLast(0), wrongCard);
+        assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.HEART).getTopCard(), two);
     }
 
     @Test
-    public void moveFromStockToFoundationComplete () {
+    public void moveFromStockToFoundationCompleteTest() {
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
@@ -86,14 +92,14 @@ public class GameTest {
         stock.addCard(four);
         Game game = new Game(foundations, stock, new Tableau(1));
         game.showStockCard();
-        game.moveFromStockToFoundation();
         assertTrue(game.moveFromStockToFoundation());
         assertTrue(game.getStock().isEmpty());
+        assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.HEART).getTopCard(), four);
     }
 
     @Test
-    public void moveFromStockToFoundationFailed () {
+    public void moveFromStockToFoundationFailedTest() {
         Card one = new Card(Suit.CLUBS, Value.ACE);
         Card two = new Card(Suit.CLUBS, Value.TWO);
         Card three = new Card(Suit.CLUBS, Value.THREE);
@@ -110,11 +116,12 @@ public class GameTest {
         game.moveFromStockToFoundation();
         assertFalse(game.moveFromStockToFoundation());
         assertEquals(game.getWaste().getLast(), wrongCard);
+        assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.CLUBS).getTopCard(), three);
     }
 
     @Test
-    public void moveFromStockToTableauComplete () {
+    public void moveFromStockToTableauCompleteTest() {
         Card king = new Card(Suit.SPADES, Value.KING);
         Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
         Card jack = new Card(Suit.CLUBS, Value.JACK);
@@ -127,15 +134,15 @@ public class GameTest {
         stock.addCard(ten);
         Game game = new Game(new ArrayList<>(4), stock, tableau);
         game.showStockCard();
-        game.moveFromStockToTableauDeck(0);
         assertTrue(game.moveFromStockToTableauDeck(0));
         assertTrue(game.getStock().isEmpty());
         assertTrue(game.getWaste().isEmpty());
         assertEquals(game.getTableau().getLast(0), ten);
+        assertFalse(game.isGameWon());
     }
 
     @Test
-    public void moveFromStockToTableauFailed () {
+    public void moveFromStockToTableauFailedTest() {
         Card king = new Card(Suit.SPADES, Value.KING);
         Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
         Card jack = new Card(Suit.CLUBS, Value.JACK);
@@ -152,10 +159,11 @@ public class GameTest {
         assertFalse(game.moveFromStockToTableauDeck(0));
         assertEquals(game.getTableau().getLast(0), jack);
         assertEquals(game.getWaste().getLast(), wrongCard);
+        assertFalse(game.isGameWon());
     }
 
     @Test
-    public void moveBetweenTableauDecksComplete () {
+    public void moveBetweenTableauDecksCompleteTest() {
         Card king = new Card(Suit.SPADES, Value.KING);
         Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
         Card jack = new Card(Suit.CLUBS, Value.JACK);
@@ -168,14 +176,14 @@ public class GameTest {
         tableau.addCard(otherKing, 1);
         tableau.addCard(otherQueen, 1);
         Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
-        game.moveBetweenTableauDecks(0, 1);
         assertTrue(game.moveBetweenTableauDecks(0, 1));
+        assertEquals(game.getTableau().getLast(0), queen);
         assertEquals(game.getTableau().getLast(1), jack);
-        assertEquals(game.getTableau().getLast(0), otherQueen);
+        assertFalse(game.isGameWon());
     }
 
     @Test
-    public void moveBetweenTableauDecksFailed () {
+    public void moveBetweenTableauDecksFailedTest() {
         Card king = new Card(Suit.SPADES, Value.KING);
         Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
         Card wrongJack = new Card(Suit.CLUBS, Value.JACK);
@@ -186,14 +194,14 @@ public class GameTest {
         tableau.addCard(wrongJack, 0);
         tableau.addCard(otherKing, 1);
         Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
-        game.moveBetweenTableauDecks(0, 1);
         assertFalse(game.moveBetweenTableauDecks(0, 1));
         assertEquals(game.getTableau().getLast(1), otherKing);
         assertEquals(game.getTableau().getLast(0), wrongJack);
+        assertFalse(game.isGameWon());
     }
 
     @Test
-    public void moveFromFoundationToTableauComplete () {
+    public void moveFromFoundationToTableauCompleteTest() {
         Card one = new Card(Suit.DIAMOND, Value.ACE);
         Card two = new Card(Suit.CLUBS, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
@@ -204,14 +212,14 @@ public class GameTest {
         tableau.getDeck(0).add(three);
         tableau.addCard(two, 0);
         Game game = new Game(foundations, new Deck(), tableau);
-        game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND);
         assertTrue(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));
         assertNull(game.getFoundationBySuit(Suit.DIAMOND).getTopCard());
         assertEquals(game.getTableau().getLast(0), one);
+        assertFalse(game.isGameWon());
     }
 
     @Test
-    public void moveFromFoundationToTableauFailed () {
+    public void moveFromFoundationToTableauFailedTest() {
         Card wrongOne = new Card(Suit.DIAMOND, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.SPADES, Value.THREE);
@@ -222,67 +230,104 @@ public class GameTest {
         tableau.getDeck(0).add(three);
         tableau.addCard(two, 0);
         Game game = new Game(foundations, new Deck(), tableau);
-        game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND);
         assertFalse(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));
         assertEquals(game.getFoundationBySuit(Suit.DIAMOND).getTopCard(), wrongOne);
         assertEquals(game.getTableau().getLast(0), two);
+        assertFalse(game.isGameWon());
     }
 
 
-    // jjsjs te los regalo
-//    @Test
-//    public void moveCardSequenceBetweenTableauDecksComplete () {
-//
-//    }
-//
-//    @Test
-//    public void moveCardSequenceBetweenTableauDecksFailed () {
-//
-//    }
+    @Test
+    public void moveCardSequenceBetweenTableauDecksCompleteTest1() {
+        Card king = new Card(Suit.SPADES, Value.KING);
+        Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
+        Card jack = new Card(Suit.CLUBS, Value.JACK);
+        Tableau tableau = new Tableau(2);
+        tableau.addCard(king, 0);
+        tableau.addCard(queen, 0);
+        tableau.addCard(jack, 0);
+        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        assertTrue(game.moveSequenceInTableau(0, 1, 0));
+        assertEquals(tableau.getDeck(0).size(), 1);
+        assertEquals(tableau.getDeck(1).size(), 2);
+        assertEquals(tableau.getLast(0), queen);
+        assertEquals(tableau.getLast(1), jack);
+    }
+
+    @Test
+    public void moveCardSequenceBetweenTableauDecksCompleteTest() {
+        Card king = new Card(Suit.SPADES, Value.KING);
+        Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
+        Card jack = new Card(Suit.CLUBS, Value.JACK);
+        Tableau tableau = new Tableau(2);
+        tableau.addCard(king, 0);
+        tableau.addCard(queen, 0);
+        tableau.addCard(jack, 0);
+        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        assertEquals(3, tableau.getDeck(0).size());
+        assertEquals(0, tableau.getDeck(1).size());
+        assertEquals(jack, tableau.getLast(0));
+        assertTrue(game.moveSequenceInTableau(0, 1, 0));
+        assertEquals(1, tableau.getDeck(0).size());
+        assertEquals(2, tableau.getDeck(1).size());
+        assertEquals(queen, tableau.getLast(0));
+        assertEquals(jack, tableau.getLast(1));
+    }
 
 
-//    Acciones en juego:
-//    Inicializar el juego a partir de una semilla aleatoria (done)
-//    Inicializar el juego en un estado particular
-//    Verificar si el estado actual es de “juego ganado” (done)
-//    Hacer un movimiento, y verificar si es válido o no (done)
+    @Test
+    public void moveCardSequenceBetweenTableauDecksFailedTest() {
+        Tableau tableau = new Tableau(2);
+        tableau.addCard(new Card(Suit.SPADES, Value.KING), 0);
+        tableau.addCard(new Card(Suit.DIAMOND, Value.QUEEN), 0);
+        tableau.addCard(new Card(Suit.CLUBS, Value.JACK), 0);
+        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        assertFalse(game.moveSequenceInTableau(0, 1, 1));
+    }
 
-    //
-//        @Test
-//        public void initDeckTest(){
-//                Stock stock = new Stock();
-//                stock.initStock();
-//                assertEquals(stock.cardCount(), 52);
-//        }
-////
-////        @Test
-////        public void stockRemovedLastCardAndNowIsEmpty () {
-////                Stock stock = new Stock();
-////                stock.initStock();
-////                while (!stock.isEmpty()){
-////                        stock.showCard();
-////                        stock.drawCard();
-////                }
-////                assertTrue(stock.isEmpty());
-////        }
-////
-////        @Test
-////        public void stockResetTest () {
-////                Stock stock = new Stock();
-////                stock.initStock();
-////                stock.showCard();
-////                stock.showCard();
-////                stock.showCard();
-////                stock.showCard();
-////                stock.reset();
-////                assertTrue(stock.noCardOnDisplay());
-////        }
-////
-////        @Test
-////        public void stockDisplayOneCard () {
-////                Stock stock = new Stock();
-////                stock.initStock();
-////                stock.showCard();
-////                assertFalse(stock.noCardOnDisplay());
-////        }
+    @Test
+    public void fullFoundationsTest() {
+        Tableau tableau = new Tableau(7);
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        foundations.add(new Foundation(Suit.HEART));
+        foundations.add(new Foundation(Suit.DIAMOND));
+        foundations.add(new Foundation(Suit.SPADES));
+        foundations.add(new Foundation(Suit.CLUBS));
+        Game game = new Game(foundations, new Deck(), tableau);
+        for (Foundation foundation : foundations) {
+            Suit suit = foundation.getSuit();
+            for (Value value : Value.values()) {
+                Card card = new Card(suit, value);
+                foundation.addCard(card);
+            }
+        }
+        assertTrue(game.areAllFoundationsFull());
+        game.winGame();
+        assertTrue(game.isGameWon());
+    }
+
+    @Test
+    public void lastMoveStockRestTest() {
+        Tableau tableau = new Tableau(7);
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        foundations.add(new Foundation(Suit.HEART));
+        foundations.add(new Foundation(Suit.DIAMOND));
+        foundations.add(new Foundation(Suit.SPADES));
+        foundations.add(new Foundation(Suit.CLUBS));
+        for (Foundation foundation : foundations) {
+            Suit suit = foundation.getSuit();
+            for (Value value : Value.values()) {
+                Card card = new Card(suit, value);
+                foundation.addCard(card);
+            }
+        }
+        Deck stock =new Deck();
+        stock.addCard(foundations.get(3).removeCard());
+        Game game = new Game(foundations, stock, tableau);
+        game.showStockCard();
+        game.showStockCard();
+        assertTrue(game.moveFromStockToFoundation());
+        assertTrue(game.isGameWon());
+        assertEquals(game.getCantMovements(), 3);
+    }
 }

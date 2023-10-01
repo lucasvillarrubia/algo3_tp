@@ -32,8 +32,10 @@ public class Foundation {
     }
 
     public void addCard(Card card){
-        if(canReceive(card)) {
-            cards.addCard(card);
+        if(card!=null) {
+            if (canReceive(card)) {
+                cards.addCard(card);
+            }
         }
     }
 

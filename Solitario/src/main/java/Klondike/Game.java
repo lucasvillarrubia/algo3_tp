@@ -26,7 +26,8 @@ public class Game {
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
-        this.stock = initStock(seed);
+        this.stock = initStock();
+        this.stock.shuffle(seed);
         this.waste = new Deck();
         this.foundations = new ArrayList<>();
         this.tableau = initTableau(stock);
@@ -66,12 +67,12 @@ public class Game {
         return cantMovements;
     }
 
-    public int addMovement() {
-        return cantMovements++;
+    public void addMovement() {
+        cantMovements++;
     }
 
-    //REVISAR QUIEN SE ENCARGA DE ESTO
-    public Deck initStock(int seed) {
+
+    public Deck initStock() {
         Deck stock = new Deck();
         for (Value value : Value.values()) {
             for (Suit suit : Suit.values()) {
@@ -79,7 +80,6 @@ public class Game {
                 stock.addCard(card);
             }
         }
-        stock.shuffle(seed);
         return stock;
     }
 
@@ -110,6 +110,7 @@ public class Game {
             resetStock();
         }
         waste.addCard(stock.drawCard());
+        addMovement();
     }
 
     public Foundation getFoundationBySuit (Suit suit) {
@@ -148,11 +149,12 @@ public class Game {
 
     public boolean moveFromStockToFoundation() {
         Card cardToMove = waste.drawCard();
-        if (getFoundationBySuit(cardToMove.getSuit()).canReceive(cardToMove)) {
+        if (cardToMove!= null && getFoundationBySuit(cardToMove.getSuit()).canReceive(cardToMove)) {
             getFoundationBySuit(cardToMove.getSuit()).addCard(cardToMove);
+            addMovement();
+            winGame();
             return true;
-        }
-        else {
+        } else {
             waste.addCard(cardToMove);
             return false;
         }
@@ -162,6 +164,8 @@ public class Game {
         Card cardToMove = tableau.drawCard(fromDeckPos);
         if (tableau.canReceive(cardToMove, toDeckPos)) {
             tableau.addCard(cardToMove, toDeckPos);
+            addMovement();
+            winGame();
             return true;
         }
         else {
@@ -177,6 +181,8 @@ public class Game {
             for (int i = 0; i < cardIndex; i++) {
                 tableau.drawCard(fromDeckPos);
             }
+            addMovement();
+            winGame();
             return true;
         }
         else {
@@ -186,8 +192,10 @@ public class Game {
 
     public boolean moveFromTableauToFoundation(int deckPos) {
         Card cardToMove = tableau.drawCard(deckPos);
-        if (getFoundationBySuit(cardToMove.getSuit()).canReceive(cardToMove)) {
+        if (cardToMove != null && getFoundationBySuit(cardToMove.getSuit()).canReceive(cardToMove)) {
             getFoundationBySuit(cardToMove.getSuit()).addCard(cardToMove);
+            addMovement();
+            winGame();
             return true;
         }
         else {
@@ -198,11 +206,12 @@ public class Game {
 
     public boolean moveFromStockToTableauDeck(int deckPos) {
         Card cardToMove = waste.drawCard();
-        if (tableau.canReceive(cardToMove, deckPos)) {
+        if (cardToMove!= null && tableau.canReceive(cardToMove, deckPos)) {
             tableau.addCard(cardToMove, deckPos);
+            addMovement();
+            winGame();
             return true;
-        }
-        else {
+        } else {
             waste.addCard(cardToMove);
             return false;
         }
@@ -210,8 +219,10 @@ public class Game {
 
     public boolean moveFromFoundationToTableauDeck(int deckPos, Suit suit) {
         Card cardToMove = getFoundationBySuit(suit).removeCard();
-        if (tableau.canReceive(cardToMove, deckPos)) {
+        if (cardToMove!= null && tableau.canReceive(cardToMove, deckPos)) {
             tableau.addCard(cardToMove, deckPos);
+            addMovement();
+            winGame();
             return true;
         }
         else {
