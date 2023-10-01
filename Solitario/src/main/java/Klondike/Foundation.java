@@ -1,6 +1,9 @@
-package Base;
+package Klondike;
 
-import java.util.Stack;
+import Base.Card;
+import Base.Deck;
+import Base.Suit;
+import Base.Value;
 
 public class Foundation {
 
@@ -15,12 +18,11 @@ public class Foundation {
 
     public boolean isFull(){
         if (cards.isEmpty()) return false;
-        if(cards.getLast().getValue().equals(Value.KING)){
-            return true;
-        } else return false;
+        return cards.getLast().getValue().equals(Value.KING);
     }
 
-    public boolean canMove(Card card){
+
+    public boolean canReceive(Card card){
         if(cards.isEmpty()){
             return (card.getValue() == Value.ACE && card.getSuit() == suit);
         } else {
@@ -29,12 +31,10 @@ public class Foundation {
         }
     }
 
-    public boolean addCard(Card card){
-        if(canMove(card)){
-           cards.addCard(card);
-           return true;
+    public void addCard(Card card){
+        if(canReceive(card)) {
+            cards.addCard(card);
         }
-        return false;
     }
 
     public Card getTopCard(){

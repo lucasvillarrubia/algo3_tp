@@ -1,5 +1,8 @@
-package Base;
+package Klondike;
 
+import Base.Card;
+import Base.Suit;
+import Base.Value;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -29,14 +32,15 @@ public class FoundationTest {
     public void dontAddCorrectCardWhenEmptyTest() {
         Foundation foundation = new Foundation(Suit.SPADES);
         Card wrongCard = new Card(Suit.SPADES, Value.EIGHT);
-        assertFalse(foundation.addCard(wrongCard));
+        foundation.addCard(wrongCard);
+        assertNull(foundation.getTopCard());
     }
 
     @Test
     public void cardsCanMoveToEmptyFoundationTest() {
         Foundation f = new Foundation(Suit.DIAMOND);
         Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
-        assertTrue(f.canMove(aceOfDiamond));
+        assertTrue(f.canReceive(aceOfDiamond));
     }
 
     @Test
@@ -47,14 +51,14 @@ public class FoundationTest {
         Card threeOfDiamonds = new Card(Suit.DIAMOND, Value.THREE);
         f.addCard(aceOfDiamond);
         f.addCard(twoOfDiamonds);
-        assertTrue(f.canMove(threeOfDiamonds));
+        assertTrue(f.canReceive(threeOfDiamonds));
     }
 
     @Test
     public void cardsCantMoveWrongSuitTest() {
         Foundation f = new Foundation(Suit.DIAMOND);
         Card aceOfSpades = new Card(Suit.SPADES, Value.ACE);
-        assertFalse(f.canMove(aceOfSpades));
+        assertFalse(f.canReceive(aceOfSpades));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class FoundationTest {
         Card aceOfHeart = new Card(Suit.HEART, Value.ACE);
         Card tenOfHeart = new Card(Suit.HEART, Value.TEN);
         f.addCard(aceOfHeart);
-        assertFalse(f.canMove(tenOfHeart));
+        assertFalse(f.canReceive(tenOfHeart));
     }
 
     @Test
