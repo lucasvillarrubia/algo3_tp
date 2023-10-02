@@ -238,7 +238,7 @@ public class GameTest {
 
 
     @Test
-    public void moveCardSequenceBetweenTableauDecksCompleteTest1() {
+    public void moveCardSequenceToEmptyDeckCompleteTest1() {
         Card king = new Card(Suit.SPADES, Value.KING);
         Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
         Card jack = new Card(Suit.CLUBS, Value.JACK);
@@ -248,30 +248,30 @@ public class GameTest {
         tableau.addCard(jack, 0);
         Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
         assertTrue(game.moveSequenceInTableau(0, 1, 0));
-        assertEquals(tableau.getDeck(0).size(), 1);
-        assertEquals(tableau.getDeck(1).size(), 2);
-        assertEquals(tableau.getLast(0), queen);
+        assertEquals(tableau.getDeck(0).size(), 0);
+        assertEquals(tableau.getDeck(1).size(), 3);
         assertEquals(tableau.getLast(1), jack);
     }
 
     @Test
     public void moveCardSequenceBetweenTableauDecksCompleteTest() {
+        Card otherKing = new Card(Suit.CLUBS, Value.KING);
         Card king = new Card(Suit.SPADES, Value.KING);
-        Card queen = new Card(Suit.DIAMOND, Value.QUEEN);
-        Card jack = new Card(Suit.CLUBS, Value.JACK);
         Tableau tableau = new Tableau(2);
         tableau.addCard(king, 0);
-        tableau.addCard(queen, 0);
-        tableau.addCard(jack, 0);
+        tableau.addCard(new Card(Suit.DIAMOND, Value.QUEEN), 0);
+        tableau.addCard(new Card(Suit.CLUBS, Value.JACK), 0);
+        tableau.addCard(new Card(Suit.HEART, Value.TEN), 0);
+        tableau.addCard(new Card(Suit.SPADES, Value.NINE), 0);
+        tableau.addCard(new Card(Suit.HEART, Value.EIGHT), 0);
+        tableau.addCard(otherKing, 1);
         Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
-        assertEquals(3, tableau.getDeck(0).size());
-        assertEquals(0, tableau.getDeck(1).size());
-        assertEquals(jack, tableau.getLast(0));
-        assertTrue(game.moveSequenceInTableau(0, 1, 0));
+        boolean didMove = game.moveSequenceInTableau(0, 1, 1);
+        assertTrue(didMove);
         assertEquals(1, tableau.getDeck(0).size());
-        assertEquals(2, tableau.getDeck(1).size());
-        assertEquals(queen, tableau.getLast(0));
-        assertEquals(jack, tableau.getLast(1));
+        assertEquals(6, tableau.getDeck(1).size());
+        assertEquals(Value.EIGHT, tableau.getLast(1).getValue());
+        assertEquals(king, tableau.getLast(0));
     }
 
 

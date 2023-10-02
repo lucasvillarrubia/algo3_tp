@@ -55,6 +55,7 @@ public class Game {
     public void winGame(){
         if (tableau.isEmpty() && areAllFoundationsFull() && stock.isEmpty() && waste.isEmpty()) {
             gameWon = true;
+            gameOver = true;
         }
     }
 
@@ -175,10 +176,11 @@ public class Game {
     }
 
     public boolean moveSequenceInTableau(int fromDeckPos, int toDeckPos, int cardIndex) {
-        List<Card> cardsToMove = tableau.getDeck(fromDeckPos).subList(cardIndex, tableau.getDeck(fromDeckPos).size());
+        int fromDeckSize = tableau.getDeck(fromDeckPos).size();
         if (tableau.canReceive(tableau.getDeck(fromDeckPos).get(cardIndex), toDeckPos)) {
+            List<Card> cardsToMove = tableau.getDeck(fromDeckPos).subList(cardIndex, fromDeckSize);
             tableau.addCardSequence(cardsToMove, toDeckPos);
-            for (int i = 0; i < cardIndex; i++) {
+            for (int i = 0; i < fromDeckSize - cardIndex; i++) {
                 tableau.drawCard(fromDeckPos);
             }
             addMovement();

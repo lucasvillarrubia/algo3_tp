@@ -120,19 +120,19 @@ public class TableauTest {
 
     @Test
     public void testAddCardSequenceValid() {
-        Tableau tableau = new Tableau(3);
+        Tableau tableau = new Tableau(1);
         tableau.addCard(new Card(Suit.HEART, Value.KING), 0);
-        tableau.addCard(new Card(Suit.SPADES, Value.QUEEN), 1);
+        tableau.addCard(new Card(Suit.SPADES, Value.QUEEN), 0);
         List<Card> cardsToAdd = new ArrayList<>();
-        cardsToAdd.add(new Card(Suit.HEART, Value.ACE));
-        cardsToAdd.add(new Card(Suit.HEART, Value.TWO));
-        cardsToAdd.add(new Card(Suit.DIAMOND, Value.THREE));
-        tableau.addCardSequence(cardsToAdd, 2);
-        List<Card> deck = tableau.getDeck(2);
-        assertEquals(3, deck.size());
-        assertEquals(Value.ACE, deck.get(0).getValue());
-        assertEquals(Value.TWO, deck.get(1).getValue());
-        assertEquals(Value.THREE, deck.get(2).getValue());
+        cardsToAdd.add(new Card(Suit.HEART, Value.JACK));
+        cardsToAdd.add(new Card(Suit.CLUBS, Value.TEN));
+        cardsToAdd.add(new Card(Suit.DIAMOND, Value.NINE));
+        tableau.addCardSequence(cardsToAdd, 0);
+        List<Card> deck = tableau.getDeck(0);
+        assertEquals(5, deck.size());
+        assertEquals(Value.NINE, deck.get(deck.size() - 1).getValue());
+        assertEquals(Value.TEN, deck.get(deck.size() - 2).getValue());
+        assertEquals(Value.JACK, deck.get(deck.size() -3).getValue());
     }
 
 
