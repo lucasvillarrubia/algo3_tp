@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Game {
 
-    private final int cantColumns = 7;
+    private static final int AMOUNT_COLUMNS = 7;
     private Deck waste;
     private boolean gameOver;
     private boolean gameWon;
@@ -85,14 +85,14 @@ public class Game {
     }
 
     public Tableau initTableau(Deck stock) {
-        Tableau tableau = new Tableau(cantColumns);
-        for (int i = 0; i < cantColumns; i++) {
+        Tableau tableau = new Tableau(AMOUNT_COLUMNS);
+        for (int i = 0; i < AMOUNT_COLUMNS; i++) {
             for (int j = 0; j < i + 1; j++) {
                 Card card = stock.drawCard();
                 if (j == i) {
                     card.flip();
                 }
-                tableau.getDeck(i).add(card);
+                tableau.getDeck(i).addCard(card);
             }
         }
         return tableau;
@@ -170,15 +170,15 @@ public class Game {
             return true;
         }
         else {
-            tableau.getDeck(fromDeckPos).add(cardToMove);
+            tableau.getDeck(fromDeckPos).addCard(cardToMove);
             return false;
         }
     }
 
     public boolean moveSequenceInTableau(int fromDeckPos, int toDeckPos, int cardIndex) {
         int fromDeckSize = tableau.getDeck(fromDeckPos).size();
-        if (tableau.canReceive(tableau.getDeck(fromDeckPos).get(cardIndex), toDeckPos)) {
-            List<Card> cardsToMove = tableau.getDeck(fromDeckPos).subList(cardIndex, fromDeckSize);
+        if (tableau.canReceive(tableau.getDeck(fromDeckPos).getCard(cardIndex), toDeckPos)) {
+            List<Card> cardsToMove = new ArrayList<>(tableau.getDeck(fromDeckPos).getAllCards().subList(cardIndex, fromDeckSize));
             tableau.addCardSequence(cardsToMove, toDeckPos);
             for (int i = 0; i < fromDeckSize - cardIndex; i++) {
                 tableau.drawCard(fromDeckPos);
@@ -201,7 +201,7 @@ public class Game {
             return true;
         }
         else {
-            tableau.getDeck(deckPos).add(cardToMove);
+            tableau.getDeck(deckPos).addCard(cardToMove);
             return false;
         }
     }

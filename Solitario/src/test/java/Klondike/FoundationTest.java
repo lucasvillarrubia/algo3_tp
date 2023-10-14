@@ -1,6 +1,7 @@
 package Klondike;
 
 import Base.Card;
+import Base.Color;
 import Base.Suit;
 import Base.Value;
 import org.junit.Test;
@@ -13,9 +14,9 @@ public class FoundationTest {
     public void initializeFoundationTest() {
         Suit clubs = Suit.CLUBS;
         Foundation foundation = new Foundation(clubs);
-        String black = Suit.CLUBS.getColor();
+        Color black = Suit.CLUBS.getColor();
         Suit foundationSuit = foundation.getSuit();
-        String foundationColor = foundation.getSuit().getColor();
+        Color foundationColor = foundation.getSuit().getColor();
         assertEquals(black,foundationColor);
         assertEquals(clubs,foundationSuit);
     }

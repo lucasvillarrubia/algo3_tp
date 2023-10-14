@@ -23,7 +23,7 @@ public class TableauTest {
     public void tableauWithCardsNotEmptyTest() {
         Tableau tableau = new Tableau(1);
         Card card = new Card(Suit.HEART, Value.NINE);
-        tableau.getDeck(0).add(card);
+        tableau.getDeck(0).addCard(card);
         assertFalse(tableau.isEmpty());
     }
 
@@ -49,7 +49,7 @@ public class TableauTest {
     public void emptyDeckGoodCardAdditionTest() {
         Tableau tableau = new Tableau(2);
         Card newCard = new Card(Suit.DIAMOND, Value.KING);
-        tableau.getDeck(0).add(newCard);
+        tableau.getDeck(0).addCard(newCard);
         assertTrue(tableau.canReceive(newCard, 1));
         tableau.addCard(newCard, 1);
         assertTrue(tableau.getLast(1).isTheSameAs(newCard));
@@ -67,12 +67,12 @@ public class TableauTest {
     @Test
     public void moveDeckLastCardToAnotherTableauDeckTest() {
         Tableau tableau = new Tableau(2);
-        List fromDeck = tableau.getDeck(0);
-        List toDeck = tableau.getDeck(1);
+        Column fromDeck = tableau.getDeck(0);
+        Column toDeck = tableau.getDeck(1);
         Card lastCard = new Card(Suit.HEART, Value.NINE);
         Card swappedCard = new Card(Suit.CLUBS, Value.EIGHT);
-        fromDeck.add(swappedCard);
-        toDeck.add(lastCard);
+        fromDeck.addCard(swappedCard);
+        toDeck.addCard(lastCard);
         assertTrue(tableau.canReceive(swappedCard,1));
         tableau.addCard(tableau.drawCard(0), 1);
         assertTrue(fromDeck.isEmpty());
@@ -86,8 +86,8 @@ public class TableauTest {
         Tableau tableau = new Tableau(2);
         Card wrongCard = new Card(Suit.DIAMOND, Value.EIGHT);
         Card lastCard = new Card(Suit.HEART, Value.NINE);
-        tableau.getDeck(0).add(wrongCard);
-        tableau.getDeck(1).add(lastCard);
+        tableau.getDeck(0).addCard(wrongCard);
+        tableau.getDeck(1).addCard(lastCard);
         assertFalse(tableau.canReceive(wrongCard, 1));
         tableau.addCard(wrongCard, 1);
         assertFalse(tableau.getLast(1).isTheSameAs(wrongCard));
@@ -100,8 +100,8 @@ public class TableauTest {
         Card lastCard = new Card(Suit.CLUBS, Value.TWO);
         Card wrongCard = new Card(Suit.DIAMOND, Value.EIGHT);
         //act
-        tableau.getDeck(0).add(wrongCard);
-        tableau.getDeck(1).add(lastCard);
+        tableau.getDeck(0).addCard(wrongCard);
+        tableau.getDeck(1).addCard(lastCard);
         assertFalse(tableau.canReceive(wrongCard, 1));
         tableau.addCard(wrongCard, 1);
         assertFalse(tableau.getLast(1).isTheSameAs(wrongCard));
@@ -128,11 +128,11 @@ public class TableauTest {
         cardsToAdd.add(new Card(Suit.CLUBS, Value.TEN));
         cardsToAdd.add(new Card(Suit.DIAMOND, Value.NINE));
         tableau.addCardSequence(cardsToAdd, 0);
-        List<Card> deck = tableau.getDeck(0);
-        assertEquals(5, deck.size());
-        assertEquals(Value.NINE, deck.get(deck.size() - 1).getValue());
-        assertEquals(Value.TEN, deck.get(deck.size() - 2).getValue());
-        assertEquals(Value.JACK, deck.get(deck.size() -3).getValue());
+        Column column = tableau.getDeck(0);
+        assertEquals(5, column.size());
+        assertEquals(Value.NINE, column.getCard(column.size() - 1).getValue());
+        assertEquals(Value.TEN, column.getCard(column.size() - 2).getValue());
+        assertEquals(Value.JACK, column.getCard(column.size() -3).getValue());
     }
 
 
