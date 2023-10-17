@@ -50,7 +50,7 @@ public class GameTest {
         foundations.get(0).addCard(one);
         foundations.get(0).addCard(two);
         Tableau tableau = new Tableau(1);
-        tableau.getDeck(0).add(three);
+        tableau.getDeck(0).addCard(three);
         Game game = new Game(foundations, new Deck(), tableau);
         assertTrue(game.moveFromTableauToFoundation(0));
         assertTrue(game.getTableau().getDeck(0).isEmpty());
@@ -209,7 +209,7 @@ public class GameTest {
         foundations.add(new Foundation(Suit.DIAMOND));
         foundations.get(0).addCard(one);
         Tableau tableau = new Tableau(1);
-        tableau.getDeck(0).add(three);
+        tableau.getDeck(0).addCard(three);
         tableau.addCard(two, 0);
         Game game = new Game(foundations, new Deck(), tableau);
         assertTrue(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));
@@ -227,7 +227,7 @@ public class GameTest {
         foundations.add(new Foundation(Suit.DIAMOND));
         foundations.get(0).addCard(wrongOne);
         Tableau tableau = new Tableau(1);
-        tableau.getDeck(0).add(three);
+        tableau.getDeck(0).addCard(three);
         tableau.addCard(two, 0);
         Game game = new Game(foundations, new Deck(), tableau);
         assertFalse(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));

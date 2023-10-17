@@ -1,16 +1,20 @@
 package Base;
 
 public enum Suit {
-    HEART("Red"),
-    DIAMOND("Red"),
-    SPADES("Black"),
-    CLUBS("Black");
-    private final String color;
-    Suit (String color) {
+    HEART(Color.RED),
+    DIAMOND(Color.RED),
+    SPADES(Color.BLACK),
+    CLUBS(Color.BLACK);
+
+    private final Color color;
+
+    Suit(Color color) {
         this.color = color;
     }
 
-    public String getColor(){
+    public Color getColor() {
         return this.color;
     }
+
+
 }
