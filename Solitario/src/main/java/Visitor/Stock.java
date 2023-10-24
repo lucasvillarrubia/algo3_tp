@@ -5,7 +5,7 @@ import Base.Card;
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends Deck implements Addeable {
+public class Stock extends Deck implements RuleAcceptance {
 
         // solo puede ser llenado una sola vez!
         private boolean filled;
@@ -41,8 +41,18 @@ public class Stock extends Deck implements Addeable {
         }
 
         @Override
-        public boolean acceptCard(DeckVisitor cardAdder) {
-                return cardAdder.checkCard(this, getLast());
+        public boolean acceptsCard(RuleChecker addingChecker, Card card) {
+                return this.addCards(card) && addingChecker.checkRule(this);
+        }
+
+        @Override
+        public boolean canDrawCard(RuleChecker removingChecker) {
+                return removingChecker.checkRule(this);
+        }
+
+        @Override
+        public boolean admitsSequence(RuleChecker sequenceChecker) {
+                return sequenceChecker.checkRule(this);
         }
 
 }

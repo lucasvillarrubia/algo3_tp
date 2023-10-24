@@ -8,15 +8,15 @@ import Base.Suit;
 import Base.Value;
 
 public class Game {
-        
-    private static final int AMOUNT_COLUMNS = 7;
+      // mover constante al init game de rules correspondiente  
+    //private static final int AMOUNT_COLUMNS = 7;
     private Deck waste;
     private boolean gameOver;
     private boolean gameWon;
     private int cantMovements;
     private List<Foundation> foundations;
+    private List<Column> tableau;
     private Stock stock;
-    private Tableau tableau;
 
 
     public Game(int seed) {
@@ -28,16 +28,14 @@ public class Game {
         this.stock.shuffle(seed);
         this.waste = new Deck();
         this.foundations = new ArrayList<>();
-        this.tableau = initTableau(stock);
         for (Suit suit : Suit.values()) {
             foundations.add(new Foundation(suit));
         }
     }
 
-    public Game(ArrayList<Foundation> foundations, Stock stock, Tableau tableau) {
+    public Game(ArrayList<Foundation> foundations, Stock stock) {
         this.foundations = foundations;
         this.stock = stock;
-        this.tableau = tableau;
         this.gameOver = false;
         this.gameWon = false;
         this.waste = new Deck();
@@ -49,8 +47,9 @@ public class Game {
         return gameWon;
     }
 
+    // falta chequear que el tableau esté vacío
     public void winGame(){
-        if (tableau.isEmpty() && areAllFoundationsFull() && stock.isEmpty() && waste.isEmpty()) {
+        if (areAllFoundationsFull() && stock.isEmpty() && waste.isEmpty()) {
             gameWon = true;
             gameOver = true;
         }
@@ -81,19 +80,20 @@ public class Game {
         return stock;
     }
 
-    public Tableau initTableau(Deck stock) {
-        Tableau tableau = new Tableau(AMOUNT_COLUMNS);
-        for (int i = 0; i < AMOUNT_COLUMNS; i++) {
-            for (int j = 0; j < i + 1; j++) {
-                Card card = stock.drawCard();
-                if (j == i) {
-                    card.flip();
-                }
-                tableau.getDeck(i).addCards(card);
-            }
-        }
-        return tableau;
-    }
+    // AGREGAR ESTO AL INIT GAME
+    // public Tableau initTableau(Deck stock) {
+    //     Tableau tableau = new Tableau(AMOUNT_COLUMNS);
+    //     for (int i = 0; i < AMOUNT_COLUMNS; i++) {
+    //         for (int j = 0; j < i + 1; j++) {
+    //             Card card = stock.drawCard();
+    //             if (j == i) {
+    //                 card.flip();
+    //             }
+    //             tableau.getDeck(i).addCards(card);
+    //         }
+    //     }
+    //     return tableau;
+    // }
 
     public void resetStock() {
         while (!waste.isEmpty()) {
@@ -119,10 +119,6 @@ public class Game {
             }
         }
         return foundation;
-    }
-
-    public Tableau getTableau () {
-        return this.tableau;
     }
 
     public Deck getStock () {
@@ -156,10 +152,10 @@ public class Game {
         return false;
     }
 
-    public boolean moveCardsInTableau (int from, int to, int index) {
-        if (index == 0) { return tableau.moveCards(from, to); }
-        else { return tableau.moveCards(from, to, index); }
-    }
+    // public boolean moveCardsInTableau (int from, int to, int index) {
+    //     if (index == 0) { return tableau.moveCards(from, to); }
+    //     else { return tableau.moveCards(from, to, index); }
+    // }
 
     // acá todavía se mueve una secuencia cualquiera, falta chequear que todas las cartas
     // están en orden correcto y se <pueden> mover

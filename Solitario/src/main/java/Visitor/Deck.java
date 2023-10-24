@@ -10,7 +10,7 @@ public class Deck {
                 this.deck = new ArrayList<>();
         }
 
-        public boolean addCards(Card card) {
+        protected boolean addCards(Card card) {
                 if (card == null) return false;
                 deck.add(0, card);
                 return true;

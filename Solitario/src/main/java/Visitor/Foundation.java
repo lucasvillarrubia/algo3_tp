@@ -2,8 +2,9 @@ package Visitor;
 
 import Base.Suit;
 import Base.Value;
+import Base.Card;
 
-public class Foundation extends Deck implements Addeable {
+public class Foundation extends Deck implements RuleAcceptance {
 
         private Suit suit;
 
@@ -22,8 +23,18 @@ public class Foundation extends Deck implements Addeable {
         }
 
         @Override
-        public boolean acceptCard(DeckVisitor cardAdder) {
-                return cardAdder.checkCard(this, getLast());
+        public boolean acceptsCard(RuleChecker addingChecker, Card card) {
+                return this.addCards(card) && addingChecker.checkRule(this);
+        }
+
+        @Override
+        public boolean canDrawCard(RuleChecker removingChecker) {
+                return removingChecker.checkRule(this);
+        }
+        
+        @Override
+        public boolean admitsSequence(RuleChecker sequenceChecker) {
+                return sequenceChecker.checkRule(this);
         }
 
 }
