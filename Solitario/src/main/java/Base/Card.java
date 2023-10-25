@@ -30,4 +30,13 @@ public class Card {
     public Suit getSuit() {
         return suit;
     }
+
+    public Color getColor() {
+        return suit.getColor();
+    }
+
+    public int getNumber() {
+        return value.getNumber();
+    }
+
 }

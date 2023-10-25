@@ -7,15 +7,15 @@ import Elements.Column;
 import Elements.Game;
 
 public interface Rules {
-        public boolean acceptsCard(Stock stock, Card card);
-        public boolean acceptsCard(Foundation foundation, Card card);
-        public boolean acceptsCard(Column column, Card card);
-        public boolean givesCard(Stock stock);
-        public boolean givesCard(Foundation foundation);
-        public boolean givesCard(Column column);
-        public boolean admitsSequence(Stock stock);
-        public boolean admitsSequence(Foundation foundation);
-        public boolean admitsSequence(Column column);
-        public boolean checkGameStatus(Game game);
-        public void gameInit(Game game);
+        boolean acceptsCard(Stock stock, Card card);
+        boolean acceptsCard(Foundation foundation, Card card);
+        boolean acceptsCard(Column column, Card card);
+        boolean givesCard(Stock stock);
+        boolean givesCard(Foundation foundation);
+        boolean givesCard(Column column);
+        boolean admitsSequence(Stock stock, Column sequence);
+        boolean admitsSequence(Foundation foundation, Column sequence);
+        boolean admitsSequence(Column column, Column sequence);
+        boolean checkGameStatus(Game game);
+        void gameInit(Game game);
 }

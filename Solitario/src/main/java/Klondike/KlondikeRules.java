@@ -1,5 +1,8 @@
 package Klondike;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Base.Card;
 import Base.Color;
 import Base.Suit;
@@ -11,9 +14,25 @@ import Elements.Stock;
 import Solitaire.Rules;
 
 public class KlondikeRules implements Rules {
-        public boolean acceptsCard(Stock stock, Card card) {
-                return !stock.contains(card) && !stock.wasFilled();
+
+        private static final int AMOUNT_COLUMNS = 7;
+
+        public boolean isSequenceValid(Card prev, Card next) {
+                int prevValue = prev.getNumber();
+                int nextValue = next.getNumber();
+                Color prevColor = prev.getColor();
+                Color nextColor = next.getColor();
+                boolean precedingValue = ((prevValue - nextValue) == 1);
+                boolean sameColor = (prevColor == nextColor);
+                return !sameColor && precedingValue;
         }
+
+        @Override
+        public boolean acceptsCard(Stock stock, Card card) {
+                return !stock.wasFilled();
+        }
+
+        @Override
         public boolean acceptsCard(Foundation foundation, Card card) {
                 if(foundation.isEmpty()){
                         return (card.getValue() == Value.ACE && card.getSuit() == foundation.getSuit());
@@ -22,28 +41,60 @@ public class KlondikeRules implements Rules {
                         return (card.getSuit()==foundation.getSuit() && card.getValue().getNumber() == topCard.getValue().getNumber() + 1);
                 }
         }
+
+        @Override
         public boolean acceptsCard(Column column, Card card) {
                 if (column.isEmpty()) {
                         return card.getValue() == Value.KING;
                 } else {
-                        int lastValue = column.getLast().getValue().getNumber();
-                        int receivedValue = card.getValue().getNumber();
-                        Color lastColor = column.getLast().getSuit().getColor();
-                        Color receivedColor = card.getSuit().getColor();
-                        boolean precedingValue = (lastValue - receivedValue) == 1;
-                        boolean sameColor = lastColor == receivedColor;
-                        return !sameColor && precedingValue;
+                        return isSequenceValid(column.getLast(), card);
                 }
         }
-        public boolean givesCard(Stock stock) { return true; }
-        public boolean givesCard(Foundation foundation) { return true; }
-        public boolean givesCard(Column column) { return true; }
-        public boolean admitsSequence(Stock stock) { return false; }
-        public boolean admitsSequence(Foundation foundation) { return false; }
-        public boolean admitsSequence(Column column) { return true; }
-        public boolean checkGameStatus(Game game) { return true; }
+
+        @Override
+        public boolean givesCard(Stock stock) {
+                return true;
+        }
+
+        @Override
+        public boolean givesCard(Foundation foundation) {
+                return true;
+        }
+
+        @Override
+        public boolean givesCard(Column column) {
+                return true;
+        }
+
+        @Override
+        public boolean admitsSequence(Stock stock, Column sequence) {
+                return false;
+        }
+
+        @Override
+        public boolean admitsSequence(Foundation foundation, Column sequence) {
+                return false;
+        }
+
+        @Override
+        public boolean admitsSequence(Column column, Column sequence) {
+                for (int i = sequence.cardCount() - 1; i > 0; i--) {
+                        if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
+                }
+                return true;
+        }
+
+        @Override
+        public boolean checkGameStatus(Game game) {
+                return game.gameStatus();
+        }
+
+        @Override
         public void gameInit(Game game) {
-                game.setStock(initStock());
+                Stock gameStock = initStock();
+                game.setStock(gameStock);
+                game.setTableau(initTableau(gameStock));
+                game.setFoundations(initFoundations());
         }
 
         public Stock initStock() {
@@ -55,6 +106,31 @@ public class KlondikeRules implements Rules {
                         }
                 }
                 return stock;
+        }
+
+        public List<Column> initTableau(Stock stock) {
+                ArrayList<Column> tableau = new ArrayList<>();
+                for (int i = 0; i < AMOUNT_COLUMNS; i++) {
+                        tableau.add(new Column());
+                }
+                for (int i = 0; i < AMOUNT_COLUMNS; i++) {
+                        for (int j = 0; j < i + 1; j++) {
+                                Card card = stock.drawCard();
+                                if (j == i) {
+                                        card.flip();
+                                }
+                                if(!tableau.get(i).acceptCard(this, card)) return null;
+                        }
+                }
+                return tableau;
+        }
+
+        public List<Foundation> initFoundations() {
+                ArrayList<Foundation> foundations = new ArrayList<>();
+                for (Suit suit : Suit.values()) {
+                        foundations.add(new Foundation(suit));
+                }
+                return foundations;
         }
 
 }

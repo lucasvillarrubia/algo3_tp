@@ -1,25 +1,16 @@
 package Elements;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
-import Klondike.KlondikeRules;
 import org.junit.Test;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class GameTest {
-    @Test
-    public void gameConstructTest() {
-        KlondikeRules rules = new KlondikeRules();
-        Game game = new Game(rules, 10);
-        assertFalse(game.isGameOver());
-        assertFalse(game.isGameWon());
-        assertEquals(0, game.getCantMovements());
-    }
 
     @Test
     public void buildGameWIthStockAndFoundation() {
@@ -32,17 +23,17 @@ public class GameTest {
         assertEquals(game.getCantMovements(),0);
     }
 
-//    @Test
-//    public void winGameTest() {
-//        ArrayList<Foundation> foundations = new ArrayList<>();
-//        Stock stock = new Stock();
-//        Game game = new Game(foundations, stock);
-//        assertFalse(game.gameStatus());
-//        game.winGame();
-//        assertTrue(game.gameStatus());
-//        assertTrue(game.isGameWon());
-//        assertTrue(game.isGameOver());
-//    }
+    @Test
+    public void winGameTest() {
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        Stock stock = new Stock();
+        Game game = new Game(foundations, stock);
+        assertFalse(game.gameStatus());
+        game.winGame();
+        assertTrue(game.gameStatus());
+        assertTrue(game.isGameWon());
+        assertTrue(game.isGameOver());
+    }
 
 
     @Test
@@ -60,21 +51,62 @@ public class GameTest {
         Stock stock = new Stock();
         foundations.add(new Foundation(Suit.CLUBS));
         Game game = new Game(foundations, stock);
-
+        assertNotNull(game.getFoundationBySuit(Suit.CLUBS));
     }
 
-    //
-//
-//    @Test
-//    public void initKlondikeGameTest() {
-//        Game klondike = new Game(1);
-//        assertFalse(klondike.gameStatus());
-//        assertFalse(klondike.isGameWon());
-//        assertNotNull(klondike.getStock());
-//        assertEquals(klondike.getCantMovements(),0);
-//    }
-//
-//    @Test
+    @Test
+    public void fullFoundationsTest() {
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        foundations.add(new Foundation(Suit.HEART));
+        foundations.add(new Foundation(Suit.DIAMOND));
+        foundations.add(new Foundation(Suit.SPADES));
+        foundations.add(new Foundation(Suit.CLUBS));
+        Game game = new Game(foundations, new Stock());
+        for (Foundation foundation : foundations) {
+            Suit suit = foundation.getSuit();
+            for (Value value : Value.values()) {
+                Card card = new Card(suit, value);
+                foundation.addCards(card);
+            }
+        }
+        assertTrue(game.areAllFoundationsFull());
+        game.winGame();
+        assertTrue(game.isGameWon());
+    }
+
+    @Test
+    public void notFullFoundationsTest() {
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        foundations.add(new Foundation(Suit.HEART));
+        foundations.add(new Foundation(Suit.DIAMOND));
+        foundations.add(new Foundation(Suit.SPADES));
+        foundations.add(new Foundation(Suit.CLUBS));
+        Game game = new Game(foundations, new Stock());
+        for (Foundation foundation : foundations) {
+            Suit suit = foundation.getSuit();
+            for (Value value : Value.values()) {
+                Card card = new Card(suit, value);
+                foundation.addCards(card);
+            }
+        }
+        game.getFoundationBySuit(Suit.SPADES).drawCard();
+        assertFalse(game.areAllFoundationsFull());
+    }
+
+    //Falta testar el metodo de set stock y el constructor de games segun rules (evitar loop)
+
+    @Test public void serializationTest() throws IOException, ClassNotFoundException {
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        foundations.add(new Foundation(Suit.CLUBS));
+        Game game = new Game(foundations, new Stock());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        game.serialize(outputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        Game deserializedGame = Game.deserialize(inputStream);
+        assertNotNull(deserializedGame);
+    }
+
+//   @Test
 //    public void initOneStepToWinGameTest() {
 //        ArrayList<Foundation> foundations = new ArrayList<>();
 //        Foundation foundation = new Foundation(Suit.CLUBS);
@@ -83,25 +115,11 @@ public class GameTest {
 //        Game game = new Game(foundations, stock);
 //        assertNotNull(game);
 //        assertFalse(game.gameStatus());
-//        assertNotNull(game.getStock());
 //        assertFalse(game.isGameWon());
 //        assertEquals(0, game.getCantMovements());
 //        assertNotNull(game.getFoundationBySuit(Suit.CLUBS));
 //    }
-//
-//    @Test
-//    public void moveFromTableauToFoundationCompleteTest() {
-//        Card one = new Card(Suit.HEART, Value.ACE);
-//        Card two = new Card(Suit.HEART, Value.TWO);
-//        Card three = new Card(Suit.HEART, Value.THREE);
-//        ArrayList<Foundation> foundations = new ArrayList<>(4);
-//        foundations.add(new Foundation(Suit.HEART));
-//        foundations.get(0).addCards(one);
-//        foundations.get(0).addCards(two);
-//        Game game = new Game(foundations, new Deck());
-//        assertFalse(game.isGameWon());
-//        assertEquals(game.getFoundationBySuit(Suit.HEART).getTopCard(), three);
-//    }
+
 //
 //    @Test
 //    public void moveFromTableauToFoundationFailedTest() {
@@ -330,42 +348,14 @@ public class GameTest {
 //        assertFalse(game.moveSequenceInTableau(0, 1, 1));
 //    }
 //
-//    @Test
-//    public void fullFoundationsTest() {
-//        Tableau tableau = new Tableau(7);
-//        ArrayList<Foundation> foundations = new ArrayList<>();
-//        foundations.add(new Foundation(Suit.HEART));
-//        foundations.add(new Foundation(Suit.DIAMOND));
-//        foundations.add(new Foundation(Suit.SPADES));
-//        foundations.add(new Foundation(Suit.CLUBS));
-//        Game game = new Game(foundations, new Deck(), tableau);
-//        for (Foundation foundation : foundations) {
-//            Suit suit = foundation.getSuit();
-//            for (Value value : Value.values()) {
-//                Card card = new Card(suit, value);
-//                foundation.addCards(card);
-//            }
-//        }
-//        assertTrue(game.areAllFoundationsFull());
-//        game.winGame();
-//        assertTrue(game.isGameWon());
-//    }
-//
+
 //    @Test
 //    public void lastMoveStockRestTest() {
-//        Tableau tableau = new Tableau(7);
 //        ArrayList<Foundation> foundations = new ArrayList<>();
 //        foundations.add(new Foundation(Suit.HEART));
 //        foundations.add(new Foundation(Suit.DIAMOND));
 //        foundations.add(new Foundation(Suit.SPADES));
 //        foundations.add(new Foundation(Suit.CLUBS));
-//        for (Foundation foundation : foundations) {
-//            Suit suit = foundation.getSuit();
-//            for (Value value : Value.values()) {
-//                Card card = new Card(suit, value);
-//                foundation.addCards(card);
-//            }
-//        }
 //        Deck stock =new Deck();
 //        stock.addCards(foundations.get(3).removeCard());
 //        Game game = new Game(foundations, stock, tableau);

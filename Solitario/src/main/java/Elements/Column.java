@@ -4,9 +4,12 @@ import Base.Deck;
 import Solitaire.Rules;
 import Base.Card;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
-public class Column extends Deck {
+public class Column extends Deck implements Serializable {
+
         // column debería tener atributo index? (posicion en tableau)
         // falta chequear que esten flippeadas, creo
         public Card getCard(int pos){
@@ -30,9 +33,33 @@ public class Column extends Deck {
                 return true;
         }
 
+        @Override
+        public boolean removeCard(Card card) { return super.removeCard(card); }
+
+        public boolean removeCard(Column cards) {
+                for (int i = 0; i < cards.cardCount(); i++) {
+                        if(!super.removeCard(cards.getCard(i))) return false;
+                }
+                return true;
+        }
+
+        @Override
         public boolean acceptCard(Rules gameRules, Card card) {
                 if (gameRules.acceptsCard(this, card)) return addCards(card);
                 else return false;
         }
+
+        @Override
+        public boolean acceptSequence(Rules gameRules, Column cards) {
+                if (gameRules.admitsSequence(this, cards)) {
+                        Collection<Card> cardsCollection = new ArrayList<>();
+                        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                                cardsCollection.add(cards.getCard(i));
+                        }
+                        return addCards(cardsCollection);
+                }
+                else return false;
+        }
+
 
 }

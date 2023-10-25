@@ -32,5 +32,17 @@ public class CardTest {
         assertTrue(card1.isTheSameAs(card2));
     }
 
+    @Test
+    public void getCardNumberTest(){
+        Card card= new Card(Suit.SPADES, Value.TEN);
+        assertEquals(card.getNumber(),10);
+    }
+
+    @Test
+    public void getCardColorTest() {
+        Card card= new Card(Suit.SPADES, Value.TEN);
+        assertEquals(card.getColor(), Color.BLACK);
+    }
+
 
 }

@@ -4,12 +4,12 @@ import Solitaire.Rules;
 import Base.Deck;
 import Base.Card;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends Deck {
+public class Stock extends Deck implements Serializable {
 
-        // solo puede ser llenado una sola vez!
         private boolean filled;
 
         public Stock () {
@@ -24,14 +24,7 @@ public class Stock extends Deck {
 
         // el método que está en game, creo que debería devolver una carta
         // pero a la vez pienso que el waste debería tenerlo el propio stock
-        public void showCard() {}
-
-        // también el método que está en game
-        public void reset() {}
-
-        public boolean contains(Card card) {
-                return this.contains(card);
-        }
+//        public void showCard() {}
 
         protected void setFilled() {
                 this.filled = true;
@@ -46,9 +39,20 @@ public class Stock extends Deck {
                 return super.addCards(card);
         }
 
+        @Override
+        protected boolean containsCard(Card card) {
+                return super.containsCard(card);
+        }
+
+        @Override
         public boolean acceptCard(Rules gameRules, Card card) {
-                if (gameRules.acceptsCard(this, card)) return addCards(card);
+                if (gameRules.acceptsCard(this, card) && !containsCard(card)) return addCards(card);
                 else return false;
+        }
+
+        @Override
+        public boolean acceptSequence(Rules gameRules, Column cards) {
+                return false;
         }
 
 }

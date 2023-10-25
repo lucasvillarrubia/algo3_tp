@@ -36,7 +36,40 @@ public class FoundationTest {
         assertEquals(foundation.getLast(),card);
     }
 
-//    @Test
+
+    @Test
+    public void removeCardTest(){
+        Foundation f = new Foundation(Suit.CLUBS);
+        Card aceOfClubs = new Card(Suit.CLUBS, Value.ACE);
+        f.addCards(aceOfClubs);
+        assertEquals(f.drawCard(),aceOfClubs);
+        assertNull(f.getLast());
+    }
+
+    @Test
+    public void fullFoundationTest(){
+        Foundation f = new Foundation(Suit.DIAMOND);
+        for(Value value : Value.values()){
+            Card card = new Card(Suit.DIAMOND, value);
+            f.addCards(card);
+        }
+        assertTrue(f.isFull());
+    }
+
+    @Test
+    public void notFullFoundationTest(){
+        Foundation f = new Foundation(Suit.DIAMOND);
+        for(Value value : Value.values()){
+            Card card = new Card(Suit.DIAMOND, value);
+            f.addCards(card);
+        }
+        f.removeCard(f.getLast());
+        f.removeCard(f.getLast());
+        f.removeCard(f.getLast());
+        assertFalse(f.isFull());
+    }
+
+    //    @Test
 //    public void dontAddCorrectCardWhenEmptyTest() {
 //        Foundation foundation = new Foundation(Suit.SPADES);
 //        Card wrongCard = new Card(Suit.SPADES, Value.EIGHT);
@@ -77,36 +110,4 @@ public class FoundationTest {
 //        f.addCard(aceOfHeart);
 //        assertFalse(f.canReceive(tenOfHeart));
 //    }
-
-    @Test
-    public void removeCardTest(){
-        Foundation f = new Foundation(Suit.CLUBS);
-        Card aceOfClubs = new Card(Suit.CLUBS, Value.ACE);
-        f.addCards(aceOfClubs);
-        assertEquals(f.drawCard(),aceOfClubs);
-        assertNull(f.getLast());
-    }
-
-    @Test
-    public void fullFoundationTest(){
-        Foundation f = new Foundation(Suit.DIAMOND);
-        for(Value value : Value.values()){
-            Card card = new Card(Suit.DIAMOND, value);
-            f.addCards(card);
-        }
-        assertTrue(f.isFull());
-    }
-
-    @Test
-    public void notFullFoundationTest(){
-        Foundation f = new Foundation(Suit.DIAMOND);
-        for(Value value : Value.values()){
-            Card card = new Card(Suit.DIAMOND, value);
-            f.addCards(card);
-        }
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
-        assertFalse(f.isFull());
-    }
 }

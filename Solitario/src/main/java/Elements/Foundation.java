@@ -6,7 +6,11 @@ import Base.Suit;
 import Base.Value;
 import Base.Card;
 
-public class Foundation extends Deck {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class Foundation extends Deck implements Serializable {
 
         private Suit suit;
 
@@ -29,8 +33,27 @@ public class Foundation extends Deck {
                 return super.addCards(card);
         }
 
+        private boolean addCards(Collection<Card> cards) {
+                if (cards == null) return false;
+                deck.addAll(0, cards);
+                return true;
+        }
+
+        @Override
         public boolean acceptCard(Rules gameRules, Card card) {
                 if (gameRules.acceptsCard(this, card)) return addCards(card);
+                else return false;
+        }
+
+        @Override
+        public boolean acceptSequence(Rules gameRules, Column cards) {
+                if (gameRules.admitsSequence(this, cards)) {
+                        Collection<Card> cardsCollection = new ArrayList<>();
+                        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                                cardsCollection.add(cards.getCard(i));
+                        }
+                        return addCards(cardsCollection);
+                }
                 else return false;
         }
 }

@@ -39,13 +39,19 @@ public class StockTest {
 //        assertNotEquals(stock.toString(), shuffledStock.toString());
 //    }
 
-//    @Test
-//    public void testContains() {
-//        Stock stock = new Stock();
-//        stock.fill();
-//        Card testCard = new Card(Suit.HEART, Value.ACE);
-//        assertTrue(stock.contains(testCard));
-//    }
+    @Test
+    public void testContains() {
+        Stock stock = new Stock();
+        Card testCard1 = new Card(Suit.HEART, Value.ACE);
+        Card testCard2 = new Card(Suit.HEART, Value.TWO);
+        Card testCard3 = new Card(Suit.HEART, Value.THREE);
+        Card testCard4 = new Card(Suit.HEART, Value.FOUR);
+        stock.addCards(testCard1);
+        stock.addCards(testCard2);
+        stock.addCards(testCard3);
+        stock.addCards(testCard4);
+        assertTrue(stock.containsCard(testCard2));
+    }
 
     @Test
     public void sameSeedShuffleTest(){

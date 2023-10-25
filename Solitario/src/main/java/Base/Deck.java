@@ -1,9 +1,10 @@
 package Base;
 
+import Solitaire.Rules;
+import Elements.Column;
 import java.util.*;
-import Base.Card;
 
-public class Deck {
+public abstract class Deck {
         protected ArrayList<Card> deck;
 
         public Deck(){
@@ -39,5 +40,12 @@ public class Deck {
         public int cardCount () {
                 return deck.size();
         }
+
+        protected boolean containsCard(Card card) {
+                return deck.contains(card);
+        }
+
+        public abstract boolean acceptCard(Rules gameRules, Card card);
+        public abstract boolean acceptSequence(Rules gameRules, Column cards);
 
 }

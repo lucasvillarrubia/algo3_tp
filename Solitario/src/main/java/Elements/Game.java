@@ -1,5 +1,6 @@
 package Elements;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +8,9 @@ import Solitaire.Rules;
 import Base.Deck;
 import Base.Card;
 import Base.Suit;
-import Base.Value;
 
-public class Game {
-      // mover constante al init game de rules correspondiente  
-    //private static final int AMOUNT_COLUMNS = 7;
+
+public class Game implements Serializable {
     private Rules gameRules;
     private boolean gameOver;
     private boolean gameWon;
@@ -76,50 +75,6 @@ public class Game {
         cantMovements++;
     }
 
-
-    // public Deck initStock() {
-    //     Deck stock = new Deck();
-    //     for (Value value : Value.values()) {
-    //         for (Suit suit : Suit.values()) {
-    //             Card card = new Card(suit, value);
-    //             stock.acceptsCard(gameRules, card);
-    //         }
-    //     }
-    //     return stock;
-    // }
-
-    // AGREGAR ESTO AL INIT GAME
-    // public Tableau initTableau(Deck stock) {
-    //     Tableau tableau = new Tableau(AMOUNT_COLUMNS);
-    //     for (int i = 0; i < AMOUNT_COLUMNS; i++) {
-    //         for (int j = 0; j < i + 1; j++) {
-    //             Card card = stock.drawCard();
-    //             if (j == i) {
-    //                 card.flip();
-    //             }
-    //             tableau.getDeck(i).addCards(card);
-    //         }
-    //     }
-    //     return tableau;
-    // }
-
-    // MOVER A STOCK
-    // public void resetStock() {
-    //     while (!waste.isEmpty()) {
-    //         Card card = waste.drawCard();
-    //         card.flip();
-    //         stock.addCards(card);
-    //     }
-    // }
-
-    // public void showStockCard() {
-    //     if (stock.isEmpty()) {
-    //         resetStock();
-    //     }
-    //     waste.addCards(stock.drawCard());
-    //     addMovement();
-    // }
-
     public Foundation getFoundationBySuit (Suit suit) {
         Foundation foundation = null;
         for (Foundation foundationBySuit: foundations) {
@@ -129,7 +84,6 @@ public class Game {
         }
         return foundation;
     }
-
 
 
     public boolean areAllFoundationsFull () {
@@ -145,39 +99,77 @@ public class Game {
         this.stock = stock;
     }
 
+    public void setTableau(List<Column> tableau) { this.tableau = tableau; }
+
+    public void setFoundations(List<Foundation> foundations) { this.foundations = foundations; }
+
+    //Serializacion
+    public void serialize(OutputStream os) throws IOException {
+        ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
+        objectOutStream.writeObject(this);
+        objectOutStream.flush();
+    }
+
+    public static Game deserialize(InputStream is) throws IOException, ClassNotFoundException {
+        ObjectInputStream objectInStream = new ObjectInputStream(is);
+        return (Game) objectInStream.readObject();
+    }
 
     //                              M O V I M I E N T O S
 
-    // public boolean moveCard (Deck from, Deck to) {
-    //     Card moved = from.getLast();
-    //     if (moved == null) { return false; }
-    //     else if (to.addCards(gameRules, moved) && from.removeCard(gameRules, moved)) {
-    //         addMovement();
-    //         winGame();
-    //         return true;
+    // MOVER A STOCK ??
+    // public void showStockCard() {
+    //     if (stock.isEmpty()) {
+    //         resetStock();
     //     }
-    //     return false;
+    //     waste.addCards(stock.drawCard());
+    //     addMovement();
     // }
 
-    // public boolean moveCardsInTableau (int from, int to, int index) {
-    //     if (index == 0) { return tableau.moveCards(from, to); }
-    //     else { return tableau.moveCards(from, to, index); }
-    // }
+//     public void showStockCard() {
+//         if (stock.isEmpty()) {
+//             resetStock();
+//         }
+//         gameRules.showStockCard();
+//         //-> en el klondike haces game.getWaste.add
+//         //->SPIDER column.add(stocke.get(0)
+//
+//     }
 
-    // acá todavía se mueve una secuencia cualquiera, falta chequear que todas las cartas
-    // están en orden correcto y se <pueden> mover
-    // método que estaría en game pidiendo Decks a Tableau:
-    // public boolean moveCardsInTableau(int fromDeckPos, int toDeckPos, int cardIndex) {
-    //     Collection<Card> cardsToMove = tableau.getDeck(fromDeckPos).getCards(cardIndex);
-    //     if (cardsToMove == null) { return false; }
-    //     else if (tableau.getDeck(toDeckPos).addCards(cardsToMove)) {
-    //         for (Card card : cardsToMove) {
-    //             if (!tableau.getDeck(fromDeckPos).removeCard(card)) { return false; }
-    //         }
-    //         addMovement();
-    //         return true;
-    //     }
-    //     return false;
-    // }
+
+
+    //mover cartas
+    //pedirle al stock
+    //pedirle una carta a la foundation
+
+
+
+
+    public boolean moveCards (Deck from, Deck to) {
+        Card moved = from.getLast();
+        if (moved == null) { return false; }
+        else if (to.acceptCard(gameRules, moved)) {
+            addMovement();
+            winGame();
+            return from.removeCard(moved);
+        }
+        return false;
+    }
+
+    public boolean moveCards (Column from, Deck to, int index) {
+        Column moved = from.getSequence(index);
+        if (moved == null) { return false; }
+        else if (to.acceptSequence(gameRules, moved)) {
+            addMovement();
+            winGame();
+            return from.removeCard(moved);
+        }
+        return false;
+    }
+
+
+//    public boolean moveCards(Stock from, Column to ){
+//        return false;
+//    }
 
 }
