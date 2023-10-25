@@ -3,6 +3,8 @@ package Klondike;
 import Base.Card;
 import Base.Suit;
 import Base.Value;
+import Elements.Column;
+import Elements.Foundation;
 import Elements.Game;
 import Elements.Stock;
 import Solitaire.Rules;
@@ -10,7 +12,6 @@ import Solitaire.Rules;
 public class KlondikeRules extends Rules {
 
     private AddingChecker addingChecker;
-    private RemovingChecker removingChecker;
 
     private SequenceChecker sequenceChecker;
 
@@ -31,4 +32,16 @@ public class KlondikeRules extends Rules {
         return stock;
     }
 
+    public boolean checkRule(Stock stock) {
+        return true;
+    }
+
+
+    public boolean checkRule(Column column) {
+        return true;
+    }
+
+    public boolean checkRule(Foundation foundation) {
+        return true;
+    }
 }
