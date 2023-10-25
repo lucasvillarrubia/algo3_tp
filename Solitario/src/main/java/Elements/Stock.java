@@ -17,11 +17,6 @@ public class Stock extends Deck {
                 this.filled = false;
         }
 
-
-        // llenaría el mazo de acuerdo a las reglas del solitario
-        // por única vez, y cambia el estado de filled a true
-        public void fill() {}
-
         public void shuffle(int seed) {
                 Random rn = new Random(seed);
                 Collections.shuffle(deck, rn);
@@ -38,20 +33,22 @@ public class Stock extends Deck {
                 return this.contains(card);
         }
 
+        protected void setFilled() {
+                this.filled = true;
+        }
+
         public boolean wasFilled() {
                 return this.filled;
         }
 
-        public boolean acceptsCard(Rules gameRules, Card card) {
-                return this.addCards(card) && gameRules.acceptsCard(this);
+        @Override
+        protected boolean addCards(Card card) {
+                return super.addCards(card);
         }
 
-        public boolean canDrawCard(Rules gameRules) {
-                return gameRules.givesCard(this);
-        }
-
-        public boolean admitsSequence(Rules gameRules) {
-                return gameRules.admitsSequence(this);
+        public boolean acceptCard(Rules gameRules, Card card) {
+                if (gameRules.acceptsCard(this, card)) return addCards(card);
+                else return false;
         }
 
 }

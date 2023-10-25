@@ -13,7 +13,7 @@ public class Column extends Deck {
                 return deck.get(pos);
         }
 
-        public Column getCards(int upToIndex) {
+        public Column getSequence(int upToIndex) {
                 Column subColumn = new Column();
                 if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
                 return subColumn;
@@ -29,17 +29,10 @@ public class Column extends Deck {
                 deck.addAll(0, cards);
                 return true;
         }
-        
-        public boolean acceptsCard(Rules gameRules, Card card) {
-                return this.addCards(card) && gameRules.acceptsCard(this);
-        }
 
-        public boolean canDrawCard(Rules gameRules) {
-                return gameRules.givesCard(this);
-        }
-
-        public boolean admitsSequence(Rules gameRules) {
-                return gameRules.admitsSequence(this);
+        public boolean acceptCard(Rules gameRules, Card card) {
+                if (gameRules.acceptsCard(this, card)) return addCards(card);
+                else return false;
         }
 
 }

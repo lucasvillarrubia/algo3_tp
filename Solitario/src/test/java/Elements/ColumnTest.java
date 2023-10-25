@@ -1,26 +1,22 @@
-package Klondike;
-
-import static org.junit.Assert.*;
+package Elements;
 
 import Base.Card;
-
-import static org.junit.Assert.*;
-
 import Base.Suit;
 import Base.Value;
-import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColumnTest {
+import static org.junit.Assert.*;
 
+public class ColumnTest {
 
     @Test
     public void testIsEmpty() {
         Column column = new Column();
         assertTrue(column.isEmpty());
-        column.addCard(new Card(Suit.HEART, Value.ACE));
+        column.addCards(new Card(Suit.HEART, Value.ACE));
         assertFalse(column.isEmpty());
     }
 
@@ -28,7 +24,7 @@ public class ColumnTest {
     public void testAddCard() {
         Column column = new Column();
         Card card = new Card(Suit.DIAMOND, Value.TWO);
-        column.addCard(card);
+        column.addCards(card);
         assertEquals(card, column.getLast());
     }
 
@@ -37,7 +33,7 @@ public class ColumnTest {
         Column column = new Column();
         assertNull(column.getLast());
         Card card = new Card(Suit.HEART, Value.KING);
-        column.addCard(card);
+        column.addCards(card);
         assertEquals(card, column.getLast());
         column.drawCard();
         assertNull(column.getLast());
@@ -47,7 +43,7 @@ public class ColumnTest {
     public void testDrawCard() {
         Column column = new Column();
         Card card = new Card(Suit.CLUBS, Value.KING);
-        column.addCard(card);
+        column.addCards(card);
         Card drawnCard = column.drawCard();
         assertEquals(card, drawnCard);
         assertTrue(column.isEmpty());
@@ -57,7 +53,7 @@ public class ColumnTest {
     public void testDrawNullCard() {
         Column column = new Column();
         Card card = null;
-        column.addCard(card);
+        column.addCards(card);
         Card drawnCard = column.drawCard();
         assertNull(card);
     }
@@ -65,16 +61,16 @@ public class ColumnTest {
     @Test
     public void testSize() {
         Column column = new Column();
-        assertEquals(0, column.size());
-        column.addCard(new Card(Suit.SPADES, Value.QUEEN));
-        assertEquals(1, column.size());
+        assertEquals(0, column.cardCount());
+        column.addCards(new Card(Suit.SPADES, Value.QUEEN));
+        assertEquals(1, column.cardCount());
     }
 
     @Test
     public void testGetCard() {
         Column column = new Column();
         Card card = new Card(Suit.HEART, Value.TEN);
-        column.addCard(card);
+        column.addCards(card);
         assertEquals(card, column.getCard(0));
     }
 
@@ -84,8 +80,11 @@ public class ColumnTest {
         List<Card> testCards = new ArrayList<>();
         testCards.add(new Card(Suit.DIAMOND, Value.FIVE));
         testCards.add(new Card(Suit.CLUBS, Value.JACK));
-        column.addCard(testCards.get(0));
-        column.addCard(testCards.get(1));
-        assertEquals(testCards, column.getAllCards());
+        column.addCards(testCards.get(1));
+        column.addCards(testCards.get(0));
+        assertTrue(column.getCard(0).isTheSameAs(testCards.get(0)));
+        assertTrue(column.getCard(1).isTheSameAs(testCards.get(1)));
     }
 }
+
+

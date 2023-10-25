@@ -1,14 +1,15 @@
 package Solitaire;
 
+import Base.Card;
 import Elements.Stock;
 import Elements.Foundation;
 import Elements.Column;
 import Elements.Game;
 
 public interface Rules {
-        public boolean acceptsCard(Stock stock);
-        public boolean acceptsCard(Foundation foundation);
-        public boolean acceptsCard(Column column);
+        public boolean acceptsCard(Stock stock, Card card);
+        public boolean acceptsCard(Foundation foundation, Card card);
+        public boolean acceptsCard(Column column, Card card);
         public boolean givesCard(Stock stock);
         public boolean givesCard(Foundation foundation);
         public boolean givesCard(Column column);

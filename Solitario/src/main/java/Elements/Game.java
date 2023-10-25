@@ -23,16 +23,19 @@ public class Game {
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
+        this.gameRules.gameInit(this);
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
-        this.stock = new Stock();
-        this.stock.fill();
         this.stock.shuffle(seed);
-        this.foundations = new ArrayList<>();
-        for (Suit suit : Suit.values()) {
-            foundations.add(new Foundation(suit));
-        }
+        this.stock.setFilled();
+
+//        this.stock = new Stock();
+//        this.stock.fill();
+//        this.foundations = new ArrayList<>();
+//        for (Suit suit : Suit.values()) {
+//            foundations.add(new Foundation(suit));
+//        }
     }
 
     public Game(ArrayList<Foundation> foundations, Stock stock) {
@@ -46,6 +49,10 @@ public class Game {
 
     public boolean isGameWon() {
         return gameWon;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 
     // falta chequear que el tableau esté vacío
@@ -123,9 +130,7 @@ public class Game {
         return foundation;
     }
 
-    public Deck getStock () {
-        return this.stock;
-    }
+
 
     public boolean areAllFoundationsFull () {
         for (Foundation foundation: foundations) {
@@ -134,6 +139,10 @@ public class Game {
             }
         }
         return true;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
 

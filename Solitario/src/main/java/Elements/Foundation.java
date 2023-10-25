@@ -24,16 +24,13 @@ public class Foundation extends Deck {
                 return this.suit;
         }
 
-        public boolean acceptsCard(Rules gameRules, Card card) {
-                return this.addCards(card) && gameRules.acceptsCard(this);
+        @Override
+        protected boolean addCards(Card card) {
+                return super.addCards(card);
         }
 
-        public boolean canDrawCard(Rules gameRules) {
-                return gameRules.givesCard(this);
+        public boolean acceptCard(Rules gameRules, Card card) {
+                if (gameRules.acceptsCard(this, card)) return addCards(card);
+                else return false;
         }
-
-        public boolean admitsSequence(Rules gameRules) {
-                return gameRules.admitsSequence(this);
-        }
-
 }
