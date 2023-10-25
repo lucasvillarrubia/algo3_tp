@@ -1,14 +1,11 @@
-package Klondike;
+package Auxiliar;
 
 import static org.junit.Assert.*;
 
 import Base.Card;
 
-import static org.junit.Assert.*;
-
 import Base.Suit;
 import Base.Value;
-import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;

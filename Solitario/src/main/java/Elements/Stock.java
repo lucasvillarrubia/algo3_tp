@@ -1,6 +1,11 @@
-package Visitor;
+package Elements;
 
 import Base.Card;
+import Base.Suit;
+import Base.Value;
+import Solitaire.RuleAcceptance;
+import Solitaire.RuleChecker;
+import Base.Deck;
 
 import java.util.Collections;
 import java.util.Random;
@@ -18,7 +23,15 @@ public class Stock extends Deck implements RuleAcceptance {
 
         // llenaría el mazo de acuerdo a las reglas del solitario
         // por única vez, y cambia el estado de filled a true
-        public void fill() {}
+        public boolean fill() {
+                for (Value value : Value.values()) {
+                        for (Suit suit : Suit.values()) {
+                                Card card = new Card(suit, value);
+                                this.addCard(card);
+                        }
+                }
+                return true;
+        }
 
         public void shuffle(int seed) {
                 Random rn = new Random(seed);
@@ -42,7 +55,7 @@ public class Stock extends Deck implements RuleAcceptance {
 
         @Override
         public boolean acceptsCard(RuleChecker addingChecker, Card card) {
-                return this.addCards(card) && addingChecker.checkRule(this);
+                return this.addCard(card) && addingChecker.checkRule(this);
         }
 
         @Override

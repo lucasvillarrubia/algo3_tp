@@ -1,4 +1,8 @@
-package Visitor;
+package Solitaire;
+
+import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
 
 public interface RuleChecker {
         public boolean checkRule(Stock stock);

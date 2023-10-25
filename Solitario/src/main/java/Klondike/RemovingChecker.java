@@ -1,4 +1,9 @@
-package Visitor;
+package Klondike;
+
+import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
+import Solitaire.RuleChecker;
 
 public class RemovingChecker implements RuleChecker {
         

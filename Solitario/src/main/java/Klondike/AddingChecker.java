@@ -1,8 +1,12 @@
-package Visitor;
+package Klondike;
 
 import Base.Card;
 import Base.Color;
 import Base.Value;
+import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
+import Solitaire.RuleChecker;
 
 public class AddingChecker implements RuleChecker {
 

@@ -1,21 +1,24 @@
-package Klondike;
+package Elements;
 
+import Auxiliar.Deck;
+import Auxiliar.Foundation;
+import Auxiliar.Game;
+import Auxiliar.Tableau;
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class GameTest {
 
+
     @Test
     public void initKlondikeGameTest() {
-        Game klondike = new Game(1);
+        Auxiliar.Game klondike = new Auxiliar.Game(1);
         assertFalse(klondike.gameStatus());
         assertFalse(klondike.isGameWon());
         assertNotNull(klondike.getStock());
@@ -24,12 +27,12 @@ public class GameTest {
 
     @Test
     public void initOneStepToWinGameTest() {
-        ArrayList<Foundation> foundations = new ArrayList<>();
-        Foundation foundation = new Foundation(Suit.CLUBS);
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>();
+        Auxiliar.Foundation foundation = new Auxiliar.Foundation(Suit.CLUBS);
         foundations.add(foundation);
         Deck deck = new Deck();
         Tableau tableau = new Tableau(3);
-        Game game = new Game(foundations, deck, tableau);
+        Auxiliar.Game game = new Auxiliar.Game(foundations, deck, tableau);
         assertNotNull(game);
         assertFalse(game.gameStatus());
         assertNotNull(game.getStock());
@@ -45,13 +48,13 @@ public class GameTest {
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.HEART));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.HEART));
         foundations.get(0).addCard(one);
         foundations.get(0).addCard(two);
         Tableau tableau = new Tableau(1);
         tableau.getDeck(0).addCard(three);
-        Game game = new Game(foundations, new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(foundations, new Deck(), tableau);
         assertTrue(game.moveFromTableauToFoundation(0));
         assertTrue(game.getTableau().getDeck(0).isEmpty());
         assertFalse(game.isGameWon());
@@ -63,13 +66,13 @@ public class GameTest {
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card wrongCard = new Card(Suit.HEART, Value.KING);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.HEART));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.HEART));
         foundations.get(0).addCard(one);
         foundations.get(0).addCard(two);
         Tableau tableau = new Tableau(1);
         tableau.addCard(wrongCard, 0);
-        Game game = new Game(foundations, new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(foundations, new Deck(), tableau);
         game.moveFromTableauToFoundation(0);
         assertFalse(game.moveFromTableauToFoundation(0));
         assertEquals(game.getTableau().getLast(0), wrongCard);
@@ -83,14 +86,14 @@ public class GameTest {
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
         Card four = new Card(Suit.HEART, Value.FOUR);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.HEART));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.HEART));
         foundations.get(0).addCard(one);
         foundations.get(0).addCard(two);
         foundations.get(0).addCard(three);
         Deck stock = new Deck();
         stock.addCard(four);
-        Game game = new Game(foundations, stock, new Tableau(1));
+        Auxiliar.Game game = new Auxiliar.Game(foundations, stock, new Tableau(1));
         game.showStockCard();
         assertTrue(game.moveFromStockToFoundation());
         assertTrue(game.getStock().isEmpty());
@@ -104,14 +107,14 @@ public class GameTest {
         Card two = new Card(Suit.CLUBS, Value.TWO);
         Card three = new Card(Suit.CLUBS, Value.THREE);
         Card wrongCard = new Card(Suit.CLUBS, Value.JACK);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.CLUBS));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.CLUBS));
         foundations.get(0).addCard(one);
         foundations.get(0).addCard(two);
         foundations.get(0).addCard(three);
         Deck stock = new Deck();
         stock.addCard(wrongCard);
-        Game game = new Game(foundations, stock, new Tableau(1));
+        Auxiliar.Game game = new Auxiliar.Game(foundations, stock, new Tableau(1));
         game.showStockCard();
         game.moveFromStockToFoundation();
         assertFalse(game.moveFromStockToFoundation());
@@ -132,7 +135,7 @@ public class GameTest {
         tableau.addCard(jack, 0);
         Deck stock = new Deck();
         stock.addCard(ten);
-        Game game = new Game(new ArrayList<>(4), stock, tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), stock, tableau);
         game.showStockCard();
         assertTrue(game.moveFromStockToTableauDeck(0));
         assertTrue(game.getStock().isEmpty());
@@ -153,7 +156,7 @@ public class GameTest {
         tableau.addCard(jack, 0);
         Deck stock = new Deck();
         stock.addCard(wrongCard);
-        Game game = new Game(new ArrayList<>(4), stock, tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), stock, tableau);
         game.showStockCard();
         game.moveFromStockToTableauDeck(0);
         assertFalse(game.moveFromStockToTableauDeck(0));
@@ -175,7 +178,7 @@ public class GameTest {
         tableau.addCard(jack, 0);
         tableau.addCard(otherKing, 1);
         tableau.addCard(otherQueen, 1);
-        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), new Deck(), tableau);
         assertTrue(game.moveBetweenTableauDecks(0, 1));
         assertEquals(game.getTableau().getLast(0), queen);
         assertEquals(game.getTableau().getLast(1), jack);
@@ -193,7 +196,7 @@ public class GameTest {
         tableau.addCard(queen, 0);
         tableau.addCard(wrongJack, 0);
         tableau.addCard(otherKing, 1);
-        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), new Deck(), tableau);
         assertFalse(game.moveBetweenTableauDecks(0, 1));
         assertEquals(game.getTableau().getLast(1), otherKing);
         assertEquals(game.getTableau().getLast(0), wrongJack);
@@ -205,13 +208,13 @@ public class GameTest {
         Card one = new Card(Suit.DIAMOND, Value.ACE);
         Card two = new Card(Suit.CLUBS, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.DIAMOND));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.DIAMOND));
         foundations.get(0).addCard(one);
         Tableau tableau = new Tableau(1);
         tableau.getDeck(0).addCard(three);
         tableau.addCard(two, 0);
-        Game game = new Game(foundations, new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(foundations, new Deck(), tableau);
         assertTrue(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));
         assertNull(game.getFoundationBySuit(Suit.DIAMOND).getTopCard());
         assertEquals(game.getTableau().getLast(0), one);
@@ -223,13 +226,13 @@ public class GameTest {
         Card wrongOne = new Card(Suit.DIAMOND, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.SPADES, Value.THREE);
-        ArrayList<Foundation> foundations = new ArrayList<>(4);
-        foundations.add(new Foundation(Suit.DIAMOND));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>(4);
+        foundations.add(new Auxiliar.Foundation(Suit.DIAMOND));
         foundations.get(0).addCard(wrongOne);
         Tableau tableau = new Tableau(1);
         tableau.getDeck(0).addCard(three);
         tableau.addCard(two, 0);
-        Game game = new Game(foundations, new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(foundations, new Deck(), tableau);
         assertFalse(game.moveFromFoundationToTableauDeck(0, Suit.DIAMOND));
         assertEquals(game.getFoundationBySuit(Suit.DIAMOND).getTopCard(), wrongOne);
         assertEquals(game.getTableau().getLast(0), two);
@@ -246,7 +249,7 @@ public class GameTest {
         tableau.addCard(king, 0);
         tableau.addCard(queen, 0);
         tableau.addCard(jack, 0);
-        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), new Deck(), tableau);
         assertTrue(game.moveSequenceInTableau(0, 1, 0));
         assertEquals(tableau.getDeck(0).size(), 0);
         assertEquals(tableau.getDeck(1).size(), 3);
@@ -265,7 +268,7 @@ public class GameTest {
         tableau.addCard(new Card(Suit.SPADES, Value.NINE), 0);
         tableau.addCard(new Card(Suit.HEART, Value.EIGHT), 0);
         tableau.addCard(otherKing, 1);
-        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), new Deck(), tableau);
         boolean didMove = game.moveSequenceInTableau(0, 1, 1);
         assertTrue(didMove);
         assertEquals(1, tableau.getDeck(0).size());
@@ -281,20 +284,20 @@ public class GameTest {
         tableau.addCard(new Card(Suit.SPADES, Value.KING), 0);
         tableau.addCard(new Card(Suit.DIAMOND, Value.QUEEN), 0);
         tableau.addCard(new Card(Suit.CLUBS, Value.JACK), 0);
-        Game game = new Game(new ArrayList<>(4), new Deck(), tableau);
+        Auxiliar.Game game = new Auxiliar.Game(new ArrayList<>(4), new Deck(), tableau);
         assertFalse(game.moveSequenceInTableau(0, 1, 1));
     }
 
     @Test
     public void fullFoundationsTest() {
         Tableau tableau = new Tableau(7);
-        ArrayList<Foundation> foundations = new ArrayList<>();
-        foundations.add(new Foundation(Suit.HEART));
-        foundations.add(new Foundation(Suit.DIAMOND));
-        foundations.add(new Foundation(Suit.SPADES));
-        foundations.add(new Foundation(Suit.CLUBS));
-        Game game = new Game(foundations, new Deck(), tableau);
-        for (Foundation foundation : foundations) {
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>();
+        foundations.add(new Auxiliar.Foundation(Suit.HEART));
+        foundations.add(new Auxiliar.Foundation(Suit.DIAMOND));
+        foundations.add(new Auxiliar.Foundation(Suit.SPADES));
+        foundations.add(new Auxiliar.Foundation(Suit.CLUBS));
+        Auxiliar.Game game = new Auxiliar.Game(foundations, new Deck(), tableau);
+        for (Auxiliar.Foundation foundation : foundations) {
             Suit suit = foundation.getSuit();
             for (Value value : Value.values()) {
                 Card card = new Card(suit, value);
@@ -309,11 +312,11 @@ public class GameTest {
     @Test
     public void lastMoveStockRestTest() {
         Tableau tableau = new Tableau(7);
-        ArrayList<Foundation> foundations = new ArrayList<>();
-        foundations.add(new Foundation(Suit.HEART));
-        foundations.add(new Foundation(Suit.DIAMOND));
-        foundations.add(new Foundation(Suit.SPADES));
-        foundations.add(new Foundation(Suit.CLUBS));
+        ArrayList<Auxiliar.Foundation> foundations = new ArrayList<>();
+        foundations.add(new Auxiliar.Foundation(Suit.HEART));
+        foundations.add(new Auxiliar.Foundation(Suit.DIAMOND));
+        foundations.add(new Auxiliar.Foundation(Suit.SPADES));
+        foundations.add(new Auxiliar.Foundation(Suit.CLUBS));
         for (Foundation foundation : foundations) {
             Suit suit = foundation.getSuit();
             for (Value value : Value.values()) {
@@ -323,11 +326,12 @@ public class GameTest {
         }
         Deck stock =new Deck();
         stock.addCard(foundations.get(3).removeCard());
-        Game game = new Game(foundations, stock, tableau);
+        Auxiliar.Game game = new Game(foundations, stock, tableau);
         game.showStockCard();
         game.showStockCard();
         assertTrue(game.moveFromStockToFoundation());
         assertTrue(game.isGameWon());
         assertEquals(game.getCantMovements(), 3);
     }
+
 }

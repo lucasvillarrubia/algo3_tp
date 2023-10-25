@@ -1,44 +1,43 @@
 package Base;
 
 import java.util.*;
+import Base.Card;
 
 public class Deck {
-    protected Stack<Card> deck;
+        protected ArrayList<Card> deck;
 
-    public Deck(){
-        this.deck = new Stack<>();
-    }
-
-    public void addCard(Card card) {
-        deck.push(card);
-    }
-
-    public Card getLast(){
-        if(deck.empty()) {
-            return null;
+        public Deck(){
+                this.deck = new ArrayList<>();
         }
-        deck.peek().flip();
-        return deck.peek();
-    }
 
-    public Card drawCard(){
-        if(deck.empty()) {
-            return null;
+        protected boolean addCard(Card card) {
+                if (card == null) return false;
+                deck.add(0, card);
+                return true;
         }
-        deck.peek().flip();
-        return deck.pop();
-    }
 
-    public boolean isEmpty () {
-        return deck.empty();
-    }
+        public Card getLast(){
+                if(deck.isEmpty()) return null;
+                deck.get(0).flip();
+                return deck.get(0);
+        }
 
-    public int cardCount () {
-        return deck.size();
-    }
+        public Card drawCard(){
+                if(deck.isEmpty()) return null;
+                deck.get(0).flip();
+                return deck.remove(0);
+        }
 
-    public void shuffle(int seed) {
-        Random rn = new Random(seed);
-        Collections.shuffle(deck, rn);
-    }
+        public boolean removeCard(Card card) {
+                return deck.remove(card);
+        } 
+
+        public boolean isEmpty () {
+                return deck.isEmpty();
+        }
+
+        public int cardCount () {
+                return deck.size();
+        }
+
 }

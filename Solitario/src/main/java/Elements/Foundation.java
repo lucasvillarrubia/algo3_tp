@@ -1,8 +1,11 @@
-package Visitor;
+package Elements;
 
 import Base.Suit;
 import Base.Value;
 import Base.Card;
+import Solitaire.RuleAcceptance;
+import Solitaire.RuleChecker;
+import Base.Deck;
 
 public class Foundation extends Deck implements RuleAcceptance {
 
@@ -24,7 +27,7 @@ public class Foundation extends Deck implements RuleAcceptance {
 
         @Override
         public boolean acceptsCard(RuleChecker addingChecker, Card card) {
-                return this.addCards(card) && addingChecker.checkRule(this);
+                return this.addCard(card) && addingChecker.checkRule(this);
         }
 
         @Override

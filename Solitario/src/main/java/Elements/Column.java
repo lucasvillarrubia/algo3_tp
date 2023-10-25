@@ -1,6 +1,9 @@
-package Visitor;
+package Elements;
 
 import Base.Card;
+import Base.Deck;
+import Solitaire.RuleAcceptance;
+import Solitaire.RuleChecker;
 
 import java.util.Collection;
 
@@ -18,8 +21,8 @@ public class Column extends Deck implements RuleAcceptance {
         }
 
         @Override
-        protected boolean addCards(Card card) {
-                return super.addCards(card);
+        protected boolean addCard(Card card) {
+                return super.addCard(card);
         }
         
         private boolean addCards(Collection<Card> cards) {
@@ -30,7 +33,7 @@ public class Column extends Deck implements RuleAcceptance {
         
         @Override
         public boolean acceptsCard(RuleChecker addingChecker, Card card) {
-                return this.addCards(card) && addingChecker.checkRule(this);
+                return this.addCard(card) && addingChecker.checkRule(this);
         }
 
         @Override

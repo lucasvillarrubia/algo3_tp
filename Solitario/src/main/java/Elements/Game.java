@@ -1,15 +1,21 @@
-package Visitor;
+package Elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Base.Card;
+import Base.Deck;
 import Base.Suit;
 import Base.Value;
+import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
+import Solitaire.Rules;
 
 public class Game {
       // mover constante al init game de rules correspondiente  
     //private static final int AMOUNT_COLUMNS = 7;
+    private Rules gameRules;
     private Deck waste;
     private boolean gameOver;
     private boolean gameWon;
@@ -69,16 +75,16 @@ public class Game {
     }
 
 
-    public Deck initStock() {
-        Deck stock = new Deck();
-        for (Value value : Value.values()) {
-            for (Suit suit : Suit.values()) {
-                Card card = new Card(suit, value);
-                stock.addCards(card);
-            }
-        }
-        return stock;
-    }
+//    public Deck initStock() {
+//        Deck stock = new Deck();
+//        for (Value value : Value.values()) {
+//            for (Suit suit : Suit.values()) {
+//                Card card = new Card(suit, value);
+//                stock.addCards(card);
+//            }
+//        }
+//        return stock;
+//    }
 
     // AGREGAR ESTO AL INIT GAME
     // public Tableau initTableau(Deck stock) {
@@ -99,7 +105,7 @@ public class Game {
         while (!waste.isEmpty()) {
             Card card = waste.drawCard();
             card.flip();
-            stock.addCards(card);
+            //stock.addCards(card);
         }
     }
 
@@ -107,7 +113,7 @@ public class Game {
         if (stock.isEmpty()) {
             resetStock();
         }
-        waste.addCards(stock.drawCard());
+        // waste.addCards(stock.drawCard());
         addMovement();
     }
 
@@ -125,10 +131,6 @@ public class Game {
         return this.stock;
     }
 
-    public Deck getWaste () {
-        return this.waste;
-    }
-
     public boolean areAllFoundationsFull () {
         for (Foundation foundation: foundations) {
             if (!foundation.isFull()){
@@ -141,15 +143,27 @@ public class Game {
 
     //                              M O V I M I E N T O S
 
-    public boolean moveCard (Deck from, Deck to) {
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (to.addCards(moved) && from.removeCard(moved)) {
-            addMovement();
-            winGame();
-            return true;
-        }
-        return false;
+//    public boolean moveCard (Deck from, Deck to) {
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (to.addCards(moved) && from.removeCard(moved)) {
+//            addMovement();
+//            winGame();
+//            return true;
+//        }
+//        return false;
+//    }
+
+    public void setFoundations(List<Foundation> foundations) {
+        this.foundations = foundations;
+    }
+
+    public void setTableau(List<Column> tableau) {
+        this.tableau = tableau;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     // public boolean moveCardsInTableau (int from, int to, int index) {

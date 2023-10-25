@@ -1,9 +1,8 @@
-package Klondike;
+package Auxiliar;
 
 
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 

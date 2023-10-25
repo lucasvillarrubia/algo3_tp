@@ -1,4 +1,4 @@
-package Klondike;
+package Auxiliar;
 
 import Base.Card;
 
