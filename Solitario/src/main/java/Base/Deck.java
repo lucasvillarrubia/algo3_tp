@@ -47,5 +47,7 @@ public abstract class Deck {
 
         public abstract boolean acceptCard(Rules gameRules, Card card);
         public abstract boolean acceptSequence(Rules gameRules, Column cards);
+        public abstract boolean givesCard(Rules gameRules);
+
 
 }

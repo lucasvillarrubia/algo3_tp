@@ -16,6 +16,10 @@ import Solitaire.Rules;
 public class KlondikeRules implements Rules {
 
         private static final int AMOUNT_COLUMNS = 7;
+        private static final String RULES_TYPE = "KLONDIKE";
+
+        @Override
+        public String getRulesType() { return RULES_TYPE; }
 
         public boolean isSequenceValid(Card prev, Card next) {
                 int prevValue = prev.getNumber();
@@ -44,7 +48,10 @@ public class KlondikeRules implements Rules {
 
         @Override
         public boolean acceptsCard(Column column, Card card) {
-                if (column.isEmpty()) {
+                if (column.isBeingFilled()) {
+                        return true;
+                }
+                else if (column.isEmpty()) {
                         return card.getValue() == Value.KING;
                 } else {
                         return isSequenceValid(column.getLast(), card);
@@ -78,6 +85,7 @@ public class KlondikeRules implements Rules {
 
         @Override
         public boolean admitsSequence(Column column, Column sequence) {
+                if (!acceptsCard(column, sequence.getCard(sequence.cardCount()-1)));
                 for (int i = sequence.cardCount() - 1; i > 0; i--) {
                         if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
                 }

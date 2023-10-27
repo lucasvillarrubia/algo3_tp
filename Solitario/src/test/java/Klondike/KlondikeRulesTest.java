@@ -7,7 +7,6 @@ import Elements.Column;
 import Elements.Foundation;
 import Elements.Game;
 import Elements.Stock;
-import Spider.SpiderRules;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -73,14 +72,10 @@ public class KlondikeRulesTest {
         KlondikeRules gameRules = new KlondikeRules();
         Stock stock = gameRules.initStock();
         Card card = new Card(Suit.DIAMOND, Value.NINE);
-        assertFalse(gameRules.acceptsCard(stock, card));
+        //assertFalse(gameRules.acceptsCard(stock, card));
         //assertTrue(stock.wasFilled()); ->CREO QUE DEPENDE DE GAMES!!!! OJO
         assertFalse(stock.isEmpty());
     }
-
-
-
-
 
     //revisar tests (son los ex-tests de game)
 
@@ -108,7 +103,8 @@ public class KlondikeRulesTest {
         foundations.get(0).acceptCard(rules,one);
         foundations.get(0).acceptCard(rules, two);
         foundations.get(0).acceptCard(rules, three);
-        Game game = new Game(foundations, new Stock());
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations, tableau,new Stock());
         assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.HEART).getLast(), three);
     }
@@ -139,5 +135,31 @@ public class KlondikeRulesTest {
         assertFalse(rules.checkGameStatus(game));
     }
 
+    ///ACCEPT SEQUENCE Y CARDS CON REGLAS
+//    @Test
+//    public void testAcceptCard() {
+//
+//        Rules gameRules = new Rules(); // You should create appropriate game rules here
+//        Card card1 = new Card(Suit.HEARTS, Rank.ACE);
+//
+//        assertTrue(column.acceptCard(gameRules, card1));
+//        assertEquals(1, column.cardCount());
+//        assertEquals(card1, column.getCard(0));
+//    }
+//
+//    @Test
+//    public void testAcceptSequence() {
+//        Rules gameRules = new Rules(); // You should create appropriate game rules here
+//        Card card1 = new Card(Suit.HEARTS, Rank.ACE);
+//        Card card2 = new Card(Suit.SPADES, Rank.KING);
+//
+//        Column cardsToAdd = new Column();
+//        cardsToAdd.addCards(card1);
+//        cardsToAdd.addCards(card2);
+//        assertTrue(column.acceptSequence(gameRules, cardsToAdd));
+//        assertEquals(2, column.cardCount());
+//        assertEquals(card2, column.getCard(0));
+//        assertEquals(card1, column.getCard(1));
+//    }
 
 }

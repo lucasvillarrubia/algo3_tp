@@ -3,14 +3,27 @@ package Elements;
 import Base.Deck;
 import Solitaire.Rules;
 import Base.Card;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Column extends Deck implements Serializable {
 
-        // column debería tener atributo index? (posicion en tableau)
+        private boolean isFilling;
+
+        public Column () {
+                super();
+                this.isFilling = true;
+        }
+
+        protected void toggleFillingState() {
+                this.isFilling = !isFilling;
+        }
+
+        public boolean isBeingFilled() {
+                return this.isFilling;
+        }
+
         // falta chequear que esten flippeadas, creo
         public Card getCard(int pos){
                 return deck.get(pos);
@@ -18,6 +31,7 @@ public class Column extends Deck implements Serializable {
 
         public Column getSequence(int upToIndex) {
                 Column subColumn = new Column();
+                subColumn.toggleFillingState();
                 if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
                 return subColumn;
         }
@@ -26,7 +40,7 @@ public class Column extends Deck implements Serializable {
         protected boolean addCards(Card card) {
                 return super.addCards(card);
         }
-        
+
         private boolean addCards(Collection<Card> cards) {
                 if (cards == null) return false;
                 deck.addAll(0, cards);
@@ -59,6 +73,11 @@ public class Column extends Deck implements Serializable {
                         return addCards(cardsCollection);
                 }
                 else return false;
+        }
+
+        @Override
+        public boolean givesCard(Rules gameRules) {
+                return gameRules.givesCard(this);
         }
 
 

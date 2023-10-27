@@ -16,7 +16,8 @@ public class GameTest {
     public void buildGameWIthStockAndFoundation() {
         ArrayList<Foundation> foundations = new ArrayList<>();
         Stock stock = new Stock();
-        Game game = new Game(foundations, stock);
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations,tableau,stock);
         assertFalse(game.isGameWon());
         assertFalse(game.isGameOver());
         assertFalse(game.gameStatus());
@@ -27,7 +28,8 @@ public class GameTest {
     public void winGameTest() {
         ArrayList<Foundation> foundations = new ArrayList<>();
         Stock stock = new Stock();
-        Game game = new Game(foundations, stock);
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations,tableau, stock);
         assertFalse(game.gameStatus());
         game.winGame();
         assertTrue(game.gameStatus());
@@ -40,7 +42,8 @@ public class GameTest {
     public void addMovementTest() {
         ArrayList<Foundation> foundations = new ArrayList<>();
         Stock stock = new Stock();
-        Game game = new Game(foundations, stock);
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations,tableau, stock);
         game.addMovement();
         assertEquals(1, game.getCantMovements());
     }
@@ -49,8 +52,9 @@ public class GameTest {
     public void getFoundationBySuitTest() {
         ArrayList<Foundation> foundations  = new ArrayList<>();
         Stock stock = new Stock();
+        ArrayList<Column> tableau = new ArrayList<>();
         foundations.add(new Foundation(Suit.CLUBS));
-        Game game = new Game(foundations, stock);
+        Game game = new Game(foundations,tableau, stock);
         assertNotNull(game.getFoundationBySuit(Suit.CLUBS));
     }
 
@@ -61,7 +65,8 @@ public class GameTest {
         foundations.add(new Foundation(Suit.DIAMOND));
         foundations.add(new Foundation(Suit.SPADES));
         foundations.add(new Foundation(Suit.CLUBS));
-        Game game = new Game(foundations, new Stock());
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations,tableau , new Stock());
         for (Foundation foundation : foundations) {
             Suit suit = foundation.getSuit();
             for (Value value : Value.values()) {
@@ -81,7 +86,8 @@ public class GameTest {
         foundations.add(new Foundation(Suit.DIAMOND));
         foundations.add(new Foundation(Suit.SPADES));
         foundations.add(new Foundation(Suit.CLUBS));
-        Game game = new Game(foundations, new Stock());
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations, tableau,new Stock());
         for (Foundation foundation : foundations) {
             Suit suit = foundation.getSuit();
             for (Value value : Value.values()) {
@@ -98,13 +104,25 @@ public class GameTest {
     @Test public void serializationTest() throws IOException, ClassNotFoundException {
         ArrayList<Foundation> foundations = new ArrayList<>();
         foundations.add(new Foundation(Suit.CLUBS));
-        Game game = new Game(foundations, new Stock());
+        ArrayList<Column> tableau = new ArrayList<>();
+        Game game = new Game(foundations, tableau, new Stock());
+        game.addMovement();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         game.serialize(outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         Game deserializedGame = Game.deserialize(inputStream);
         assertNotNull(deserializedGame);
+        assertEquals(deserializedGame.getCantMovements(), 1);
     }
+
+    //game serialization con el stock lleno de cartas y cosas(?
+
+
+    //Testeos de Game con Klondike
+
+
+
+    //Testeos de Game con Spider
 
 //   @Test
 //    public void initOneStepToWinGameTest() {

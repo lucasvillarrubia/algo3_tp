@@ -56,4 +56,10 @@ public class Foundation extends Deck implements Serializable {
                 }
                 else return false;
         }
+
+        @Override
+        public boolean givesCard(Rules gameRules) {
+                return gameRules.givesCard(this);
+        }
+
 }

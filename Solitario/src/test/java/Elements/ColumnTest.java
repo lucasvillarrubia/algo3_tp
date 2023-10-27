@@ -3,7 +3,6 @@ package Elements;
 import Base.Card;
 import Base.Suit;
 import Base.Value;
-import Klondike.KlondikeRules;
 import org.junit.Test;
 
 
@@ -37,7 +36,7 @@ public class ColumnTest {
 
         Column subColumn = column.getSequence(3);
 
-//REVISAR!!!
+        //REVISAR!!!
         assertNotNull(subColumn);
         assertEquals(3, subColumn.cardCount());
         assertEquals(card1, subColumn.getCard(2));
@@ -115,6 +114,28 @@ public class ColumnTest {
         assertEquals(1, column.cardCount());
     }
 
+    @Test
+    public void testRemoveCard() {
+        Column column = new Column();
+        Card card1 = new Card(Suit.HEART, Value.ACE);
+        column.addCards(card1);
+        assertTrue(column.removeCard(card1));
+        assertEquals(0, column.cardCount());
+    }
+
+    @Test
+    public void testRemoveCardFromColumn() {
+        Column column = new Column();
+        Card card1 = new Card(Suit.HEART, Value.ACE);
+        Card card2 = new Card(Suit.SPADES, Value.KING);
+        column.addCards(card1);
+        column.addCards(card2);
+        Column cardsToRemove = new Column();
+        cardsToRemove.addCards(card2);
+        assertTrue(column.removeCard(cardsToRemove));
+        assertEquals(1, column.cardCount());
+        assertEquals(card1, column.getCard(0));
+    }
 
 }
 
