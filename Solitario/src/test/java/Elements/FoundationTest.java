@@ -7,6 +7,9 @@ import Base.Suit;
 import Base.Value;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import static org.junit.Assert.*;
 
 public class FoundationTest {
@@ -68,6 +71,15 @@ public class FoundationTest {
         f.removeCard(f.getLast());
         assertFalse(f.isFull());
     }
+
+    @Test
+    public void addCardTest() {
+        Foundation foundation = new Foundation(Suit.HEART);
+        Card aceOfHearts = new Card(Suit.HEART, Value.ACE);
+        assertTrue(foundation.addCards(aceOfHearts));
+        assertEquals(aceOfHearts, foundation.getLast());
+    }
+
 
     //    @Test
 //    public void dontAddCorrectCardWhenEmptyTest() {

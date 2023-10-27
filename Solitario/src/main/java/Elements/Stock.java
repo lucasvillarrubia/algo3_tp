@@ -24,7 +24,7 @@ public class Stock extends Deck implements Serializable {
 
         // el método que está en game, creo que debería devolver una carta
         // pero a la vez pienso que el waste debería tenerlo el propio stock
-//        public void showCard() {}
+        public boolean showCard() { return false; }
 
         protected void setFilled() {
                 this.filled = true;
@@ -53,6 +53,11 @@ public class Stock extends Deck implements Serializable {
         @Override
         public boolean acceptSequence(Rules gameRules, Column cards) {
                 return false;
+        }
+
+        @Override
+        public boolean givesCard(Rules gameRules) {
+                return gameRules.givesCard(this);
         }
 
 }

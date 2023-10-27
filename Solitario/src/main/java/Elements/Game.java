@@ -11,6 +11,7 @@ import Base.Suit;
 
 
 public class Game implements Serializable {
+
     private Rules gameRules;
     private boolean gameOver;
     private boolean gameWon;
@@ -18,7 +19,6 @@ public class Game implements Serializable {
     private List<Foundation> foundations;
     private List<Column> tableau;
     private Stock stock;
-
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
@@ -28,21 +28,28 @@ public class Game implements Serializable {
         this.cantMovements = 0;
         this.stock.shuffle(seed);
         this.stock.setFilled();
-
-//        this.stock = new Stock();
-//        this.stock.fill();
-//        this.foundations = new ArrayList<>();
-//        for (Suit suit : Suit.values()) {
-//            foundations.add(new Foundation(suit));
-//        }
+        this.tableau.forEach(Column::toggleFillingState);
     }
 
-    public Game(ArrayList<Foundation> foundations, Stock stock) {
+    public Game(List<Foundation> foundations, List<Column> tableau, Stock stock) {
         this.foundations = foundations;
+        this.tableau = tableau;
         this.stock = stock;
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
+    }
+
+
+    //pensar lo del constructor con un game ya serializado
+    public Game(Rules rules, boolean gameOver, boolean gameWon, int cantMovements, Stock stock, List<Foundation> foundations, List<Column> tableau){
+        this.gameRules = rules;
+        this.gameOver = gameOver;
+        this.gameWon = gameWon;
+        this.cantMovements = cantMovements;
+        this.stock = stock;
+        this.foundations = foundations;
+        this.tableau = tableau;
     }
 
 
@@ -66,7 +73,6 @@ public class Game implements Serializable {
         return gameOver;
     }
 
-
     public int getCantMovements() {
         return cantMovements;
     }
@@ -84,7 +90,6 @@ public class Game implements Serializable {
         }
         return foundation;
     }
-
 
     public boolean areAllFoundationsFull () {
         for (Foundation foundation: foundations) {
@@ -115,37 +120,38 @@ public class Game implements Serializable {
         return (Game) objectInStream.readObject();
     }
 
+
+
     //                              M O V I M I E N T O S
 
-    // MOVER A STOCK ??
-    // public void showStockCard() {
-    //     if (stock.isEmpty()) {
-    //         resetStock();
-    //     }
-    //     waste.addCards(stock.drawCard());
-    //     addMovement();
-    // }
+    public boolean dealOneCardToEachColumn () {
+        //gameRules.takeCardFromStock(tableau)
+        for (int i = 0; i < 10; i++) {
+            if (tableau.get(i).isEmpty()) return false;
+        }
+        for (int j = 0; j < 10; j++) {
+            tableau.get(j).toggleFillingState();
+            if (!moveCards(stock, tableau.get(j))) {
+                tableau.get(j).toggleFillingState();
+                return false;
+            }
+            tableau.get(j).toggleFillingState();
+        }
+        return true;
+    }
 
-//     public void showStockCard() {
-//         if (stock.isEmpty()) {
-//             resetStock();
-//         }
-//         gameRules.showStockCard();
-//         //-> en el klondike haces game.getWaste.add
-//         //->SPIDER column.add(stocke.get(0)
-//
-//     }
+    public boolean getCardFromStock(){
+        if(gameRules.getRulesType().equals("SPIDER")){
+            return dealOneCardToEachColumn();
+        }
+        else if(gameRules.getRulesType().equals("KLONDIKE")) {
+            return stock.showCard();
+        }
+        return false;
+    }
 
-
-
-    //mover cartas
-    //pedirle al stock
-    //pedirle una carta a la foundation
-
-
-
-
-    public boolean moveCards (Deck from, Deck to) {
+    public boolean moveCards(Deck from, Deck to) {
+        if (!from.givesCard(gameRules)) return false;
         Card moved = from.getLast();
         if (moved == null) { return false; }
         else if (to.acceptCard(gameRules, moved)) {
@@ -156,7 +162,8 @@ public class Game implements Serializable {
         return false;
     }
 
-    public boolean moveCards (Column from, Deck to, int index) {
+    public boolean moveCards(Column from, Deck to, int index) {
+        if (!from.givesCard(gameRules)) return false;
         Column moved = from.getSequence(index);
         if (moved == null) { return false; }
         else if (to.acceptSequence(gameRules, moved)) {
@@ -166,10 +173,5 @@ public class Game implements Serializable {
         }
         return false;
     }
-
-
-//    public boolean moveCards(Stock from, Column to ){
-//        return false;
-//    }
 
 }
