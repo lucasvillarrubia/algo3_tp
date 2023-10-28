@@ -3,10 +3,13 @@ package Elements;
 import Base.Card;
 import Base.Suit;
 import Base.Value;
+import GameType.KlondikeRules;
+import GameType.SpiderRules;
 import org.junit.Test;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -116,15 +119,58 @@ public class GameTest {
     }
 
     //game serialization con el stock lleno de cartas y cosas(?
-
+    @Test
+    public void completeSerializationTest() throws IOException, ClassNotFoundException {
+        KlondikeRules kr = new KlondikeRules();
+        Stock stock = kr.initStock();
+        int cant = 20;
+        List<Foundation> foundations = kr.initFoundations();
+        List<Column> tableau = new ArrayList<>();
+        Game game = new Game(kr, false, false, cant, stock, foundations, tableau);
+        game.addMovement();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        game.serialize(outputStream);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        Game deserializedGame = Game.deserialize(inputStream);
+        assertNotNull(deserializedGame);
+        assertEquals(deserializedGame.getCantMovements(), 21);
+        assertNotNull(deserializedGame.getFoundationBySuit(Suit.HEART));
+        assertTrue(deserializedGame.getStock().getLast().isTheSameAs(new Card(Suit.CLUBS,Value.KING)));
+    }
 
     //Testeos de Game con Klondike
 
 
 
-    //Testeos de Game con Spider
 
-//   @Test
+
+
+    //Testeos de Game con Spider
+    @Test
+    public void initSpiderGameTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Game game = new Game(spiderRules, 10);
+        assertEquals(game.getStock().cardCount(), 50);
+        for(int i = 0; i<10;i++){
+            assertNotNull(game.getColumn(i));
+        }
+        for(int i = 0; i<6; i++){
+            assertEquals(game.getColumn(i).cardCount(),5);
+        }
+        for(int i = 0; i<4; i++){
+            assertEquals(game.getColumn(i).cardCount(),6);
+        }
+    }
+
+    @Test
+    public void gameStatusTest(){
+        SpiderRules spiderRules = new SpiderRules();
+        Game game =  new Game(spiderRules, 12);
+        assertFalse(game.isGameWon());
+    }
+
+
+    //   @Test
 //    public void initOneStepToWinGameTest() {
 //        ArrayList<Foundation> foundations = new ArrayList<>();
 //        Foundation foundation = new Foundation(Suit.CLUBS);

@@ -14,7 +14,7 @@ public class StockTest {
     public void stockInitEmptyTest() {
         Stock stock = new Stock();
         assertTrue(stock.isEmpty());
-        assertFalse(stock.wasFilled());
+        assertFalse(stock.isFilling());
         assertEquals(0, stock.cardCount());
     }
 
