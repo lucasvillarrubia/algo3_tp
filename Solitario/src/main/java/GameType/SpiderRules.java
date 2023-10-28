@@ -1,4 +1,4 @@
-package Spider;
+package GameType;
 
 import Base.Card;
 import Base.Suit;
@@ -9,13 +9,13 @@ import Elements.Game;
 import Elements.Stock;
 import Solitaire.Rules;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SpiderRules implements Rules {
+public class SpiderRules implements Rules, Serializable {
 
-    private static final String RULES_TYPE = "SPIDER";
     private static final int AMOUNT_COLUMNS = 10;
     private static final int AMOUNT_COLUMNS_SHORT = 6;
     private static final int AMOUNT_CARDS_SHORT = 5;
@@ -25,10 +25,6 @@ public class SpiderRules implements Rules {
     private static final int COMPLETE_FOUNDATION =13;
     private static final Suit SPADES = Suit.SPADES;
 
-    @Override
-    public String getRulesType() { return RULES_TYPE; }
-
-
     public boolean isSequenceValid(Card prev, Card next) {
         int prevValue = prev.getNumber();
         int nextValue = next.getNumber();
@@ -37,7 +33,7 @@ public class SpiderRules implements Rules {
 
     @Override
     public boolean acceptsCard(Stock stock, Card card) {
-        return !stock.wasFilled();
+        return !stock.isFilling();
     }
 
     @Override
@@ -47,11 +43,8 @@ public class SpiderRules implements Rules {
 
     @Override
     public boolean acceptsCard(Column column, Card card) {
-        if (column.isBeingFilled()) {
+        if (column.isBeingFilled() || column.isEmpty()) {
             return true;
-        }
-        else if (column.isEmpty()) {
-            return card.getValue() == Value.KING;
         } else {
             Card topCard = column.getLast();
             return (card.getValue().getNumber() == topCard.getValue().getNumber() - 1);
@@ -60,8 +53,7 @@ public class SpiderRules implements Rules {
 
     @Override
     public boolean givesCard(Stock stock) {
-        //ESTA DUDA
-        return true;
+        return stock.isFilling();
     }
 
     @Override
@@ -103,13 +95,9 @@ public class SpiderRules implements Rules {
     }
 
     @Override
-    public boolean checkGameStatus(Game game) {
-        return game.gameStatus();
-    }
-
-    @Override
-    public void gameInit(Game game) {
+    public void gameInit(Game game, int seed) {
         Stock gameStock = initStock();
+        gameStock.shuffle(seed);
         game.setStock(gameStock);
         game.setTableau(initTableau(gameStock));
         game.setFoundations(initFoundations());
@@ -159,6 +147,21 @@ public class SpiderRules implements Rules {
             foundations.add(new Foundation(SPADES));
         }
         return foundations;
+    }
+
+    public boolean drawCardFromStock (Game game) {
+        for (int i = 0; i < AMOUNT_COLUMNS; i++) {
+            if (game.getColumn(i).isEmpty()) return false;
+        }
+        for (int j = 0; j < AMOUNT_COLUMNS; j++) {
+            game.getColumn(j).toggleFillingState();
+            if (!game.moveCards(game.getStock(), game.getColumn(j))) {
+                game.getColumn(j).toggleFillingState();
+                return false;
+            }
+            game.getColumn(j).toggleFillingState();
+        }
+        return true;
     }
 
 }

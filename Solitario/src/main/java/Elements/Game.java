@@ -1,9 +1,7 @@
 package Elements;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-
 import Solitaire.Rules;
 import Base.Deck;
 import Base.Card;
@@ -19,15 +17,15 @@ public class Game implements Serializable {
     private List<Foundation> foundations;
     private List<Column> tableau;
     private Stock stock;
+    private Stock waste;
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
-        this.gameRules.gameInit(this);
+        this.gameRules.gameInit(this, seed);
+        this.stock.toggleFillingState();
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
-        this.stock.shuffle(seed);
-        this.stock.setFilled();
         this.tableau.forEach(Column::toggleFillingState);
     }
 
@@ -40,8 +38,6 @@ public class Game implements Serializable {
         this.cantMovements = 0;
     }
 
-
-    //pensar lo del constructor con un game ya serializado
     public Game(Rules rules, boolean gameOver, boolean gameWon, int cantMovements, Stock stock, List<Foundation> foundations, List<Column> tableau){
         this.gameRules = rules;
         this.gameOver = gameOver;
@@ -51,7 +47,6 @@ public class Game implements Serializable {
         this.foundations = foundations;
         this.tableau = tableau;
     }
-
 
     public boolean isGameWon() {
         return gameWon;
@@ -91,13 +86,12 @@ public class Game implements Serializable {
         return foundation;
     }
 
-    public boolean areAllFoundationsFull () {
-        for (Foundation foundation: foundations) {
-            if (!foundation.isFull()){
-                return false;
-            }
-        }
-        return true;
+    public Stock getStock() {
+        return stock;
+    }
+
+    public Column getColumn(int index) {
+        return tableau.get(index);
     }
 
     public void setStock(Stock stock) {
@@ -108,7 +102,15 @@ public class Game implements Serializable {
 
     public void setFoundations(List<Foundation> foundations) { this.foundations = foundations; }
 
-    //Serializacion
+    public boolean areAllFoundationsFull () {
+        for (Foundation foundation: foundations) {
+            if (!foundation.isFull()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void serialize(OutputStream os) throws IOException {
         ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
         objectOutStream.writeObject(this);
@@ -121,33 +123,13 @@ public class Game implements Serializable {
     }
 
 
-
     //                              M O V I M I E N T O S
 
-    public boolean dealOneCardToEachColumn () {
-        //gameRules.takeCardFromStock(tableau)
-        for (int i = 0; i < 10; i++) {
-            if (tableau.get(i).isEmpty()) return false;
-        }
-        for (int j = 0; j < 10; j++) {
-            tableau.get(j).toggleFillingState();
-            if (!moveCards(stock, tableau.get(j))) {
-                tableau.get(j).toggleFillingState();
-                return false;
-            }
-            tableau.get(j).toggleFillingState();
-        }
-        return true;
-    }
 
-    public boolean getCardFromStock(){
-        if(gameRules.getRulesType().equals("SPIDER")){
-            return dealOneCardToEachColumn();
-        }
-        else if(gameRules.getRulesType().equals("KLONDIKE")) {
-            return stock.showCard();
-        }
-        return false;
+    public boolean drawCardFromStock(){
+        stock.toggleFillingState();
+        return gameRules.drawCardFromStock(this);
+
     }
 
     public boolean moveCards(Deck from, Deck to) {

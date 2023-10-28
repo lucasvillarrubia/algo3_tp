@@ -2,9 +2,11 @@ package Base;
 
 import Solitaire.Rules;
 import Elements.Column;
+
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Deck {
+public abstract class Deck implements Serializable {
         protected ArrayList<Card> deck;
 
         public Deck(){
@@ -45,8 +47,8 @@ public abstract class Deck {
                 return deck.contains(card);
         }
 
-        public abstract boolean acceptCard(Rules gameRules, Card card);
         public abstract boolean acceptSequence(Rules gameRules, Column cards);
+        public abstract boolean acceptCard(Rules gameRules, Card card);
         public abstract boolean givesCard(Rules gameRules);
 
 

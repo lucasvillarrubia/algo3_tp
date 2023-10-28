@@ -16,7 +16,7 @@ public class Column extends Deck implements Serializable {
                 this.isFilling = true;
         }
 
-        protected void toggleFillingState() {
+        public void toggleFillingState() {
                 this.isFilling = !isFilling;
         }
 
@@ -24,7 +24,6 @@ public class Column extends Deck implements Serializable {
                 return this.isFilling;
         }
 
-        // falta chequear que esten flippeadas, creo
         public Card getCard(int pos){
                 return deck.get(pos);
         }
@@ -48,7 +47,9 @@ public class Column extends Deck implements Serializable {
         }
 
         @Override
-        public boolean removeCard(Card card) { return super.removeCard(card); }
+        public boolean removeCard(Card card) {
+                return super.removeCard(card);
+        }
 
         public boolean removeCard(Column cards) {
                 for (int i = 0; i < cards.cardCount(); i++) {

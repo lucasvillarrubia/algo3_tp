@@ -1,24 +1,17 @@
 package Elements;
 
-import Base.Deck;
 import Base.Card;
 import Base.Color;
 import Base.Suit;
 import Base.Value;
+import GameType.KlondikeRules;
+import GameType.SpiderRules;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.Assert.*;
 
 public class FoundationTest {
-//    public class P extends Deck {
-//        @Override
-//        public boolean addCards(Card card){
-//            return super.addCards(card);
-//        }
-//    }
 
     @Test
     public void initializeFoundationTest() {
@@ -62,9 +55,10 @@ public class FoundationTest {
     @Test
     public void notFullFoundationTest(){
         Foundation f = new Foundation(Suit.DIAMOND);
+        KlondikeRules klondikeRules = new KlondikeRules();
         for(Value value : Value.values()){
             Card card = new Card(Suit.DIAMOND, value);
-            f.addCards(card);
+            f.acceptCard(klondikeRules, card);
         }
         f.removeCard(f.getLast());
         f.removeCard(f.getLast());
@@ -76,50 +70,80 @@ public class FoundationTest {
     public void addCardTest() {
         Foundation foundation = new Foundation(Suit.HEART);
         Card aceOfHearts = new Card(Suit.HEART, Value.ACE);
-        assertTrue(foundation.addCards(aceOfHearts));
+        KlondikeRules klondikeRules = new KlondikeRules();
+        assertTrue(foundation.acceptCard(klondikeRules, aceOfHearts));
         assertEquals(aceOfHearts, foundation.getLast());
     }
 
+    @Test
+    public void dontAddWrongCardWhenEmptyTest() {
+        Foundation foundation = new Foundation(Suit.SPADES);
+        Card wrongCard = new Card(Suit.SPADES, Value.EIGHT);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        foundation.acceptCard(klondikeRules, wrongCard);
+        assertNull(foundation.getLast());
+    }
 
-    //    @Test
-//    public void dontAddCorrectCardWhenEmptyTest() {
-//        Foundation foundation = new Foundation(Suit.SPADES);
-//        Card wrongCard = new Card(Suit.SPADES, Value.EIGHT);
-//        foundation.addCards(wrongCard);
-//        assertNull(foundation.getLast());
-//    }
+    @Test
+    public void cardsCanMoveToEmptyFoundationTest() {
+        Foundation f = new Foundation(Suit.DIAMOND);
+        Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        assertTrue(f.acceptCard(klondikeRules, aceOfDiamond));
+        Card aceOfSpades = new Card(Suit.SPADES, Value.ACE);
+        Foundation f2 = new Foundation(Suit.DIAMOND);
+        SpiderRules spiderRules = new SpiderRules();
+        assertFalse(f2.acceptCard(spiderRules, aceOfSpades));
+    }
 
-//    @Test
-//    public void cardsCanMoveToEmptyFoundationTest() {
-//        Foundation f = new Foundation(Suit.DIAMOND);
-//        Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
-//        assertTrue(f.acceptsCard(aceOfDiamond));
-//    }
+    @Test
+    public void cardsCanMoveToNotEmptyFoundationTest() {
+        Foundation f = new Foundation(Suit.DIAMOND);
+        Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
+        Card twoOfDiamonds = new Card(Suit.DIAMOND, Value.TWO);
+        Card threeOfDiamonds = new Card(Suit.DIAMOND, Value.THREE);
+        f.addCards(aceOfDiamond);
+        f.addCards(twoOfDiamonds);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        assertTrue(f.acceptCard(klondikeRules,threeOfDiamonds));
+    }
 
-//    @Test
-//    public void cardsCanMoveToNotEmptyFoundationTest() {
-//        Foundation f = new Foundation(Suit.DIAMOND);
-//        Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
-//        Card twoOfDiamonds = new Card(Suit.DIAMOND, Value.TWO);
-//        Card threeOfDiamonds = new Card(Suit.DIAMOND, Value.THREE);
-//        f.addCards(aceOfDiamond);
-//        f.addCards(twoOfDiamonds);
-//        assertTrue(f.canReceive(threeOfDiamonds));
-//    }
+    @Test
+    public void cardsCantMoveWrongSuitTest() {
+        Foundation f = new Foundation(Suit.DIAMOND);
+        Card aceOfSpades = new Card(Suit.SPADES, Value.ACE);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        assertFalse(f.acceptCard(klondikeRules, aceOfSpades));
+    }
 
-//    @Test
-//    public void cardsCantMoveWrongSuitTest() {
-//        Foundation f = new Foundation(Suit.DIAMOND);
-//        Card aceOfSpades = new Card(Suit.SPADES, Value.ACE);
-//        assertFalse(f.canReceive(aceOfSpades));
-//    }
+    @Test
+    public void cardsCantMoveWrongValueTest() {
+        Foundation f = new Foundation(Suit.HEART);
+        Card aceOfHeart = new Card(Suit.HEART, Value.ACE);
+        Card tenOfHeart = new Card(Suit.HEART, Value.TEN);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        f.acceptCard(klondikeRules, aceOfHeart);
+        assertFalse(f.acceptCard(klondikeRules,tenOfHeart));
+    }
 
-//    @Test
-//    public void cardsCantMoveWrongValueTest() {
-//        Foundation f = new Foundation(Suit.HEART);
-//        Card aceOfHeart = new Card(Suit.HEART, Value.ACE);
-//        Card tenOfHeart = new Card(Suit.HEART, Value.TEN);
-//        f.addCard(aceOfHeart);
-//        assertFalse(f.canReceive(tenOfHeart));
-//    }
+
+    @Test
+    public void givesCardKlondikeTest() {
+        Foundation foundation = new Foundation(Suit.HEART);
+        KlondikeRules klondikeRules = new KlondikeRules();
+        foundation.acceptCard(klondikeRules, new Card(Suit.HEART, Value.ACE));
+        foundation.acceptCard(klondikeRules, new Card(Suit.HEART, Value.TWO));
+        foundation.acceptCard(klondikeRules, new Card(Suit.HEART, Value.THREE));
+        assertTrue(foundation.givesCard(klondikeRules));
+    }
+
+    @Test
+    public void givesCardSpiderTest() {
+        Foundation foundation = new Foundation(Suit.SPADES);
+        SpiderRules spiderRules = new SpiderRules();
+        for(Value v: Value.values()){
+            foundation.acceptCard(spiderRules, new Card(Suit.SPADES, v));
+        }
+        assertFalse(foundation.givesCard(spiderRules));
+    }
 }

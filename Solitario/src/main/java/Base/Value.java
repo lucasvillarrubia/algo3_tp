@@ -10,6 +10,7 @@ public enum Value {
     Value (int cardNumber) {
         this.number = cardNumber;
     }
+
     public int getNumber(){
         return this.number;
     }

@@ -17,20 +17,20 @@ public class Stock extends Deck implements Serializable {
                 this.filled = false;
         }
 
+        public void flipCard(int index) {
+                deck.get(index).flip();
+        }
+
         public void shuffle(int seed) {
                 Random rn = new Random(seed);
                 Collections.shuffle(deck, rn);
         }
 
-        // el método que está en game, creo que debería devolver una carta
-        // pero a la vez pienso que el waste debería tenerlo el propio stock
-        public boolean showCard() { return false; }
-
-        protected void setFilled() {
-                this.filled = true;
+        public void toggleFillingState() {
+                this.filled = !filled;
         }
 
-        public boolean wasFilled() {
+        public boolean isFilling() {
                 return this.filled;
         }
 
@@ -52,7 +52,7 @@ public class Stock extends Deck implements Serializable {
 
         @Override
         public boolean acceptSequence(Rules gameRules, Column cards) {
-                return false;
+                return gameRules.admitsSequence(this, cards);
         }
 
         @Override

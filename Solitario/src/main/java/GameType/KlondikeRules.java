@@ -1,5 +1,6 @@
-package Klondike;
+package GameType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,19 +8,13 @@ import Base.Card;
 import Base.Color;
 import Base.Suit;
 import Base.Value;
-import Elements.Column;
-import Elements.Foundation;
-import Elements.Game;
-import Elements.Stock;
+import Elements.*;
 import Solitaire.Rules;
 
-public class KlondikeRules implements Rules {
+public class KlondikeRules implements Rules,Serializable{
 
         private static final int AMOUNT_COLUMNS = 7;
-        private static final String RULES_TYPE = "KLONDIKE";
-
-        @Override
-        public String getRulesType() { return RULES_TYPE; }
+        private int stockDisplayIndex = 0;
 
         public boolean isSequenceValid(Card prev, Card next) {
                 int prevValue = prev.getNumber();
@@ -33,7 +28,7 @@ public class KlondikeRules implements Rules {
 
         @Override
         public boolean acceptsCard(Stock stock, Card card) {
-                return !stock.wasFilled();
+                return !stock.isFilling();
         }
 
         @Override
@@ -74,9 +69,7 @@ public class KlondikeRules implements Rules {
         }
 
         @Override
-        public boolean admitsSequence(Stock stock, Column sequence) {
-                return false;
-        }
+        public boolean admitsSequence(Stock stock, Column sequence) { return false; }
 
         @Override
         public boolean admitsSequence(Foundation foundation, Column sequence) {
@@ -85,25 +78,25 @@ public class KlondikeRules implements Rules {
 
         @Override
         public boolean admitsSequence(Column column, Column sequence) {
-                if (!acceptsCard(column, sequence.getCard(sequence.cardCount()-1)));
+                if (!acceptsCard(column, sequence.getCard(sequence.cardCount()-1))) return false;
                 for (int i = sequence.cardCount() - 1; i > 0; i--) {
                         if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
                 }
                 return true;
         }
 
-        @Override
-        public boolean checkGameStatus(Game game) {
-                return game.gameStatus();
-        }
 
         @Override
-        public void gameInit(Game game) {
+        public void gameInit(Game game, int seed) {
                 Stock gameStock = initStock();
+                gameStock.shuffle(seed);
                 game.setStock(gameStock);
                 game.setTableau(initTableau(gameStock));
                 game.setFoundations(initFoundations());
         }
+
+
+
 
         public Stock initStock() {
                 Stock stock = new Stock();
@@ -141,7 +134,21 @@ public class KlondikeRules implements Rules {
                 return foundations;
         }
 
+        @Override
+        public boolean drawCardFromStock(Game game) {
+                if (game.getStock().isEmpty() || game.getStock().isFilling()) return false;
+                if (stockDisplayIndex == game.getStock().cardCount()) {
+                        stockDisplayIndex = 0;
+                        return false;
+                }
+                game.getStock().flipCard(stockDisplayIndex);
+                if (stockDisplayIndex != 0) {
+                        game.getStock().flipCard(stockDisplayIndex - 1);
+                }
+                stockDisplayIndex++;
+                return true;
+        }
+
 }
-
-
+//previous next
 
