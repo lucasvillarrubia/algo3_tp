@@ -101,11 +101,10 @@ public class ColumnTest {
     @Test
     public void drawNullCardTest() {
         Column column = new Column();
-        Card card = null;
-        column.addCards(card);
+        column.addCards(null);
         Card drawnCard = column.drawCard();
         assertNull(drawnCard);
-        assertNull(card);
+        assertNull(null);
     }
 
     @Test

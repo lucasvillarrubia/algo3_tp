@@ -21,7 +21,6 @@ public abstract class Deck implements Serializable {
 
         public Card getLast(){
                 if(deck.isEmpty()) return null;
-//                deck.get(0).flip();
                 return deck.get(0);
         }
 

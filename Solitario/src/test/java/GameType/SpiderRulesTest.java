@@ -8,9 +8,7 @@ import Elements.Foundation;
 import Elements.Game;
 import Elements.Stock;
 import org.junit.Test;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -45,11 +43,11 @@ public class SpiderRulesTest {
     }
 
     @Test
-    public void emptyColumnAccptCards() {
+    public void emptyColumnAcceptCards() {
         Column column = new Column();
-        Card kingOfhearts = new Card(Suit.SPADES, Value.KING);
+        Card kingOfHearts = new Card(Suit.SPADES, Value.KING);
         SpiderRules spiderRules = new SpiderRules();
-        assertTrue(column.acceptCard(spiderRules, kingOfhearts));
+        assertTrue(column.acceptCard(spiderRules, kingOfHearts));
     }
 
 
@@ -84,7 +82,7 @@ public class SpiderRulesTest {
 
 
     @Test
-    public void emptystockGiveCardTest(){
+    public void emptyStockGiveCardTest(){
         Stock stock = new Stock();
         SpiderRules spiderRules = new SpiderRules();
         assertFalse(spiderRules.givesCard(stock));
@@ -111,22 +109,6 @@ public class SpiderRulesTest {
         c.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
         assertFalse(spiderRules.admitsSequence(stock, c));
     }
-
-//    @Test
-//    public void foundationAdmitsSequenceTest() {
-//        Foundation foundation = new Foundation(Suit.SPADES);
-//        SpiderRules spiderRules = new SpiderRules();
-//        Column cards = new Column();
-//        for(Value v: Value.values()){
-//             cards.acceptCard(spiderRules,new Card(Suit.SPADES, v));
-//        }
-//        assertTrue(spiderRules.admitsSequence(foundation, cards));
-//        cards.drawCard();
-//        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.JACK));
-//        assertFalse(spiderRules.admitsSequence(foundation, cards));
-//        cards.drawCard();
-//        assertFalse(spiderRules.admitsSequence(foundation, cards));
-//    }
 
     @Test
     public void emptyColumnAdmitsSequenceTest() {
@@ -178,12 +160,12 @@ public class SpiderRulesTest {
     public void notDrawCardFromStockTest() {
         SpiderRules spiderRules = new SpiderRules();
         ArrayList<Foundation> foundations = new ArrayList<>();
-        Stock stock = spiderRules.initStock();;
+        Stock stock = spiderRules.initStock();
         ArrayList<Column> tableau = new ArrayList<>();
         for(int i =0; i <10; i++){
             tableau.add(0, new Column());
         }
-        Game game = new Game(foundations,tableau,stock);
+        Game game = new Game(spiderRules,foundations,tableau,stock);
         assertEquals(game.getStock().cardCount(),104);
         assertFalse(spiderRules.drawCardFromStock(game));
     }

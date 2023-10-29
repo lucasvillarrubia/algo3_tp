@@ -3,8 +3,6 @@ package Elements;
 import Solitaire.Rules;
 import Base.Deck;
 import Base.Card;
-
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Random;
 

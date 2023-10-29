@@ -13,7 +13,7 @@ public class CardTest {
         //assert
         assertFalse(card.isFaceUp());
         assertEquals(card.getSuit(), Suit.HEART);
-        assertTrue(card.getValue().equals(Value.ACE));
+        assertEquals(card.getValue(), Value.ACE);
     }
 
     @Test

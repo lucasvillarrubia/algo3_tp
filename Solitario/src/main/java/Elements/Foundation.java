@@ -5,14 +5,12 @@ import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Base.Card;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Foundation extends Deck {
 
-        private Suit suit;
+        private final Suit suit;
 
         public Foundation(Suit suit) {
                 super();

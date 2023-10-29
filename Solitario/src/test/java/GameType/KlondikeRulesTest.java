@@ -7,7 +7,6 @@ import Elements.Column;
 import Elements.Foundation;
 import Elements.Game;
 import Elements.Stock;
-import GameType.KlondikeRules;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -65,7 +64,6 @@ public class KlondikeRulesTest {
         Stock stock = new Stock();
         KlondikeRules gameRules = new KlondikeRules();
         Card card = new Card(Suit.HEART, Value.QUEEN);
-        //stock.toggleFillingState();
         assertTrue(gameRules.acceptsCard(stock, card));
         stock.acceptCard(gameRules, card);
         assertEquals(1, stock.cardCount());
@@ -87,6 +85,7 @@ public class KlondikeRulesTest {
 
     @Test
     public void moveFromTableauToFoundationCompleteTest() {
+        KlondikeRules kr = new KlondikeRules();
         Card one = new Card(Suit.HEART, Value.ACE);
         Card two = new Card(Suit.HEART, Value.TWO);
         Card three = new Card(Suit.HEART, Value.THREE);
@@ -97,22 +96,12 @@ public class KlondikeRulesTest {
         foundations.get(0).acceptCard(rules, two);
         foundations.get(0).acceptCard(rules, three);
         ArrayList<Column> tableau = new ArrayList<>();
-        Game game = new Game(foundations, tableau,new Stock());
+        Game game = new Game(kr, foundations, tableau,new Stock());
         assertFalse(game.isGameWon());
         assertEquals(game.getFoundationBySuit(Suit.HEART).getLast(), three);
     }
 
-    @Test
-    public void columnAdmitsSequenceTest() {
-        KlondikeRules rules = new KlondikeRules();
-        Column column = new Column();
-        List<Card> cardsSeq = new ArrayList<>();
-        cardsSeq.add(new Card(Suit.SPADES, Value.QUEEN));
-        cardsSeq.add(new Card(Suit.HEART, Value.JACK));
-        cardsSeq.add(new Card(Suit.SPADES, Value.TEN));
-        cardsSeq.add(new Card(Suit.HEART, Value.NINE));
-        //column.acceptCard(rules, cardsSeq);
-    }
+
 
 
     //                  C  O  L  U  M  N
@@ -258,8 +247,7 @@ public class KlondikeRulesTest {
     @Test
     public void testCannotDrawCardFromStockOfNullGame() {
         KlondikeRules kr = new KlondikeRules();
-        Game nullGame = null;
-        assertFalse(kr.drawCardFromStock(nullGame));
+        assertFalse(kr.drawCardFromStock(null));
     }
 
     @Test
@@ -269,7 +257,7 @@ public class KlondikeRulesTest {
         emptyStock.toggleFillingState();
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
-        Game emptyGame = new Game(emptyFoundations, emptyTableau, emptyStock);
+        Game emptyGame = new Game(kr, emptyFoundations, emptyTableau, emptyStock);
         assertFalse(kr.drawCardFromStock(emptyGame));
     }
 
@@ -280,7 +268,7 @@ public class KlondikeRulesTest {
         emptyStock.toggleFillingState();
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
-        Game game = new Game(emptyFoundations, emptyTableau, emptyStock);
+        Game game = new Game(kr, emptyFoundations, emptyTableau, emptyStock);
         assertFalse(kr.drawCardFromStock(game));
         assertFalse(game.getStock().isFilling());
     }
@@ -298,7 +286,7 @@ public class KlondikeRulesTest {
         filledStock.toggleFillingState();
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
-        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        Game game = new Game(kr, emptyFoundations, emptyTableau, filledStock);
         assertTrue(kr.drawCardFromStock(game));
     }
 
@@ -319,7 +307,7 @@ public class KlondikeRulesTest {
         filledStock.toggleFillingState();
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
-        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        Game game = new Game(kr, emptyFoundations, emptyTableau, filledStock);
         kr.drawCardFromStock(game);
         kr.drawCardFromStock(game);
         game.getStock().drawCard();
@@ -341,10 +329,10 @@ public class KlondikeRulesTest {
         filledStock.acceptCard(kr, card4);
         filledStock.acceptCard(kr, card5);
         filledStock.toggleFillingState();
-        assertFalse(filledStock.isFilling());// -> prueba
+        assertFalse(filledStock.isFilling());
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
-        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        Game game = new Game(kr, emptyFoundations, emptyTableau, filledStock);
         assertTrue(kr.drawCardFromStock(game));
         assertTrue(kr.drawCardFromStock(game));
         assertTrue(kr.drawCardFromStock(game));

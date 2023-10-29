@@ -114,8 +114,8 @@ public class SpiderRules implements Rules, Serializable {
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
             tableau.add(new Column());
         }
-        for (int i = 0; i < AMOUNT_COLUMNS_LONG; i++) { //para cada columna del tableau
-            for (int j = 0; j < AMOUNT_CARDS_LONG; j++) { //agrega la cantidad de cartas
+        for (int i = 0; i < AMOUNT_COLUMNS_LONG; i++) {
+            for (int j = 0; j < AMOUNT_CARDS_LONG; j++) {
                 Card card = stock.drawCard();
                 if (j == AMOUNT_CARDS_LONG-1) {
                     card.flip();
@@ -123,8 +123,8 @@ public class SpiderRules implements Rules, Serializable {
                 if(!tableau.get(i).acceptCard(this, card)) return null;
             }
         }
-        for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) { //para cada columna del tableau
-            for (int j = 0; j < AMOUNT_CARDS_SHORT; j++) { //agrega la cantidad de cartas
+        for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) {
+            for (int j = 0; j < AMOUNT_CARDS_SHORT; j++) {
                 Card card = stock.drawCard();
                 if (j == AMOUNT_CARDS_SHORT-1) {
                     card.flip();

@@ -86,15 +86,6 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
 
-//        @Override
-//        public void gameInit(Game game, int seed) {
-//                Stock gameStock = initStock();
-//                gameStock.shuffle(seed);
-//                game.setStock(gameStock);
-//                game.setTableau(initTableau(gameStock));
-//                game.setFoundations(initFoundations());
-//        }
-
         @Override
         public Stock initStock() {
                 Stock stock = new Stock();
