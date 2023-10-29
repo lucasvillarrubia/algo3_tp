@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Column extends Deck implements Serializable {
+public class Column extends Deck {
 
         private boolean isFilling;
 

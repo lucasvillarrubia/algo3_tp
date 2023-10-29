@@ -140,14 +140,30 @@ public class GameTest {
 
     //Testeos de Game con Klondike
 
-
-
+    @Test
+    public void klondikeGameTest(){
+        KlondikeRules klondikeRules = new KlondikeRules();
+        Game game = new Game(klondikeRules, 10);
+        assertEquals(game.getStock().cardCount(), 24);
+        for(int i = 0; i< 7;i++){
+            assertNotNull(game.getColumn(i));
+            assertEquals(game.getColumn(i).cardCount(), i+1);
+        }
+        assertFalse(game.isGameWon());
+        assertFalse(game.isGameOver());
+        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(4)));
+        assertTrue(game.moveCards(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS)));
+        assertTrue(game.drawCardFromStock());
+        assertTrue(game.drawCardFromStock());
+        assertFalse(game.moveCards(game.getColumn(1),game.getColumn(2), 1 ));
+        //assertEquals(game.getStock().cardCount(), 22);
+    }
 
 
     //Testeos de Game con Spider
-    //revisar cuales no esten duplicados
+
     @Test
-    public void initSpiderGameTest() {
+    public void spiderGameTest() {
         SpiderRules spiderRules = new SpiderRules();
         Game game = new Game(spiderRules, 10);
         assertEquals(game.getStock().cardCount(), 50);
@@ -162,14 +178,15 @@ public class GameTest {
         }
         assertFalse(game.isGameWon());
         assertTrue(game.drawCardFromStock());
-        //con la seed 10 luego de pedirle cartas al stock
-        //se que en la primer columna hay un 9 y en la sexta hay un 10
+        assertEquals(game.getStock().cardCount(), 40);
         assertTrue(game.moveCards(game.getColumn(0), game.getColumn(5)));
         assertFalse(game.moveCards(game.getColumn(2), game.getColumn(7)));
-        assertEquals(game.getStock().cardCount(), 40);
         assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
         assertFalse(game.moveCards(game.getColumn(2), game.getColumn(9), 3));
         assertTrue(game.moveCards(game.getColumn(1), game.getColumn(9), 1));
+        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
+        assertEquals(game.getCantMovements(), 4);
+        //assertEquals(game.getStock().cardCount(), 41);
     }
 
 }

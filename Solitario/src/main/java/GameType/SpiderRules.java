@@ -33,7 +33,7 @@ public class SpiderRules implements Rules, Serializable {
 
     @Override
     public boolean acceptsCard(Stock stock, Card card) {
-        return !stock.isFilling();
+        return stock.isFilling();
     }
 
     @Override
@@ -79,9 +79,7 @@ public class SpiderRules implements Rules, Serializable {
     private boolean isSequenceComplete(Column sequence){
         if (sequence.cardCount() == COMPLETE_FOUNDATION) {
             for (int i = COMPLETE_FOUNDATION -1 ; i > 0; i--){
-                if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))){
-                    return false;
-                }
+                if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
             }
             return true;
         }
@@ -96,16 +94,8 @@ public class SpiderRules implements Rules, Serializable {
         return true;
     }
 
+
     @Override
-    public void gameInit(Game game, int seed) {
-        Stock gameStock = initStock();
-        gameStock.shuffle(seed);
-        game.setStock(gameStock);
-        game.setFoundations(initFoundations());
-        game.setTableau(initTableau(gameStock));
-    }
-
-
     public Stock initStock() {
        Stock stock = new Stock();
         for (Value value : Value.values()) {
@@ -114,10 +104,11 @@ public class SpiderRules implements Rules, Serializable {
                 stock.acceptCard(this, card);
             }
         }
+        stock.toggleFillingState();
         return stock;
     }
 
-
+    @Override
     public List<Column> initTableau(Stock stock) {
         ArrayList<Column> tableau = new ArrayList<>();
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
@@ -126,7 +117,6 @@ public class SpiderRules implements Rules, Serializable {
         for (int i = 0; i < AMOUNT_COLUMNS_LONG; i++) { //para cada columna del tableau
             for (int j = 0; j < AMOUNT_CARDS_LONG; j++) { //agrega la cantidad de cartas
                 Card card = stock.drawCard();
-                card.flip();
                 if (j == AMOUNT_CARDS_LONG-1) {
                     card.flip();
                 }
@@ -136,20 +126,18 @@ public class SpiderRules implements Rules, Serializable {
         for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) { //para cada columna del tableau
             for (int j = 0; j < AMOUNT_CARDS_SHORT; j++) { //agrega la cantidad de cartas
                 Card card = stock.drawCard();
-                card.flip();
                 if (j == AMOUNT_CARDS_SHORT-1) {
                     card.flip();
                 }
-                if(!tableau.get(i).acceptCard(this, card)){
-                    return null;
-                }
+                if(!tableau.get(i).acceptCard(this, card)) return null;
             }
         }
+        tableau.forEach(Column::toggleFillingState);
         return tableau;
     }
 
 
-
+    @Override
     public List<Foundation> initFoundations() {
         ArrayList<Foundation> foundations = new ArrayList<>();
         for (int j = 0; j < AMOUNT_FOUNDATIONS; j++) {
@@ -159,6 +147,7 @@ public class SpiderRules implements Rules, Serializable {
     }
 
     public boolean drawCardFromStock (Game game) {
+        if( game == null || game.getStock().isEmpty()) return  false;
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
             if (game.getColumn(i).isEmpty()){
                 return false;
@@ -167,15 +156,11 @@ public class SpiderRules implements Rules, Serializable {
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
             Card card = game.getStock().drawCard();
             game.getColumn(j).toggleFillingState();
-            if(!(game.getColumn(j).acceptCard(this, card))){
-                game.getColumn(j).toggleFillingState();
-                return false;
-            }
+            game.getColumn(j).acceptCard(this, card);
             game.getColumn(j).getLast().flip();
             game.getColumn(j).toggleFillingState();
         }
         game.getStock().toggleFillingState();
-        game.addMovement();
         return true;
     }
 

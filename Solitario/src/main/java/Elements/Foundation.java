@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Foundation extends Deck implements Serializable {
+public class Foundation extends Deck {
 
         private Suit suit;
 

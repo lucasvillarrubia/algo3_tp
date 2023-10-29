@@ -65,32 +65,22 @@ public class KlondikeRulesTest {
         Stock stock = new Stock();
         KlondikeRules gameRules = new KlondikeRules();
         Card card = new Card(Suit.HEART, Value.QUEEN);
+        //stock.toggleFillingState();
         assertTrue(gameRules.acceptsCard(stock, card));
         stock.acceptCard(gameRules, card);
         assertEquals(1, stock.cardCount());
         assertEquals(card, stock.getLast());
     }
 
-    @Test
-    public void fullStockAcceptWrongCardTest() {
-        KlondikeRules gameRules = new KlondikeRules();
-        Stock stock = gameRules.initStock();
-        Card card = new Card(Suit.DIAMOND, Value.NINE);
-        assertFalse(stock.isEmpty());
-    }
-
-    //revisar tests (son los ex-tests de game)
 
     @Test
     public void initKlondikeGameTest() {
         KlondikeRules rules = new KlondikeRules();
-        Game game = new Game(rules, 1);
-        rules.gameInit(game, 10);
+        Game game = new Game(rules, 10);
         assertFalse(game.gameStatus());
         assertFalse(game.isGameWon());
         assertEquals(game.getCantMovements(),0);
         for(Suit s: Suit.values()){
-
             assertNotNull(game.getFoundationBySuit(s));
         }
     }
@@ -227,6 +217,7 @@ public class KlondikeRulesTest {
         KlondikeRules gameRules = new KlondikeRules();
         Card card1 = new Card(Suit.HEART, Value.KING);
         Stock emptyStock = new Stock();
+        //emptyStock.toggleFillingState();
         assertTrue(gameRules.acceptsCard(emptyStock, card1));
     }
 
@@ -291,7 +282,7 @@ public class KlondikeRulesTest {
         List<Foundation> emptyFoundations = new ArrayList<>();
         Game game = new Game(emptyFoundations, emptyTableau, emptyStock);
         assertFalse(kr.drawCardFromStock(game));
-        assertTrue(game.getStock().isFilling());
+        assertFalse(game.getStock().isFilling());
     }
 
     @Test
@@ -350,6 +341,7 @@ public class KlondikeRulesTest {
         filledStock.acceptCard(kr, card4);
         filledStock.acceptCard(kr, card5);
         filledStock.toggleFillingState();
+        assertFalse(filledStock.isFilling());// -> prueba
         List<Column> emptyTableau = new ArrayList<>();
         List<Foundation> emptyFoundations = new ArrayList<>();
         Game game = new Game(emptyFoundations, emptyTableau, filledStock);

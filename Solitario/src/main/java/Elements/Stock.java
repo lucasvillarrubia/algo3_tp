@@ -8,13 +8,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends Deck implements Serializable {
+public class Stock extends Deck {
 
         private boolean filled;
 
         public Stock () {
                 super();
-                this.filled = false;
+                this.filled = true;
         }
 
         public void showPreviousCard() {

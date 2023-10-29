@@ -28,7 +28,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean acceptsCard(Stock stock, Card card) {
-                return !stock.isFilling();
+                return stock.isFilling();
         }
 
         @Override
@@ -55,7 +55,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean givesCard(Stock stock) {
-                return !(waste == null);
+                return waste != null;
         }
 
         @Override
@@ -86,18 +86,16 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
 
+//        @Override
+//        public void gameInit(Game game, int seed) {
+//                Stock gameStock = initStock();
+//                gameStock.shuffle(seed);
+//                game.setStock(gameStock);
+//                game.setTableau(initTableau(gameStock));
+//                game.setFoundations(initFoundations());
+//        }
+
         @Override
-        public void gameInit(Game game, int seed) {
-                Stock gameStock = initStock();
-                gameStock.shuffle(seed);
-                game.setStock(gameStock);
-                game.setTableau(initTableau(gameStock));
-                game.setFoundations(initFoundations());
-        }
-
-
-
-
         public Stock initStock() {
                 Stock stock = new Stock();
                 for (Value value : Value.values()) {
@@ -106,9 +104,11 @@ public class KlondikeRules implements Rules,Serializable{
                                 stock.acceptCard(this, card);
                         }
                 }
+                stock.toggleFillingState();
                 return stock;
         }
 
+        @Override
         public List<Column> initTableau(Stock stock) {
                 ArrayList<Column> tableau = new ArrayList<>();
                 for (int i = 0; i < AMOUNT_COLUMNS; i++) {
@@ -123,9 +123,11 @@ public class KlondikeRules implements Rules,Serializable{
                                 if(!tableau.get(i).acceptCard(this, card)) return null;
                         }
                 }
+                tableau.forEach(Column::toggleFillingState);
                 return tableau;
         }
 
+        @Override
         public List<Foundation> initFoundations() {
                 ArrayList<Foundation> foundations = new ArrayList<>();
                 for (Suit suit : Suit.values()) {
@@ -136,39 +138,11 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean drawCardFromStock(Game game) {
-                if (game == null || game.getStock().isEmpty() || !game.getStock().isFilling()) return false; //seria si no esta filling(?)
-                // if (stockDisplayIndex == game.getStock().cardCount()) {
-                //         stockDisplayIndex = 0;
-                //         return false;
-                // }
-                // game.getStock().flipCard(stockDisplayIndex);
-                // if (stockDisplayIndex != 0) {
-                //         game.getStock().flipCard(stockDisplayIndex - 1);
-                // }
-                // stockDisplayIndex++;
-
-
-                // if (waste == null && !game.getStock().getLast().isFaceUp()) {
-                //         game.getStock().flipCard(0);
-                //         waste = game.getStock().getLast();
-                // }
-                // else if (waste != null) {
-                //         game.getStock().flipCard(0);
-                //         game.getStock().showNextCard();
-                //         game.getStock().flipCard(0);
-                //         waste = game.getStock().getLast();
-                // }
-                // else if (waste != null && !game.getStock().containsCard(waste)) {
-                //         game.getStock().showPreviousCard();
-                //         game.getStock().flipCard(0);
-                //         waste = game.getStock().getLast();
-                // }
-
+                if (game == null || game.getStock().isEmpty() || game.getStock().isFilling()) return false;
                 if (waste != null) {
                         if (!game.getStock().containsCard(waste)) {
                                 game.getStock().showPreviousCard();
-                        }
-                        else {
+                        } else {
                                 game.getStock().getLast().flip();
                                 game.getStock().showNextCard();
                         }

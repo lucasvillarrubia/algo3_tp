@@ -152,6 +152,29 @@ public class ColumnTest {
         assertTrue(to.acceptSequence(k, cards));
     }
 
+    @Test
+    public void rejectSequenceKlondikeTest() {
+        Column cards = new Column();
+        Column wrongSequence = new Column();
+        Card card3 = new Card(Suit.SPADES, Value.TEN);
+        Card card4 = new Card(Suit.HEART, Value.NINE);
+        Card card5 = new Card(Suit.CLUBS, Value.EIGHT);
+        wrongSequence.addCards(card3);
+        wrongSequence.addCards(card4);
+        wrongSequence.addCards(card5);
+        KlondikeRules k= new KlondikeRules();
+        Card card1 = new Card(Suit.HEART, Value.KING);
+        Card card2 = new Card(Suit.SPADES, Value.QUEEN);
+        cards.addCards(card1);
+        cards.addCards(card2);
+        cards.toggleFillingState();
+        wrongSequence.toggleFillingState();
+        Column to = new Column();
+        to.toggleFillingState();
+        assertTrue(to.acceptSequence(k, cards));
+        assertFalse(to.acceptSequence(k, wrongSequence));
+    }
+
 }
 
 

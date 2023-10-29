@@ -16,7 +16,7 @@ public class StockTest {
     public void stockInitEmptyTest() {
         Stock stock = new Stock();
         assertTrue(stock.isEmpty());
-        assertFalse(stock.isFilling());
+        assertTrue(stock.isFilling());
         assertEquals(0, stock.cardCount());
     }
 
@@ -59,9 +59,9 @@ public class StockTest {
 
     @Test
     public void acceptCardKlondikeTest() {
-        KlondikeRules k=new KlondikeRules();
+        KlondikeRules k = new KlondikeRules();
         Stock stock = k.initStock();
-        assertTrue(stock.acceptCard(k, new Card(Suit.CLUBS, Value.SEVEN)));
+        assertFalse(stock.acceptCard(k, new Card(Suit.CLUBS, Value.SEVEN)));
     }
 
     @Test
@@ -78,9 +78,10 @@ public class StockTest {
 //revisar para klondike hay algo que no termina de cerrar :/
     @Test
     public void givesCardTest() {
-//        KlondikeRules klondikeRules = new KlondikeRules();
-//        Stock sKlondike = klondikeRules.initStock();
-//        assertTrue(sKlondike.givesCard(klondikeRules));
+        KlondikeRules klondikeRules = new KlondikeRules();
+        Stock sKlondike = klondikeRules.initStock();
+        //se debe inicializar el waste y eso lo haria game
+        assertFalse(sKlondike.givesCard(klondikeRules));
         SpiderRules spiderRules = new SpiderRules();
         Stock sSpider = spiderRules.initStock();
         assertTrue(sSpider.givesCard(spiderRules));

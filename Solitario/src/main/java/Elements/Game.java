@@ -18,15 +18,15 @@ public class Game implements Serializable {
     private List<Column> tableau;
     private Stock stock;
 
-
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
-        this.gameRules.gameInit(this, seed);
-        this.stock.toggleFillingState();
+        this.stock = gameRules.initStock();
+        this.stock.shuffle(seed);
+        this.tableau = gameRules.initTableau(this.stock);
+        this.foundations = gameRules.initFoundations();
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
-        this.tableau.forEach(Column::toggleFillingState);
     }
 
     public Game(List<Foundation> foundations, List<Column> tableau, Stock stock) {
@@ -94,14 +94,6 @@ public class Game implements Serializable {
         return tableau.get(index);
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
-    }
-
-    public void setTableau(List<Column> tableau) { this.tableau = tableau; }
-
-    public void setFoundations(List<Foundation> foundations) { this.foundations = foundations; }
-
     public boolean areAllFoundationsFull () {
         for (Foundation foundation: foundations) {
             if (!foundation.isFull()){
@@ -121,13 +113,9 @@ public class Game implements Serializable {
         ObjectInputStream objectInStream = new ObjectInputStream(is);
         return (Game) objectInStream.readObject();
     }
-
-
     //                              M O V I M I E N T O S
-
-
     public boolean drawCardFromStock(){
-        stock.toggleFillingState();
+        //stock.toggleFillingState();
         return gameRules.drawCardFromStock(this);
     }
 
@@ -145,10 +133,10 @@ public class Game implements Serializable {
     }
 
     public boolean moveCards(Column from, Deck to, int index) {
-        if (!from.givesCard(gameRules)) return false;
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        else if (to.acceptSequence(gameRules, moved)) {
+        if (!from.givesCard(gameRules)) return false; //ame tienen que dar la carta
+        Column moved = from.getSequence(index); //obtengo la secuencia
+        if (moved == null) { return false; } //la secuencia no tiene que ser nula
+        else if (to.acceptSequence(gameRules, moved)) { //a donde quiero mandarla acepta la secuencia ( la agrega)
             addMovement();
             winGame();
             return from.removeSequence(moved);

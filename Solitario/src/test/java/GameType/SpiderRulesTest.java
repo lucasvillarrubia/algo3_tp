@@ -98,7 +98,7 @@ public class SpiderRulesTest {
         stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.NINE));
         stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.EIGHT));
         stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
-        assertTrue(spiderRules.givesCard(stock));
+        assertFalse(spiderRules.givesCard(stock));
     }
 
     @Test
