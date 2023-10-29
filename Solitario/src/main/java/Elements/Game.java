@@ -137,9 +137,10 @@ public class Game implements Serializable {
         Card moved = from.getLast();
         if (moved == null) { return false; }
         else if (to.acceptCard(gameRules, moved)) {
+            from.drawCard();
             addMovement();
             winGame();
-            return from.removeCard(moved);
+            return true;
         }
         return false;
     }
@@ -151,7 +152,7 @@ public class Game implements Serializable {
         else if (to.acceptSequence(gameRules, moved)) {
             addMovement();
             winGame();
-            return from.removeCard(moved);
+            return from.removeSequence(moved);
         }
         return false;
     }

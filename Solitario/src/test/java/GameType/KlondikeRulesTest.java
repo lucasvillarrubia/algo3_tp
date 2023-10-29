@@ -221,5 +221,140 @@ public class KlondikeRulesTest {
 
     //                  S  T  O  C  K
 
+    @Test
+    public void testAcceptCardInStockWhileFilling() {
+        KlondikeRules gameRules = new KlondikeRules();
+        Card card1 = new Card(Suit.HEART, Value.KING);
+        Stock emptyStock = new Stock();
+        assertTrue(gameRules.acceptsCard(emptyStock, card1));
+    }
+
+    @Test
+    public void testRejectCardInStockTypeWithKlondikeRules() {
+        KlondikeRules gameRules = new KlondikeRules();
+        Card card1 = new Card(Suit.CLUBS, Value.SEVEN);
+        Stock emptyStock = new Stock();
+        emptyStock.toggleFillingState();
+        assertFalse(gameRules.acceptsCard(emptyStock, card1));
+    }
+
+    @Test
+    public void testStockCannotSendCardWithoutWasteCard() {
+        KlondikeRules gameRules = new KlondikeRules();
+        Stock emptyStock = new Stock();
+        assertFalse(gameRules.givesCard(emptyStock));
+    }
+    
+    @Test
+    public void testStockTypeDoesNotAdmitSequencesWithKlondikeRules() {
+        KlondikeRules gameRules = new KlondikeRules();
+        Card card1 = new Card(Suit.CLUBS, Value.ACE);
+        Card card2 = new Card(Suit.CLUBS, Value.TWO);
+        Card card3 = new Card(Suit.CLUBS, Value.THREE);
+        Column cardsToAdd = new Column();
+        Stock stock = new Stock();
+        cardsToAdd.acceptCard(gameRules, card1);
+        cardsToAdd.acceptCard(gameRules, card2);
+        stock.acceptCard(gameRules, card3);
+        cardsToAdd.toggleFillingState();
+        stock.toggleFillingState();
+        assertFalse(gameRules.admitsSequence(stock, cardsToAdd));
+    }
+
+    //        D  R  A  W    C  A  R  D    F  R  O  M    S  T  O  C  K
+
+    @Test
+    public void testCannotDrawCardFromStockOfNullGame() {
+        KlondikeRules kr = new KlondikeRules();
+        Game nullGame = null;
+        assertFalse(kr.drawCardFromStock(nullGame));
+    }
+
+    @Test
+    public void testCannotDrawCardFromStockOfEmptyStock() {
+        KlondikeRules kr = new KlondikeRules();
+        Stock emptyStock = new Stock();
+        emptyStock.toggleFillingState();
+        List<Column> emptyTableau = new ArrayList<>();
+        List<Foundation> emptyFoundations = new ArrayList<>();
+        Game emptyGame = new Game(emptyFoundations, emptyTableau, emptyStock);
+        assertFalse(kr.drawCardFromStock(emptyGame));
+    }
+
+    @Test
+    public void testCannotDrawCardFromStockIfIsFilling() {
+        KlondikeRules kr = new KlondikeRules();
+        Stock emptyStock = new Stock();
+        emptyStock.toggleFillingState();
+        List<Column> emptyTableau = new ArrayList<>();
+        List<Foundation> emptyFoundations = new ArrayList<>();
+        Game game = new Game(emptyFoundations, emptyTableau, emptyStock);
+        assertFalse(kr.drawCardFromStock(game));
+        assertTrue(game.getStock().isFilling());
+    }
+
+    @Test
+    public void testDrawCardFromStockWhenGameJustStarted() {
+        KlondikeRules kr = new KlondikeRules();
+        Stock filledStock = new Stock();
+        Card card1 = new Card(Suit.SPADES, Value.TEN);
+        Card card2 = new Card(Suit.HEART, Value.NINE);
+        Card card3 = new Card(Suit.CLUBS, Value.EIGHT);
+        filledStock.acceptCard(kr, card1);
+        filledStock.acceptCard(kr, card2);
+        filledStock.acceptCard(kr, card3);
+        filledStock.toggleFillingState();
+        List<Column> emptyTableau = new ArrayList<>();
+        List<Foundation> emptyFoundations = new ArrayList<>();
+        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        assertTrue(kr.drawCardFromStock(game));
+    }
+
+    @Test
+    public void testDrawCardFromStockIfWasteCardWasDrawn() {
+        KlondikeRules kr = new KlondikeRules();
+        Stock filledStock = new Stock();
+        Card card1 = new Card(Suit.SPADES, Value.TEN);
+        Card card2 = new Card(Suit.HEART, Value.NINE);
+        Card card3 = new Card(Suit.CLUBS, Value.EIGHT);
+        Card card4 = new Card(Suit.SPADES, Value.THREE);
+        Card card5 = new Card(Suit.CLUBS, Value.FOUR);
+        filledStock.acceptCard(kr, card1);
+        filledStock.acceptCard(kr, card2);
+        filledStock.acceptCard(kr, card3);
+        filledStock.acceptCard(kr, card4);
+        filledStock.acceptCard(kr, card5);
+        filledStock.toggleFillingState();
+        List<Column> emptyTableau = new ArrayList<>();
+        List<Foundation> emptyFoundations = new ArrayList<>();
+        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        kr.drawCardFromStock(game);
+        kr.drawCardFromStock(game);
+        game.getStock().drawCard();
+        assertTrue(kr.drawCardFromStock(game));
+    }
+    @Test
+    public void testDrawCardFromStockGoesThroughNextCard() {
+        KlondikeRules kr = new KlondikeRules();
+        Stock filledStock = new Stock();
+        Card card1 = new Card(Suit.SPADES, Value.TEN);
+        Card card2 = new Card(Suit.HEART, Value.NINE);
+        Card card3 = new Card(Suit.CLUBS, Value.EIGHT);
+        Card card4 = new Card(Suit.SPADES, Value.THREE);
+        Card card5 = new Card(Suit.CLUBS, Value.FOUR);
+        filledStock.acceptCard(kr, card1);
+        filledStock.acceptCard(kr, card2);
+        filledStock.acceptCard(kr, card3);
+        filledStock.acceptCard(kr, card4);
+        filledStock.acceptCard(kr, card5);
+        filledStock.toggleFillingState();
+        List<Column> emptyTableau = new ArrayList<>();
+        List<Foundation> emptyFoundations = new ArrayList<>();
+        Game game = new Game(emptyFoundations, emptyTableau, filledStock);
+        assertTrue(kr.drawCardFromStock(game));
+        assertTrue(kr.drawCardFromStock(game));
+        assertTrue(kr.drawCardFromStock(game));
+    }
+
 
 }

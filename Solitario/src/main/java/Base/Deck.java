@@ -27,13 +27,9 @@ public abstract class Deck implements Serializable {
 
         public Card drawCard(){
                 if(deck.isEmpty()) return null;
-                deck.get(0).flip();
+                //deck.get(0).flip();
                 return deck.remove(0);
         }
-
-        public boolean removeCard(Card card) {
-                return deck.remove(card);
-        } 
 
         public boolean isEmpty () {
                 return deck.isEmpty();

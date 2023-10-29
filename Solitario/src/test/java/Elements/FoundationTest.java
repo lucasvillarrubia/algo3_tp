@@ -60,9 +60,9 @@ public class FoundationTest {
             Card card = new Card(Suit.DIAMOND, value);
             f.acceptCard(klondikeRules, card);
         }
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
+        f.drawCard();
+        f.drawCard();
+        f.drawCard();
         assertFalse(f.isFull());
     }
 

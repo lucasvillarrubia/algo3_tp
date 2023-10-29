@@ -29,6 +29,7 @@ public class Column extends Deck implements Serializable {
         }
 
         public Column getSequence(int upToIndex) {
+                if(!getCard(upToIndex).isFaceUp()) return null;
                 Column subColumn = new Column();
                 subColumn.toggleFillingState();
                 if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
@@ -47,14 +48,20 @@ public class Column extends Deck implements Serializable {
         }
 
         @Override
-        public boolean removeCard(Card card) {
-                return super.removeCard(card);
+        public Card drawCard() {
+                Card drawn = super.drawCard();
+                if(!isEmpty() && !getLast().isFaceUp()) getLast().flip();
+                return drawn;
         }
 
-        public boolean removeCard(Column cards) {
+        public boolean removeSequence(Column cards) {
                 for (int i = 0; i < cards.cardCount(); i++) {
-                        if(!super.removeCard(cards.getCard(i))) return false;
+                        if(!deck.get(i).isTheSameAs(cards.getCard(i))) {
+                                return false;
+                        }
+                        drawCard();
                 }
+                if(!isEmpty() && !getLast().isFaceUp()) getLast().flip();
                 return true;
         }
 

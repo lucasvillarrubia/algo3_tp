@@ -103,6 +103,7 @@ public class ColumnTest {
         Card card = null;
         column.addCards(card);
         Card drawnCard = column.drawCard();
+        assertNull(drawnCard);
         assertNull(card);
     }
 
@@ -119,7 +120,7 @@ public class ColumnTest {
         Column column = new Column();
         Card card1 = new Card(Suit.HEART, Value.ACE);
         column.addCards(card1);
-        assertTrue(column.removeCard(card1));
+        assertEquals(column.drawCard(), card1);
         assertEquals(0, column.cardCount());
     }
 
@@ -132,7 +133,7 @@ public class ColumnTest {
         column.addCards(card2);
         Column cardsToRemove = new Column();
         cardsToRemove.addCards(card2);
-        assertTrue(column.removeCard(cardsToRemove));
+        assertTrue(column.removeSequence(cardsToRemove));
         assertEquals(1, column.cardCount());
         assertEquals(card1, column.getCard(0));
     }
