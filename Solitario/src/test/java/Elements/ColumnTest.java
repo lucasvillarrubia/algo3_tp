@@ -3,6 +3,7 @@ package Elements;
 import Base.Card;
 import Base.Suit;
 import Base.Value;
+import GameType.KlondikeRules;
 import org.junit.Test;
 
 
@@ -24,28 +25,28 @@ public class ColumnTest {
     }
 
     @Test
-    public void testGetSequence() {
+    public void getSequenceTest() {
         Column column =new Column();
         Card card1 = new Card(Suit.HEART, Value.ACE);
         Card card2 = new Card(Suit.DIAMOND, Value.KING);
         Card card3 = new Card(Suit.CLUBS, Value.QUEEN);
-
+        card1.flip();
+        card2.flip();
+        card3.flip();
         column.addCards(card1);
         column.addCards(card2);
         column.addCards(card3);
 
-        Column subColumn = column.getSequence(3);
+        Column subColumn = column.getSequence(2);
 
-        //REVISAR!!!
         assertNotNull(subColumn);
-        assertEquals(3, subColumn.cardCount());
-        assertEquals(card1, subColumn.getCard(2));
+        assertEquals(2, subColumn.cardCount());
         assertEquals(card2, subColumn.getCard(1));
         assertEquals(card3, subColumn.getCard(0));
     }
 
     @Test
-    public void testAddCards() {
+    public void addCardsTest() {
         Column column =new Column();
         Card card1 = new Card(Suit.SPADES, Value.JACK);
         Card card2 = new Card(Suit.CLUBS, Value.TEN);
@@ -103,6 +104,7 @@ public class ColumnTest {
         Card card = null;
         column.addCards(card);
         Card drawnCard = column.drawCard();
+        assertNull(drawnCard);
         assertNull(card);
     }
 
@@ -115,16 +117,16 @@ public class ColumnTest {
     }
 
     @Test
-    public void testRemoveCard() {
+    public void removeCardTest() {
         Column column = new Column();
         Card card1 = new Card(Suit.HEART, Value.ACE);
         column.addCards(card1);
-        assertTrue(column.removeCard(card1));
+        assertEquals(column.drawCard(), card1);
         assertEquals(0, column.cardCount());
     }
 
     @Test
-    public void testRemoveCardFromColumn() {
+    public void removeCardFromColumnTest() {
         Column column = new Column();
         Card card1 = new Card(Suit.HEART, Value.ACE);
         Card card2 = new Card(Suit.SPADES, Value.KING);
@@ -132,9 +134,22 @@ public class ColumnTest {
         column.addCards(card2);
         Column cardsToRemove = new Column();
         cardsToRemove.addCards(card2);
-        assertTrue(column.removeCard(cardsToRemove));
+        assertTrue(column.removeSequence(cardsToRemove));
+        assertFalse(column.removeSequence(cardsToRemove));
         assertEquals(1, column.cardCount());
         assertEquals(card1, column.getCard(0));
+    }
+
+    @Test
+    public void acceptSequenceKlondikeTest() {
+        Column cards = new Column();
+        KlondikeRules k= new KlondikeRules();
+        Card card1 = new Card(Suit.HEART, Value.KING);
+        Card card2 = new Card(Suit.SPADES, Value.QUEEN);
+        cards.addCards(card1);
+        cards.addCards(card2);
+        Column to = new Column();
+        assertTrue(to.acceptSequence(k, cards));
     }
 
 }

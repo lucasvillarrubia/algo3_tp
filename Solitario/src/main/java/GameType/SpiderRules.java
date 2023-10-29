@@ -17,19 +17,19 @@ import java.util.List;
 public class SpiderRules implements Rules, Serializable {
 
     private static final int AMOUNT_COLUMNS = 10;
-    private static final int AMOUNT_COLUMNS_SHORT = 6;
     private static final int AMOUNT_CARDS_SHORT = 5;
     private static final int AMOUNT_COLUMNS_LONG = 4;
     private static final int AMOUNT_CARDS_LONG = 6;
     private static final int AMOUNT_FOUNDATIONS = 8;
-    private static final int COMPLETE_FOUNDATION =13;
+    private static final int COMPLETE_FOUNDATION = 13;
     private static final Suit SPADES = Suit.SPADES;
 
     public boolean isSequenceValid(Card prev, Card next) {
         int prevValue = prev.getNumber();
         int nextValue = next.getNumber();
-        return ((prevValue - nextValue) != 1);
+        return ((prevValue - nextValue) == 1);
     }
+
 
     @Override
     public boolean acceptsCard(Stock stock, Card card) {
@@ -40,20 +40,20 @@ public class SpiderRules implements Rules, Serializable {
     public boolean acceptsCard(Foundation foundation, Card card) {
         return false;
     }
-
     @Override
     public boolean acceptsCard(Column column, Card card) {
         if (column.isBeingFilled() || column.isEmpty()) {
             return true;
         } else {
             Card topCard = column.getLast();
-            return (card.getValue().getNumber() == topCard.getValue().getNumber() - 1);
+            return (card.getValue().getNumber() == (topCard.getValue().getNumber() - 1));
         }
     }
 
     @Override
     public boolean givesCard(Stock stock) {
-        return stock.isFilling();
+        if(!stock.isEmpty()) return !stock.isFilling();
+        return false;
     }
 
     @Override
@@ -78,8 +78,10 @@ public class SpiderRules implements Rules, Serializable {
 
     private boolean isSequenceComplete(Column sequence){
         if (sequence.cardCount() == COMPLETE_FOUNDATION) {
-            for (int i = 0; i <COMPLETE_FOUNDATION; i++){
-                if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i - 1))) return false;
+            for (int i = COMPLETE_FOUNDATION -1 ; i > 0; i--){
+                if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))){
+                    return false;
+                }
             }
             return true;
         }
@@ -89,7 +91,7 @@ public class SpiderRules implements Rules, Serializable {
     @Override
     public boolean admitsSequence(Column column, Column sequence) {
         for (int i = sequence.cardCount() - 1; i > 0; i--) {
-            if (isSequenceValid(sequence.getCard(i), sequence.getCard(i - 1))) return false;
+            if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i - 1))) return false;
         }
         return true;
     }
@@ -99,8 +101,8 @@ public class SpiderRules implements Rules, Serializable {
         Stock gameStock = initStock();
         gameStock.shuffle(seed);
         game.setStock(gameStock);
-        game.setTableau(initTableau(gameStock));
         game.setFoundations(initFoundations());
+        game.setTableau(initTableau(gameStock));
     }
 
 
@@ -118,28 +120,35 @@ public class SpiderRules implements Rules, Serializable {
 
     public List<Column> initTableau(Stock stock) {
         ArrayList<Column> tableau = new ArrayList<>();
-        int[] columnCounts = {AMOUNT_COLUMNS_SHORT, AMOUNT_COLUMNS_LONG};
-        int[] cardCounts = {AMOUNT_CARDS_SHORT, AMOUNT_CARDS_LONG};
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
             tableau.add(new Column());
         }
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < columnCounts[i]; j++) {
-                Column column = new Column();
-                tableau.add(column);
-                for (int k = 0; k < cardCounts[i]; k++) {
-                    Card card = stock.drawCard();
-                    if (k == j) {
-                        card.flip();
-                    }
-                    if (!column.acceptCard(this, card)) {
-                        return null;
-                    }
+        for (int i = 0; i < AMOUNT_COLUMNS_LONG; i++) { //para cada columna del tableau
+            for (int j = 0; j < AMOUNT_CARDS_LONG; j++) { //agrega la cantidad de cartas
+                Card card = stock.drawCard();
+                card.flip();
+                if (j == AMOUNT_CARDS_LONG-1) {
+                    card.flip();
+                }
+                if(!tableau.get(i).acceptCard(this, card)) return null;
+            }
+        }
+        for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) { //para cada columna del tableau
+            for (int j = 0; j < AMOUNT_CARDS_SHORT; j++) { //agrega la cantidad de cartas
+                Card card = stock.drawCard();
+                card.flip();
+                if (j == AMOUNT_CARDS_SHORT-1) {
+                    card.flip();
+                }
+                if(!tableau.get(i).acceptCard(this, card)){
+                    return null;
                 }
             }
         }
         return tableau;
     }
+
+
 
     public List<Foundation> initFoundations() {
         ArrayList<Foundation> foundations = new ArrayList<>();
@@ -151,16 +160,22 @@ public class SpiderRules implements Rules, Serializable {
 
     public boolean drawCardFromStock (Game game) {
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
-            if (game.getColumn(i).isEmpty()) return false;
+            if (game.getColumn(i).isEmpty()){
+                return false;
+            }
         }
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
+            Card card = game.getStock().drawCard();
             game.getColumn(j).toggleFillingState();
-            if (!game.moveCards(game.getStock(), game.getColumn(j))) {
+            if(!(game.getColumn(j).acceptCard(this, card))){
                 game.getColumn(j).toggleFillingState();
                 return false;
             }
+            game.getColumn(j).getLast().flip();
             game.getColumn(j).toggleFillingState();
         }
+        game.getStock().toggleFillingState();
+        game.addMovement();
         return true;
     }
 

@@ -17,7 +17,7 @@ public class Game implements Serializable {
     private List<Foundation> foundations;
     private List<Column> tableau;
     private Stock stock;
-    private Stock waste;
+
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
@@ -58,7 +58,7 @@ public class Game implements Serializable {
 
     // falta chequear que el tableau esté vacío
     public void winGame(){
-        if (areAllFoundationsFull() && stock.isEmpty()) {
+        if (areAllFoundationsFull() && stock.isEmpty() && tableau.isEmpty()) {
             gameWon = true;
             gameOver = true;
         }
@@ -129,7 +129,6 @@ public class Game implements Serializable {
     public boolean drawCardFromStock(){
         stock.toggleFillingState();
         return gameRules.drawCardFromStock(this);
-
     }
 
     public boolean moveCards(Deck from, Deck to) {
@@ -137,9 +136,10 @@ public class Game implements Serializable {
         Card moved = from.getLast();
         if (moved == null) { return false; }
         else if (to.acceptCard(gameRules, moved)) {
+            from.drawCard();
             addMovement();
             winGame();
-            return from.removeCard(moved);
+            return true;
         }
         return false;
     }
@@ -151,7 +151,7 @@ public class Game implements Serializable {
         else if (to.acceptSequence(gameRules, moved)) {
             addMovement();
             winGame();
-            return from.removeCard(moved);
+            return from.removeSequence(moved);
         }
         return false;
     }

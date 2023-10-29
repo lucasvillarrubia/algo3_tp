@@ -14,7 +14,7 @@ import Solitaire.Rules;
 public class KlondikeRules implements Rules,Serializable{
 
         private static final int AMOUNT_COLUMNS = 7;
-        private int stockDisplayIndex = 0;
+        private Card waste = null;
 
         public boolean isSequenceValid(Card prev, Card next) {
                 int prevValue = prev.getNumber();
@@ -55,7 +55,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean givesCard(Stock stock) {
-                return true;
+                return !(waste == null);
         }
 
         @Override
@@ -136,19 +136,46 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean drawCardFromStock(Game game) {
-                if (game.getStock().isEmpty() || game.getStock().isFilling()) return false;
-                if (stockDisplayIndex == game.getStock().cardCount()) {
-                        stockDisplayIndex = 0;
-                        return false;
+                if (game == null || game.getStock().isEmpty() || !game.getStock().isFilling()) return false; //seria si no esta filling(?)
+                // if (stockDisplayIndex == game.getStock().cardCount()) {
+                //         stockDisplayIndex = 0;
+                //         return false;
+                // }
+                // game.getStock().flipCard(stockDisplayIndex);
+                // if (stockDisplayIndex != 0) {
+                //         game.getStock().flipCard(stockDisplayIndex - 1);
+                // }
+                // stockDisplayIndex++;
+
+
+                // if (waste == null && !game.getStock().getLast().isFaceUp()) {
+                //         game.getStock().flipCard(0);
+                //         waste = game.getStock().getLast();
+                // }
+                // else if (waste != null) {
+                //         game.getStock().flipCard(0);
+                //         game.getStock().showNextCard();
+                //         game.getStock().flipCard(0);
+                //         waste = game.getStock().getLast();
+                // }
+                // else if (waste != null && !game.getStock().containsCard(waste)) {
+                //         game.getStock().showPreviousCard();
+                //         game.getStock().flipCard(0);
+                //         waste = game.getStock().getLast();
+                // }
+
+                if (waste != null) {
+                        if (!game.getStock().containsCard(waste)) {
+                                game.getStock().showPreviousCard();
+                        }
+                        else {
+                                game.getStock().getLast().flip();
+                                game.getStock().showNextCard();
+                        }
                 }
-                game.getStock().flipCard(stockDisplayIndex);
-                if (stockDisplayIndex != 0) {
-                        game.getStock().flipCard(stockDisplayIndex - 1);
-                }
-                stockDisplayIndex++;
+                game.getStock().getLast().flip();
+                waste = game.getStock().getLast();
                 return true;
         }
 
 }
-//previous next
-

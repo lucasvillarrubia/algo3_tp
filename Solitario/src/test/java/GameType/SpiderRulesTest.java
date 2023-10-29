@@ -5,8 +5,12 @@ import Base.Suit;
 import Base.Value;
 import Elements.Column;
 import Elements.Foundation;
+import Elements.Game;
 import Elements.Stock;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -15,8 +19,9 @@ public class SpiderRulesTest {
     @Test
     public void isSequenceValidTest() {
         SpiderRules rules = new SpiderRules();
-        assertTrue(rules.isSequenceValid(new Card(Suit.SPADES, Value.THREE),new Card(Suit.SPADES, Value.FOUR)));
+        assertTrue(rules.isSequenceValid(new Card(Suit.SPADES, Value.FOUR),new Card(Suit.SPADES, Value.THREE)));
     }
+
     @Test
     public void isSequenceNotValidTest() {
         SpiderRules rules = new SpiderRules();
@@ -27,6 +32,7 @@ public class SpiderRulesTest {
     public void stockAcceptsCardTest() {
         Stock stock = new Stock();
         SpiderRules spiderRules = new SpiderRules();
+        stock.toggleFillingState();
         assertFalse(spiderRules.acceptsCard(stock, new Card(Suit.SPADES, Value.NINE)));
     }
 
@@ -48,7 +54,7 @@ public class SpiderRulesTest {
 
 
     @Test
-    public void columnAccptCardsTest() {
+    public void columnAcceptCardsTest() {
         Column column = new Column();
         Card kingOfSpades = new Card(Suit.SPADES, Value.KING);
         Card queenOfSpades = new Card(Suit.SPADES, Value.QUEEN);
@@ -62,16 +68,17 @@ public class SpiderRulesTest {
     }
 
     @Test
-    public void columnAccptWrongCardsTest() {
+    public void columnAcceptWrongCardsTest() {
         Column column = new Column();
         Card kingOfSpades = new Card(Suit.SPADES, Value.KING);
         Card queenOfSpades = new Card(Suit.SPADES, Value.QUEEN);
         Card jackOfSpades = new Card(Suit.SPADES, Value.JACK);
-        Card twoOfSpades = new Card(Suit.SPADES, Value.TEN);
+        Card twoOfSpades = new Card(Suit.SPADES, Value.TWO);
         SpiderRules spiderRules = new SpiderRules();
         column.acceptCard(spiderRules, kingOfSpades);
         column.acceptCard(spiderRules, queenOfSpades);
         column.acceptCard(spiderRules, jackOfSpades);
+        column.toggleFillingState();
         assertFalse(spiderRules.acceptsCard(column, twoOfSpades));
     }
 
@@ -83,8 +90,103 @@ public class SpiderRulesTest {
         assertFalse(spiderRules.givesCard(stock));
     }
 
+
     @Test
-    public void drawCardFromStockTest() {
+    public void stockGivesCardTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Stock stock = new Stock();
+        stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.NINE));
+        stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.EIGHT));
+        stock.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
+        assertTrue(spiderRules.givesCard(stock));
+    }
+
+    @Test
+    public void stockAdmitsSequenceTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Stock stock = new Stock();
+        Column c= new Column();
+        c.acceptCard(spiderRules, new Card(Suit.SPADES, Value.NINE));
+        c.acceptCard(spiderRules, new Card(Suit.SPADES, Value.EIGHT));
+        c.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
+        assertFalse(spiderRules.admitsSequence(stock, c));
+    }
+
+//    @Test
+//    public void foundationAdmitsSequenceTest() {
+//        Foundation foundation = new Foundation(Suit.SPADES);
+//        SpiderRules spiderRules = new SpiderRules();
+//        Column cards = new Column();
+//        for(Value v: Value.values()){
+//             cards.acceptCard(spiderRules,new Card(Suit.SPADES, v));
+//        }
+//        assertTrue(spiderRules.admitsSequence(foundation, cards));
+//        cards.drawCard();
+//        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.JACK));
+//        assertFalse(spiderRules.admitsSequence(foundation, cards));
+//        cards.drawCard();
+//        assertFalse(spiderRules.admitsSequence(foundation, cards));
+//    }
+
+    @Test
+    public void emptyColumnAdmitsSequenceTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Column cards = new Column();
+        Column column= new Column();
+        Card c1 = new Card(Suit.SPADES, Value.KING);
+        Card c2 = new Card(Suit.SPADES, Value.QUEEN);
+        Card c3 = new Card(Suit.SPADES, Value.JACK);
+        cards.acceptCard(spiderRules, c1);
+        cards.acceptCard(spiderRules, c2);
+        cards.acceptCard(spiderRules, c3);
+        assertTrue(spiderRules.admitsSequence(column, cards));
+    }
+
+    @Test
+    public void spiderGameInitTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Game game = new Game(spiderRules, 10);
+        assertNotNull(game.getStock());
+        assertEquals(game.getStock().cardCount(),50);
+        for(int i = 0; i<10; i++){
+            assertNotNull(game.getColumn(i));
+        }
+        for(int i = 0; i<10;i++){
+            assertNotNull(game.getColumn(i));
+        }
+        for(int i = 0; i< 4; i++){
+            assertEquals(game.getColumn(i).cardCount(),6);
+        }
+        for(int i = 5; i<10; i++){
+            assertEquals(game.getColumn(i).cardCount(),5);
+        }
+        assertTrue(game.getColumn(0).getLast().isTheSameAs(new Card(Suit.SPADES, Value.NINE)));
 
     }
+
+
+    @Test
+    public void drawCardFromStockTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        Game game = new Game(spiderRules, 10);
+        assertEquals(game.getStock().cardCount(),50);
+        assertTrue(spiderRules.drawCardFromStock(game));
+        assertEquals(game.getStock().cardCount(),40);
+    }
+
+    @Test
+    public void notDrawCardFromStockTest() {
+        SpiderRules spiderRules = new SpiderRules();
+        ArrayList<Foundation> foundations = new ArrayList<>();
+        Stock stock = spiderRules.initStock();;
+        ArrayList<Column> tableau = new ArrayList<>();
+        for(int i =0; i <10; i++){
+            tableau.add(0, new Column());
+        }
+        Game game = new Game(foundations,tableau,stock);
+        assertEquals(game.getStock().cardCount(),104);
+        assertFalse(spiderRules.drawCardFromStock(game));
+    }
+
+
 }

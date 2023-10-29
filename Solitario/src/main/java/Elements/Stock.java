@@ -17,8 +17,16 @@ public class Stock extends Deck implements Serializable {
                 this.filled = false;
         }
 
-        public void flipCard(int index) {
-                deck.get(index).flip();
+        public void showPreviousCard() {
+                Card card = deck.get(cardCount()-1);
+                deck.remove(card);
+                addCards(card);
+        }
+
+        public void showNextCard() {
+                Card card = getLast();
+                deck.remove(card);
+                deck.add(card);
         }
 
         public void shuffle(int seed) {
@@ -40,7 +48,7 @@ public class Stock extends Deck implements Serializable {
         }
 
         @Override
-        protected boolean containsCard(Card card) {
+        public boolean containsCard(Card card) {
                 return super.containsCard(card);
         }
 

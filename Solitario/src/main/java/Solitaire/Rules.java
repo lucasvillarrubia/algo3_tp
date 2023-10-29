@@ -11,11 +11,7 @@ public interface Rules {
 
         //protected transient Game game;
 
-        //Game -> rules
-        //reglas -> juego
-
         //public abstract String getRulesType();
-
 
         boolean acceptsCard(Stock stock, Card card);
         boolean acceptsCard(Foundation foundation, Card card);

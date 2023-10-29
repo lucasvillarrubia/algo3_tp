@@ -49,7 +49,7 @@ public class Foundation extends Deck implements Serializable {
         public boolean acceptSequence(Rules gameRules, Column cards) {
                 if (gameRules.admitsSequence(this, cards)) {
                         Collection<Card> cardsCollection = new ArrayList<>();
-                        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                        for (int i = cards.cardCount()-1; i >= 0;  i--) {
                                 cardsCollection.add(cards.getCard(i));
                         }
                         return addCards(cardsCollection);

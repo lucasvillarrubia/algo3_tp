@@ -60,9 +60,9 @@ public class FoundationTest {
             Card card = new Card(Suit.DIAMOND, value);
             f.acceptCard(klondikeRules, card);
         }
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
-        f.removeCard(f.getLast());
+        f.drawCard();
+        f.drawCard();
+        f.drawCard();
         assertFalse(f.isFull());
     }
 
@@ -102,8 +102,8 @@ public class FoundationTest {
         Card aceOfDiamond = new Card(Suit.DIAMOND, Value.ACE);
         Card twoOfDiamonds = new Card(Suit.DIAMOND, Value.TWO);
         Card threeOfDiamonds = new Card(Suit.DIAMOND, Value.THREE);
-        f.addCards(aceOfDiamond);
-        f.addCards(twoOfDiamonds);
+        assertTrue(f.addCards(aceOfDiamond));
+        assertTrue(f.addCards(twoOfDiamonds));
         KlondikeRules klondikeRules = new KlondikeRules();
         assertTrue(f.acceptCard(klondikeRules,threeOfDiamonds));
     }
@@ -126,6 +126,45 @@ public class FoundationTest {
         assertFalse(f.acceptCard(klondikeRules,tenOfHeart));
     }
 
+    @Test
+    public void acceptSequenceKlondikeTest() {
+        Foundation foundation = new Foundation(Suit.HEART);
+        Card card1 = new Card(Suit.HEART, Value.KING);
+        Card card2 = new Card(Suit.HEART, Value.QUEEN);
+        Card card3 = new Card(Suit.HEART, Value.JACK);
+        Column cards = new Column();
+        KlondikeRules k = new KlondikeRules();
+        cards.acceptCard(k,card1);
+        cards.acceptCard(k,card2);
+        cards.acceptCard(k,card3);
+        assertFalse(foundation.acceptSequence(k, cards));
+    }
+
+    @Test
+    public void acceptSequenceSpiderTest() {
+        Foundation f = new Foundation(Suit.SPADES);
+        SpiderRules spiderRules = new SpiderRules();
+        Column cards = new Column();
+        cards.toggleFillingState();
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.KING));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.QUEEN));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.JACK));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.TEN));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.NINE));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.EIGHT));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.SEVEN));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.SIX));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FIVE));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.THREE));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.TWO));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.ACE));
+        assertTrue(f.acceptSequence(spiderRules,cards));
+        cards.drawCard();
+        assertFalse(f.acceptSequence(spiderRules,cards));
+        cards.acceptCard(spiderRules, new Card(Suit.SPADES, Value.FOUR));
+        assertFalse(f.acceptSequence(spiderRules,cards));
+    }
 
     @Test
     public void givesCardKlondikeTest() {
@@ -146,4 +185,5 @@ public class FoundationTest {
         }
         assertFalse(foundation.givesCard(spiderRules));
     }
+
 }

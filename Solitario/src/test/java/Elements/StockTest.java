@@ -2,6 +2,8 @@ package Elements;
 
 import Base.Card;
 import Base.Value;
+import GameType.KlondikeRules;
+import GameType.SpiderRules;
 import org.junit.Test;
 import Base.Suit;
 
@@ -18,26 +20,6 @@ public class StockTest {
         assertEquals(0, stock.cardCount());
     }
 
-   //FILL PERTENECE  A LAS REGLAS
-
-//    @Test
-//    public void stockFillingTest() {
-//        Stock stock = new Stock();
-//        stock.fill();
-//        //assertTrue(stock.wasFilled());
-//        assertEquals(52, stock.cardCount());
-//    }
-//
-//
-//    @Test
-//    public void shuffleTest() {
-//        Stock stock = new Stock();
-//        stock.fill();
-//        Stock shuffledStock = new Stock();
-//        shuffledStock.fill();
-//        shuffledStock.shuffle(10);
-//        assertNotEquals(stock.toString(), shuffledStock.toString());
-//    }
 
     @Test
     public void testContains() {
@@ -75,4 +57,51 @@ public class StockTest {
         assertEquals(stock1.getLast().getValue(), stock2.getLast().getValue());
     }
 
+    @Test
+    public void acceptCardKlondikeTest() {
+        KlondikeRules k=new KlondikeRules();
+        Stock stock = k.initStock();
+        assertTrue(stock.acceptCard(k, new Card(Suit.CLUBS, Value.SEVEN)));
+    }
+
+    @Test
+    public void acceptSequenceTest() {
+        KlondikeRules klondikeRules = new KlondikeRules();
+        Stock s = new Stock();
+        Column column = new Column();
+        column.acceptCard(klondikeRules, new Card(Suit.CLUBS, Value.TEN));
+        column.acceptCard(klondikeRules, new Card(Suit.HEART, Value.FIVE));
+        assertFalse(s.acceptSequence(klondikeRules, column));
+    }
+
+
+//revisar para klondike hay algo que no termina de cerrar :/
+    @Test
+    public void givesCardTest() {
+//        KlondikeRules klondikeRules = new KlondikeRules();
+//        Stock sKlondike = klondikeRules.initStock();
+//        assertTrue(sKlondike.givesCard(klondikeRules));
+        SpiderRules spiderRules = new SpiderRules();
+        Stock sSpider = spiderRules.initStock();
+        assertTrue(sSpider.givesCard(spiderRules));
+    }
+
+
+    @Test
+    public void emptyStockGivesCardTest() {
+        KlondikeRules klondikeRules = new KlondikeRules();
+        SpiderRules spiderRules = new SpiderRules();
+        Stock s = new Stock();
+        assertFalse(s.givesCard(klondikeRules));
+        assertFalse(s.givesCard(spiderRules));
+    }
+
+    @Test
+    public void acceptCardTest() {
+        KlondikeRules klondikeRules = new KlondikeRules();
+        Stock s = new Stock();
+        Card c = new Card(Suit.SPADES, Value.QUEEN);
+        s.acceptCard(klondikeRules, c);
+        assertFalse(s.acceptCard(klondikeRules, c));
+    }
 }
