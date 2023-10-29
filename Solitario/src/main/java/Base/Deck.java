@@ -1,48 +1,49 @@
 package Base;
 
+import Solitaire.Rules;
+import Elements.Column;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Deck {
-    protected Stack<Card> deck;
-    public Deck(){
-        this.deck = new Stack<>();
-    }
-    public void addCard(Card card) {
-        deck.push(card);
-    }
-    public Card getLast(){
-        if(deck.empty()) {
-            return null;
+public abstract class Deck implements Serializable {
+        protected ArrayList<Card> deck;
+
+        public Deck(){
+                this.deck = new ArrayList<>();
         }
-        deck.peek().flip();
-        return deck.peek();
-    }
 
-
-    public Card drawCard(){
-        if(deck.empty()) {
-            return null;
+        protected boolean addCards(Card card) {
+                if (card == null) return false;
+                deck.add(0, card);
+                return true;
         }
-        deck.peek().flip();
-        return deck.pop();
-    }
 
+        public Card getLast(){
+                if(deck.isEmpty()) return null;
+                return deck.get(0);
+        }
 
-    public boolean isEmpty () {
-        return deck.empty();
-    }
+        public Card drawCard(){
+                if(deck.isEmpty()) return null;
+                return deck.remove(0);
+        }
 
-    public int cardCount () {
-        return deck.size();
-    }
+        public boolean isEmpty () {
+                return deck.isEmpty();
+        }
 
+        public int cardCount () {
+                return deck.size();
+        }
 
-    public void shuffle(int seed) {
-        Random rn = new Random(seed);
-        Collections.shuffle(deck, rn);
-    }
+        protected boolean containsCard(Card card) {
+                return deck.contains(card);
+        }
 
-
+        public abstract boolean acceptSequence(Rules gameRules, Column cards);
+        public abstract boolean acceptCard(Rules gameRules, Card card);
+        public abstract boolean givesCard(Rules gameRules);
 
 
 }

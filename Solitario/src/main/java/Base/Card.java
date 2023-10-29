@@ -1,6 +1,8 @@
 package Base;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private final Suit suit;
     private final Value value;
     private boolean faceUp;
@@ -30,4 +32,13 @@ public class Card {
     public Suit getSuit() {
         return suit;
     }
+
+    public Color getColor() {
+        return suit.getColor();
+    }
+
+    public int getNumber() {
+        return value.getNumber();
+    }
+
 }
