@@ -45,5 +45,4 @@ public abstract class Deck implements Serializable {
         public abstract boolean acceptCard(Rules gameRules, Card card);
         public abstract boolean givesCard(Rules gameRules);
 
-
 }

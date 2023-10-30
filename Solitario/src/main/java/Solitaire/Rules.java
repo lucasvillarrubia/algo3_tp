@@ -23,5 +23,7 @@ public interface Rules {
         List<Foundation> initFoundations();
         boolean drawCardFromStock(Game game);
 
+        boolean isSequenceValid(Card prev, Card next);
+
 }
 

@@ -24,6 +24,7 @@ public class SpiderRules implements Rules, Serializable {
     private static final int COMPLETE_FOUNDATION = 13;
     private static final Suit SPADES = Suit.SPADES;
 
+    @Override
     public boolean isSequenceValid(Card prev, Card next) {
         int prevValue = prev.getNumber();
         int nextValue = next.getNumber();
@@ -73,10 +74,6 @@ public class SpiderRules implements Rules, Serializable {
 
     @Override
     public boolean admitsSequence(Foundation foundation, Column sequence) {
-         return isSequenceComplete(sequence);
-    }
-
-    private boolean isSequenceComplete(Column sequence){
         if (sequence.cardCount() == COMPLETE_FOUNDATION) {
             for (int i = COMPLETE_FOUNDATION -1 ; i > 0; i--){
                 if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
@@ -85,6 +82,7 @@ public class SpiderRules implements Rules, Serializable {
         }
         return false;
     }
+
 
     @Override
     public boolean admitsSequence(Column column, Column sequence) {
