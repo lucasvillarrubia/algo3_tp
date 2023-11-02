@@ -7,11 +7,9 @@ public enum Suit {
     CLUBS(Color.BLACK);
 
     private final Color color;
-
     Suit(Color color) {
         this.color = color;
     }
-
     public Color getColor() {
         return this.color;
     }
