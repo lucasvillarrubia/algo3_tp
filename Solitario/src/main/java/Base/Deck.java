@@ -1,8 +1,5 @@
 package Base;
 
-import Solitaire.Rules;
-import Elements.Column;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -13,7 +10,7 @@ public abstract class Deck implements Serializable {
                 this.deck = new ArrayList<>();
         }
 
-        protected boolean addCards(Card card) {
+        public boolean addCards(Card card) {
                 if (card == null) return false;
                 deck.add(0, card);
                 return true;
@@ -40,10 +37,5 @@ public abstract class Deck implements Serializable {
         protected boolean containsCard(Card card) {
                 return deck.contains(card);
         }
-
-        public abstract boolean acceptSequence(Rules gameRules, Column cards);
-        public abstract boolean acceptCard(Rules gameRules, Card card);
-        public abstract boolean givesCard(Rules gameRules);
-
 
 }

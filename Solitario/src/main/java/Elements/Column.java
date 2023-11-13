@@ -1,7 +1,6 @@
 package Elements;
 
 import Base.Deck;
-import Solitaire.Rules;
 import Base.Card;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,6 +45,15 @@ public class Column extends Deck {
                 return true;
         }
 
+        protected boolean addCards(Column cards) {
+                if (cards == null) return false;
+                Collection<Card> cardsCollection = new ArrayList<>();
+                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                        cardsCollection.add(cards.getCard(i));
+                }
+                return addCards(cardsCollection);
+        }
+
         @Override
         public Card drawCard() {
                 Card drawn = super.drawCard();
@@ -63,29 +71,5 @@ public class Column extends Deck {
                 if(!isEmpty() && !getLast().isFaceUp()) getLast().flip();
                 return true;
         }
-
-        @Override
-        public boolean acceptCard(Rules gameRules, Card card) {
-                if (gameRules.acceptsCard(this, card)) return addCards(card);
-                else return false;
-        }
-
-        @Override
-        public boolean acceptSequence(Rules gameRules, Column cards) {
-                if (gameRules.admitsSequence(this, cards)) {
-                        Collection<Card> cardsCollection = new ArrayList<>();
-                        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                                cardsCollection.add(cards.getCard(i));
-                        }
-                        return addCards(cardsCollection);
-                }
-                else return false;
-        }
-
-        @Override
-        public boolean givesCard(Rules gameRules) {
-                return gameRules.givesCard(this);
-        }
-
 
 }

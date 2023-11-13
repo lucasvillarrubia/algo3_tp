@@ -1,11 +1,11 @@
 package GameType;
 
 import Base.Card;
+import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
 import Elements.Foundation;
-import Elements.Game;
 import Elements.Stock;
 import Solitaire.Rules;
 
@@ -146,22 +146,31 @@ public class SpiderRules implements Rules, Serializable {
         return foundations;
     }
 
-    public boolean drawCardFromStock (Game game) {
-        if( game == null || game.getStock().isEmpty()) return  false;
+    public boolean drawCardFromStock (Stock stock, List<Column> tableau) {
+        if(stock.isEmpty()) return  false;
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
-            if (game.getColumn(i).isEmpty()){
+            if (tableau.get(i).isEmpty()){
                 return false;
             }
         }
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
-            Card card = game.getStock().drawCard();
-            game.getColumn(j).toggleFillingState();
-            game.getColumn(j).acceptCard(this, card);
-            game.getColumn(j).getLast().flip();
-            game.getColumn(j).toggleFillingState();
+            Card card = stock.drawCard();
+            tableau.get(j).toggleFillingState();
+            tableau.get(j).acceptCard(this, card);
+            tableau.get(j).getLast().flip();
+            tableau.get(j).toggleFillingState();
         }
-        game.getStock().toggleFillingState();
+        stock.toggleFillingState();
         return true;
     }
+
+    @Override
+    public boolean acceptsCard(Deck deck, Card card) { return true; }
+
+    @Override
+    public boolean givesCard(Deck deck) { return true; }
+
+    @Override
+    public boolean admitsSequence(Deck deck, Column sequence) { return true; }
 
 }

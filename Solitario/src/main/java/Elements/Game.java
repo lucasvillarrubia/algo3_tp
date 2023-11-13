@@ -10,7 +10,7 @@ import Base.Suit;
 
 public class Game implements Serializable {
 
-    private Rules gameRules;
+    private final Rules gameRules;
     private boolean gameOver;
     private boolean gameWon;
     private int cantMovements;
@@ -115,14 +115,14 @@ public class Game implements Serializable {
     }
 
     public boolean drawCardFromStock(){
-        return gameRules.drawCardFromStock(this);
+        return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
     public boolean moveCards(Deck from, Deck to) {
-        if (!from.givesCard(gameRules)) return false;
+        if (!gameRules.givesCard(from)) return false;
         Card moved = from.getLast();
         if (moved == null) { return false; }
-        else if (to.acceptCard(gameRules, moved)) {
+        else if (gameRules.acceptsCard(to, moved)) {
             from.drawCard();
             addMovement();
             winGame();
@@ -132,10 +132,10 @@ public class Game implements Serializable {
     }
 
     public boolean moveCards(Column from, Deck to, int index) {
-        if (!from.givesCard(gameRules)) return false;
+        if (!gameRules.givesCard(from)) return false;
         Column moved = from.getSequence(index);
         if (moved == null) { return false; }
-        else if (to.acceptSequence(gameRules, moved)) {
+        else if (gameRules.admitsSequence(to, moved)) {
             addMovement();
             winGame();
             return from.removeSequence(moved);

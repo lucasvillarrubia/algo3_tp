@@ -1,6 +1,5 @@
 package Elements;
 
-import Solitaire.Rules;
 import Base.Deck;
 import Base.Card;
 import java.util.Collections;
@@ -48,22 +47,6 @@ public class Stock extends Deck {
         @Override
         public boolean containsCard(Card card) {
                 return super.containsCard(card);
-        }
-
-        @Override
-        public boolean acceptCard(Rules gameRules, Card card) {
-                if (gameRules.acceptsCard(this, card) && !containsCard(card)) return addCards(card);
-                else return false;
-        }
-
-        @Override
-        public boolean acceptSequence(Rules gameRules, Column cards) {
-                return gameRules.admitsSequence(this, cards);
-        }
-
-        @Override
-        public boolean givesCard(Rules gameRules) {
-                return gameRules.givesCard(this);
         }
 
 }
