@@ -35,7 +35,7 @@ public class Column extends Deck {
         }
 
         @Override
-        protected boolean addCards(Card card) {
+        public boolean addCards(Card card) {
                 return super.addCards(card);
         }
 

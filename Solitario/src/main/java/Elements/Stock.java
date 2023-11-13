@@ -40,7 +40,7 @@ public class Stock extends Deck {
         }
 
         @Override
-        protected boolean addCards(Card card) {
+        public boolean addCards(Card card) {
                 return super.addCards(card);
         }
 

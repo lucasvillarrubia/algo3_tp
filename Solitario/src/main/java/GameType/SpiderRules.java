@@ -101,7 +101,7 @@ public class SpiderRules implements Rules, Serializable {
         for (Value value : Value.values()) {
             for (int j = 0; j < AMOUNT_FOUNDATIONS; j++) {
                 Card card = new Card(SPADES, value);
-                stock.acceptCard(this, card);
+                stock.addCards(card);
             }
         }
         stock.toggleFillingState();
@@ -120,7 +120,7 @@ public class SpiderRules implements Rules, Serializable {
                 if (j == AMOUNT_CARDS_LONG-1) {
                     card.flip();
                 }
-                if(!tableau.get(i).acceptCard(this, card)) return null;
+                if(!tableau.get(i).addCards(card)) return null;
             }
         }
         for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) {
@@ -129,7 +129,7 @@ public class SpiderRules implements Rules, Serializable {
                 if (j == AMOUNT_CARDS_SHORT-1) {
                     card.flip();
                 }
-                if(!tableau.get(i).acceptCard(this, card)) return null;
+                if(!tableau.get(i).addCards(card)) return null;
             }
         }
         tableau.forEach(Column::toggleFillingState);
@@ -156,7 +156,7 @@ public class SpiderRules implements Rules, Serializable {
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
             Card card = stock.drawCard();
             tableau.get(j).toggleFillingState();
-            tableau.get(j).acceptCard(this, card);
+            tableau.get(j).addCards(card);
             tableau.get(j).getLast().flip();
             tableau.get(j).toggleFillingState();
         }

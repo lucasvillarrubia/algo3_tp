@@ -85,16 +85,15 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public Stock initStock() {
-                Deck stock = new Stock();
+                Stock stock = new Stock();
                 for (Value value : Value.values()) {
                         for (Suit suit : Suit.values()) {
                                 Card card = new Card(suit, value);
                                 stock.addCards(card);
                         }
                 }
-                Stock newStock = (Stock)stock;
-                newStock.toggleFillingState();
-                return newStock;
+                stock.toggleFillingState();
+                return stock;
         }
 
         @Override
@@ -109,7 +108,7 @@ public class KlondikeRules implements Rules,Serializable{
                                 if (j == i) {
                                         card.flip();
                                 }
-                                if(!tableau.get(i).acceptCard(this, card)) return null;
+                                if(!tableau.get(i).addCards(card)) return null;
                         }
                 }
                 tableau.forEach(Column::toggleFillingState);
