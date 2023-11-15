@@ -7,13 +7,6 @@ import java.util.Random;
 
 public class Stock extends Deck {
 
-        private boolean filled;
-
-        public Stock () {
-                super();
-                this.filled = true;
-        }
-
         public void showPreviousCard() {
                 Card card = deck.get(cardCount()-1);
                 deck.remove(card);
@@ -31,22 +24,8 @@ public class Stock extends Deck {
                 Collections.shuffle(deck, rn);
         }
 
-        public void toggleFillingState() {
-                this.filled = !filled;
-        }
-
-        public boolean isFilling() {
-                return this.filled;
-        }
-
-        @Override
-        public boolean addCards(Card card) {
-                return super.addCards(card);
-        }
-
-        @Override
         public boolean containsCard(Card card) {
-                return super.containsCard(card);
+                return deck.contains(card);
         }
 
 }

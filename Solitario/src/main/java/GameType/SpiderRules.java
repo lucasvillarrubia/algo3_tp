@@ -1,7 +1,6 @@
 package GameType;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
@@ -30,10 +29,9 @@ public class SpiderRules implements Rules, Serializable {
         return ((prevValue - nextValue) == 1);
     }
 
-
     @Override
     public boolean acceptsCard(Stock stock, Card card) {
-        return stock.isFilling();
+        return false;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class SpiderRules implements Rules, Serializable {
     }
     @Override
     public boolean acceptsCard(Column column, Card card) {
-        if (column.isBeingFilled() || column.isEmpty()) {
+        if (column.isEmpty()) {
             return true;
         } else {
             Card topCard = column.getLast();
@@ -51,10 +49,7 @@ public class SpiderRules implements Rules, Serializable {
     }
 
     @Override
-    public boolean givesCard(Stock stock) {
-        if(!stock.isEmpty()) return !stock.isFilling();
-        return false;
-    }
+    public boolean givesCard(Stock stock) { return false; }
 
     @Override
     public boolean givesCard(Foundation foundation) {
@@ -104,7 +99,6 @@ public class SpiderRules implements Rules, Serializable {
                 stock.addCards(card);
             }
         }
-        stock.toggleFillingState();
         return stock;
     }
 
@@ -132,10 +126,8 @@ public class SpiderRules implements Rules, Serializable {
                 if(!tableau.get(i).addCards(card)) return null;
             }
         }
-        tableau.forEach(Column::toggleFillingState);
         return tableau;
     }
-
 
     @Override
     public List<Foundation> initFoundations() {
@@ -155,22 +147,10 @@ public class SpiderRules implements Rules, Serializable {
         }
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
             Card card = stock.drawCard();
-            tableau.get(j).toggleFillingState();
             tableau.get(j).addCards(card);
             tableau.get(j).getLast().flip();
-            tableau.get(j).toggleFillingState();
         }
-        stock.toggleFillingState();
         return true;
     }
-
-    @Override
-    public boolean acceptsCard(Deck deck, Card card) { return true; }
-
-    @Override
-    public boolean givesCard(Deck deck) { return true; }
-
-    @Override
-    public boolean admitsSequence(Deck deck, Column sequence) { return true; }
 
 }
