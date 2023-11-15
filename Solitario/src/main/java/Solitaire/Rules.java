@@ -25,5 +25,7 @@ public interface Rules {
         List<Foundation> initFoundations();
         boolean drawCardFromStock(Stock stock, List<Column> tableau);
 
+        boolean isSequenceValid(Card prev, Card next);
+
 }
 

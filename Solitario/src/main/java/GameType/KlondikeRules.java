@@ -13,6 +13,7 @@ public class KlondikeRules implements Rules,Serializable{
         private static final int AMOUNT_COLUMNS = 7;
         private Card waste = null;
 
+        @Override
         public boolean isSequenceValid(Card prev, Card next) {
                 int prevValue = prev.getNumber();
                 int nextValue = next.getNumber();
