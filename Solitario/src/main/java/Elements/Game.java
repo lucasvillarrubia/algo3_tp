@@ -124,9 +124,7 @@ public class Game implements Serializable {
         if (moved == null) { return false; }
         else if (gameRules.acceptsCard(to, moved)) {
             from.drawCard();
-            addMovement();
-            winGame();
-            return true;
+            return to.addCards(moved);
         }
         return false;
     }
@@ -136,9 +134,7 @@ public class Game implements Serializable {
         Column moved = from.getSequence(index);
         if (moved == null) { return false; }
         else if (gameRules.admitsSequence(to, moved)) {
-            addMovement();
-            winGame();
-            return from.removeSequence(moved);
+            return to.addCards(moved) && from.removeSequence(moved);
         }
         return false;
     }

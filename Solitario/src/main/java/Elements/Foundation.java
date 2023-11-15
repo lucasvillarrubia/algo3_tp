@@ -25,24 +25,4 @@ public class Foundation extends Deck {
                 return this.suit;
         }
 
-        @Override
-        public boolean addCards(Card card) {
-                return super.addCards(card);
-        }
-
-        protected boolean addCards(Column cards) {
-                if (cards == null) return false;
-                Collection<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount()-1; i >= 0;  i--) {
-                        cardsCollection.add(cards.getCard(i));
-                }
-                return addCards(cardsCollection);
-        }
-
-        private boolean addCards(Collection<Card> cards) {
-                if (cards == null) return false;
-                deck.addAll(0, cards);
-                return true;
-        }
-
 }

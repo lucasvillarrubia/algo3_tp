@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public interface Rules {
+        
         boolean acceptsCard(Stock stock, Card card);
         boolean acceptsCard(Foundation foundation, Card card);
         boolean acceptsCard(Column column, Card card);

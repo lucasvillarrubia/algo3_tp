@@ -25,7 +25,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean acceptsCard(Stock stock, Card card) {
-                return stock.isFilling();
+                return false;
         }
 
         @Override
@@ -40,10 +40,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean acceptsCard(Column column, Card card) {
-                if (column.isBeingFilled()) {
-                        return true;
-                }
-                else if (column.isEmpty()) {
+                if (column.isEmpty()) {
                         return card.getValue() == Value.KING;
                 } else {
                         return isSequenceValid(column.getLast(), card);
@@ -82,7 +79,6 @@ public class KlondikeRules implements Rules,Serializable{
                 return true;
         }
 
-
         @Override
         public Stock initStock() {
                 Stock stock = new Stock();
@@ -92,7 +88,6 @@ public class KlondikeRules implements Rules,Serializable{
                                 stock.addCards(card);
                         }
                 }
-                stock.toggleFillingState();
                 return stock;
         }
 
@@ -111,7 +106,6 @@ public class KlondikeRules implements Rules,Serializable{
                                 if(!tableau.get(i).addCards(card)) return null;
                         }
                 }
-                tableau.forEach(Column::toggleFillingState);
                 return tableau;
         }
 
@@ -126,7 +120,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean drawCardFromStock(Stock stock, List<Column> tableau) {
-                if (stock.isEmpty() || stock.isFilling()) return false;
+                if (stock.isEmpty()) return false;
                 if (waste != null) {
                         if (!stock.containsCard(waste)) {
                                 stock.showPreviousCard();
@@ -141,12 +135,12 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
         @Override
-        public boolean acceptsCard(Deck deck, Card card) { return true; }
+        public boolean acceptsCard(Deck deck, Card card) { return false; }
 
         @Override
-        public boolean givesCard(Deck deck) { return true; }
+        public boolean givesCard(Deck deck) { return false; }
 
         @Override
-        public boolean admitsSequence(Deck deck, Column sequence) { return true; }
+        public boolean admitsSequence(Deck deck, Column sequence) { return false; }
 
 }

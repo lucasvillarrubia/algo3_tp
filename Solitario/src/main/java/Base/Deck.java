@@ -1,9 +1,12 @@
 package Base;
 
+import Elements.Column;
+
 import java.io.Serializable;
 import java.util.*;
 
 public abstract class Deck implements Serializable {
+
         protected ArrayList<Card> deck;
 
         public Deck(){
@@ -14,6 +17,21 @@ public abstract class Deck implements Serializable {
                 if (card == null) return false;
                 deck.add(0, card);
                 return true;
+        }
+
+        protected boolean addCards(Collection<Card> cards) {
+                if (cards == null) return false;
+                deck.addAll(0, cards);
+                return true;
+        }
+
+        public boolean addCards(Column cards) {
+                if (cards == null) return false;
+                Collection<Card> cardsCollection = new ArrayList<>();
+                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                        cardsCollection.add(cards.getCard(i));
+                }
+                return addCards(cardsCollection);
         }
 
         public Card getLast(){
@@ -32,10 +50,6 @@ public abstract class Deck implements Serializable {
 
         public int cardCount () {
                 return deck.size();
-        }
-
-        protected boolean containsCard(Card card) {
-                return deck.contains(card);
         }
 
 }
