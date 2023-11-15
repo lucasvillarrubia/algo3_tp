@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import Base.Card;
-import Base.Color;
-import Base.Suit;
-import Base.Value;
+import Base.*;
 import Elements.*;
 import Solitaire.Rules;
 
@@ -29,7 +26,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean acceptsCard(Stock stock, Card card) {
-                return stock.isFilling();
+                return false;
         }
 
         @Override
@@ -44,10 +41,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean acceptsCard(Column column, Card card) {
-                if (column.isBeingFilled()) {
-                        return true;
-                }
-                else if (column.isEmpty()) {
+                if (column.isEmpty()) {
                         return card.getValue() == Value.KING;
                 } else {
                         return isSequenceValid(column.getLast(), card);
@@ -56,7 +50,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean givesCard(Stock stock) {
-                return waste != null;
+                return waste != null && !stock.isEmpty();
         }
 
         @Override
@@ -86,17 +80,15 @@ public class KlondikeRules implements Rules,Serializable{
                 return true;
         }
 
-
         @Override
         public Stock initStock() {
                 Stock stock = new Stock();
                 for (Value value : Value.values()) {
                         for (Suit suit : Suit.values()) {
                                 Card card = new Card(suit, value);
-                                stock.acceptCard(this, card);
+                                stock.addCards(card);
                         }
                 }
-                stock.toggleFillingState();
                 return stock;
         }
 
@@ -112,10 +104,9 @@ public class KlondikeRules implements Rules,Serializable{
                                 if (j == i) {
                                         card.flip();
                                 }
-                                if(!tableau.get(i).acceptCard(this, card)) return null;
+                                if(!tableau.get(i).addCards(card)) return null;
                         }
                 }
-                tableau.forEach(Column::toggleFillingState);
                 return tableau;
         }
 
@@ -129,18 +120,18 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
         @Override
-        public boolean drawCardFromStock(Game game) {
-                if (game == null || game.getStock().isEmpty() || game.getStock().isFilling()) return false;
+        public boolean drawCardFromStock(Stock stock, List<Column> tableau) {
+                if (stock == null || tableau == null || stock.isEmpty()) return false;
                 if (waste != null) {
-                        if (!game.getStock().containsCard(waste)) {
-                                game.getStock().showPreviousCard();
+                        if (!stock.containsCard(waste)) {
+                                stock.showPreviousCard();
                         } else {
-                                game.getStock().getLast().flip();
-                                game.getStock().showNextCard();
+                                stock.getLast().flip();
+                                stock.showNextCard();
                         }
                 }
-                game.getStock().getLast().flip();
-                waste = game.getStock().getLast();
+                stock.getLast().flip();
+                waste = stock.getLast();
                 return true;
         }
 

@@ -5,7 +5,6 @@ import Base.Suit;
 import Base.Value;
 import Elements.Column;
 import Elements.Foundation;
-import Elements.Game;
 import Elements.Stock;
 import Solitaire.Rules;
 
@@ -31,10 +30,9 @@ public class SpiderRules implements Rules, Serializable {
         return ((prevValue - nextValue) == 1);
     }
 
-
     @Override
     public boolean acceptsCard(Stock stock, Card card) {
-        return stock.isFilling();
+        return false;
     }
 
     @Override
@@ -43,7 +41,7 @@ public class SpiderRules implements Rules, Serializable {
     }
     @Override
     public boolean acceptsCard(Column column, Card card) {
-        if (column.isBeingFilled() || column.isEmpty()) {
+        if (column.isEmpty()) {
             return true;
         } else {
             Card topCard = column.getLast();
@@ -52,10 +50,7 @@ public class SpiderRules implements Rules, Serializable {
     }
 
     @Override
-    public boolean givesCard(Stock stock) {
-        if(!stock.isEmpty()) return !stock.isFilling();
-        return false;
-    }
+    public boolean givesCard(Stock stock) { return false; }
 
     @Override
     public boolean givesCard(Foundation foundation) {
@@ -99,10 +94,9 @@ public class SpiderRules implements Rules, Serializable {
         for (Value value : Value.values()) {
             for (int j = 0; j < AMOUNT_FOUNDATIONS; j++) {
                 Card card = new Card(SPADES, value);
-                stock.acceptCard(this, card);
+                stock.addCards(card);
             }
         }
-        stock.toggleFillingState();
         return stock;
     }
 
@@ -118,7 +112,7 @@ public class SpiderRules implements Rules, Serializable {
                 if (j == AMOUNT_CARDS_LONG-1) {
                     card.flip();
                 }
-                if(!tableau.get(i).acceptCard(this, card)) return null;
+                if(!tableau.get(i).addCards(card)) return null;
             }
         }
         for (int i = AMOUNT_COLUMNS_LONG; i < AMOUNT_COLUMNS; i++) {
@@ -127,13 +121,11 @@ public class SpiderRules implements Rules, Serializable {
                 if (j == AMOUNT_CARDS_SHORT-1) {
                     card.flip();
                 }
-                if(!tableau.get(i).acceptCard(this, card)) return null;
+                if(!tableau.get(i).addCards(card)) return null;
             }
         }
-        tableau.forEach(Column::toggleFillingState);
         return tableau;
     }
-
 
     @Override
     public List<Foundation> initFoundations() {
@@ -144,21 +136,18 @@ public class SpiderRules implements Rules, Serializable {
         return foundations;
     }
 
-    public boolean drawCardFromStock (Game game) {
-        if( game == null || game.getStock().isEmpty()) return  false;
+    public boolean drawCardFromStock (Stock stock, List<Column> tableau) {
+        if(stock.isEmpty()) return  false;
         for (int i = 0; i < AMOUNT_COLUMNS; i++) {
-            if (game.getColumn(i).isEmpty()){
+            if (tableau.get(i).isEmpty()){
                 return false;
             }
         }
         for (int j = 0; j < AMOUNT_COLUMNS; j++) {
-            Card card = game.getStock().drawCard();
-            game.getColumn(j).toggleFillingState();
-            game.getColumn(j).acceptCard(this, card);
-            game.getColumn(j).getLast().flip();
-            game.getColumn(j).toggleFillingState();
+            Card card = stock.drawCard();
+            tableau.get(j).addCards(card);
+            tableau.get(j).getLast().flip();
         }
-        game.getStock().toggleFillingState();
         return true;
     }
 
