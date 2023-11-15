@@ -3,26 +3,27 @@ package UI;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Menu {
 
-    public static ComboBox<String> dropDownMenu(){
+
+    public ComboBox<String> dropDownMenu(){
         ComboBox<String> gameTypeCB = new ComboBox<>();
+        gameTypeCB.setPrefWidth(100);
         gameTypeCB.getItems().addAll("Klondike", "Spider");
-        gameTypeCB.setValue("Klondike");
+        gameTypeCB.setValue("Choose...");
         return gameTypeCB;
     }
 
-
-    private void openGame(String selectedGame){
-        Stage gameStage = new Stage();
-        gameStage.setTitle(selectedGame);
-        if(selectedGame.equals("Klondike")){
-            KlondikeUI.setUpGame();
-        } else if(selectedGame.equals("Spider")){
-            SpiderUI.setUpGame();
+    public void openGame(Stage stage, String selectedGame) throws IOException {
+        if ("Klondike".equals(selectedGame)) {
+            KlondikeUI klondikeUI = new KlondikeUI();
+            klondikeUI.setUpGame(stage);
+        } else if ("Spider".equals(selectedGame)) {
+            SpiderUI spiderUI = new SpiderUI();
+            spiderUI.setUpGame(stage);
         }
-
-        gameStage.show();
     }
 
 
