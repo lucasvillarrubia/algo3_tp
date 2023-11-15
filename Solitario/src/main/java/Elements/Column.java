@@ -25,7 +25,7 @@ public class Column extends Deck {
 
         public boolean removeSequence(Column sequence) {
                 for (int i = 0; i < sequence.cardCount(); i++) {
-                        if(!deck.get(i).isTheSameAs(sequence.getCard(i))) {
+                        if(!deck.get(0).isTheSameAs(sequence.getCard(i))) {
                                 return false;
                         }
                         drawCard();

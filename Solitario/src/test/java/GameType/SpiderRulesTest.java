@@ -144,15 +144,31 @@ public class SpiderRulesTest {
 
     }
 
-
-//    @Test
-//    public void drawCardFromStockTest() {
-//        SpiderRules spiderRules = new SpiderRules();
-//        Game game = new Game(spiderRules, 10);
-//        assertEquals(game.getStock().cardCount(),50);
-//        assertTrue(spiderRules.drawCardFromStock(game.getStock(), game.get));
-//        assertEquals(game.getStock().cardCount(),40);
-//    }
+    @Test
+    public void acceptSequenceSpiderTest() {
+        SpiderRules sr = new SpiderRules();
+        Foundation f = new Foundation(Suit.SPADES);
+        Column cards = new Column();
+        cards.addCards(new Card(Suit.SPADES, Value.KING));
+        cards.addCards(new Card(Suit.SPADES, Value.QUEEN));
+        cards.addCards(new Card(Suit.SPADES, Value.JACK));
+        cards.addCards(new Card(Suit.SPADES, Value.TEN));
+        cards.addCards(new Card(Suit.SPADES, Value.NINE));
+        cards.addCards(new Card(Suit.SPADES, Value.EIGHT));
+        cards.addCards(new Card(Suit.SPADES, Value.SEVEN));
+        cards.addCards(new Card(Suit.SPADES, Value.SIX));
+        cards.addCards(new Card(Suit.SPADES, Value.FIVE));
+        cards.addCards(new Card(Suit.SPADES, Value.FOUR));
+        cards.addCards(new Card(Suit.SPADES, Value.THREE));
+        cards.addCards(new Card(Suit.SPADES, Value.TWO));
+        cards.addCards(new Card(Suit.SPADES, Value.ACE));
+        assertTrue(sr.admitsSequence(f, cards));
+        cards.drawCard();
+        assertFalse(sr.admitsSequence(f, cards));
+        cards.addCards(new Card(Suit.SPADES, Value.ACE));
+        cards.addCards(new Card(Suit.SPADES, Value.FOUR));
+        assertFalse(sr.admitsSequence(f, cards));
+    }
 
     @Test
     public void notDrawCardFromStockTest() {

@@ -27,9 +27,9 @@ public abstract class Deck implements Serializable {
 
         public boolean addCards(Column cards) {
                 if (cards == null) return false;
-                Collection<Card> cardsCollection = new ArrayList<>();
+                ArrayList<Card> cardsCollection = new ArrayList<>();
                 for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(cards.getCard(i));
+                        cardsCollection.add(0, cards.getCard(i));
                 }
                 return addCards(cardsCollection);
         }

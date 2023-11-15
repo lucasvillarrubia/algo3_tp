@@ -1,7 +1,6 @@
 package GameType;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
@@ -50,7 +49,7 @@ public class SpiderRules implements Rules, Serializable {
     }
 
     @Override
-    public boolean givesCard(Stock stock) { return !stock.isEmpty(); }
+    public boolean givesCard(Stock stock) { return false; }
 
     @Override
     public boolean givesCard(Foundation foundation) {
@@ -153,14 +152,5 @@ public class SpiderRules implements Rules, Serializable {
         }
         return true;
     }
-
-    @Override
-    public boolean acceptsCard(Deck deck, Card card) { return false; }
-
-    @Override
-    public boolean givesCard(Deck deck) { return false; }
-
-    @Override
-    public boolean admitsSequence(Deck deck, Column sequence) { return false; }
 
 }

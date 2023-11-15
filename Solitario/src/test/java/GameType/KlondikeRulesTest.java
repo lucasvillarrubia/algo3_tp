@@ -58,18 +58,6 @@ public class KlondikeRulesTest {
     }
 
     @Test
-    public void stockAcceptCardTest() {
-        Stock stock = new Stock();
-        KlondikeRules gameRules = new KlondikeRules();
-        Card card = new Card(Suit.HEART, Value.QUEEN);
-        assertTrue(gameRules.acceptsCard(stock, card));
-        stock.addCards(card);
-        assertEquals(1, stock.cardCount());
-        assertEquals(card, stock.getLast());
-    }
-
-
-    @Test
     public void initKlondikeGameTest() {
         KlondikeRules rules = new KlondikeRules();
         Game game = new Game(rules, 10);
@@ -192,13 +180,6 @@ public class KlondikeRulesTest {
     }
 
     //                  S  T  O  C  K
-    @Test
-    public void testAcceptCardInStockWhileFilling() {
-        KlondikeRules gameRules = new KlondikeRules();
-        Card card1 = new Card(Suit.HEART, Value.KING);
-        Stock emptyStock = new Stock();
-        assertTrue(gameRules.acceptsCard(emptyStock, card1));
-    }
 
     @Test
     public void testRejectCardInStockTypeWithKlondikeRules() {

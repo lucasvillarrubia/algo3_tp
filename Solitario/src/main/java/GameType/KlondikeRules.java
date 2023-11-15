@@ -49,7 +49,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean givesCard(Stock stock) {
-                return waste != null;
+                return waste != null && !stock.isEmpty();
         }
 
         @Override
@@ -120,7 +120,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean drawCardFromStock(Stock stock, List<Column> tableau) {
-                if (stock.isEmpty()) return false;
+                if (stock == null || tableau == null || stock.isEmpty()) return false;
                 if (waste != null) {
                         if (!stock.containsCard(waste)) {
                                 stock.showPreviousCard();
@@ -133,14 +133,5 @@ public class KlondikeRules implements Rules,Serializable{
                 waste = stock.getLast();
                 return true;
         }
-
-        @Override
-        public boolean acceptsCard(Deck deck, Card card) { return false; }
-
-        @Override
-        public boolean givesCard(Deck deck) { return false; }
-
-        @Override
-        public boolean admitsSequence(Deck deck, Column sequence) { return false; }
 
 }

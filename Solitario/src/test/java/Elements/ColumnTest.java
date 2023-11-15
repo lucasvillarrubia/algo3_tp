@@ -151,13 +151,6 @@ public class ColumnTest {
     @Test
     public void removeSequenceTest() {
         Column cards = new Column();
-        Column wrongSequence = new Column();
-        Card card3 = new Card(Suit.SPADES, Value.TEN);
-        Card card4 = new Card(Suit.HEART, Value.NINE);
-        Card card5 = new Card(Suit.CLUBS, Value.EIGHT);
-        wrongSequence.addCards(card3);
-        wrongSequence.addCards(card4);
-        wrongSequence.addCards(card5);
         Card card1 = new Card(Suit.HEART, Value.KING);
         Card card2 = new Card(Suit.SPADES, Value.QUEEN);
         cards.addCards(card1);
@@ -165,6 +158,10 @@ public class ColumnTest {
         Column to = new Column();
         assertTrue(to.addCards(cards));
         assertFalse(to.isEmpty());
+        assertEquals(cards.getCard(0), card2);
+        assertEquals(cards.getCard(1), card1);
+        assertTrue(to.getCard(1).isTheSameAs(card1));
+        assertTrue(to.getCard(0).isTheSameAs(card2));
         assertTrue(to.removeSequence(cards));
         assertTrue(to.isEmpty());
     }
