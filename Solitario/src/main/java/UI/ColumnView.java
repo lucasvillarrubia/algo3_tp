@@ -2,7 +2,6 @@ package UI;
 
 import Base.Card;
 import Elements.Column;
-import Elements.Game;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 

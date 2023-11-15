@@ -5,7 +5,7 @@ import Base.Suit;
 import Base.Value;
 import Elements.Column;
 import Elements.Foundation;
-import Elements.Game;
+import Solitaire.Game;
 import Elements.Stock;
 import org.junit.Test;
 import java.util.ArrayList;

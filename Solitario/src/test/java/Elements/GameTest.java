@@ -5,6 +5,7 @@ import Base.Suit;
 import Base.Value;
 import GameType.KlondikeRules;
 import GameType.SpiderRules;
+import Solitaire.Game;
 import org.junit.Test;
 
 import java.io.*;

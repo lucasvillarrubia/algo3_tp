@@ -1,6 +1,6 @@
 package UI;
 
-import Elements.Game;
+import Solitaire.Game;
 import GameType.SpiderRules;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

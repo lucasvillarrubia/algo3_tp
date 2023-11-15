@@ -1,9 +1,11 @@
-package Elements;
+package Solitaire;
 
 import java.io.*;
 import java.util.List;
-import Solitaire.Rules;
-import Base.Deck;
+
+import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
 import Base.Card;
 import Base.Suit;
 
