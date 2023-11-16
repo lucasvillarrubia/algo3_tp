@@ -3,6 +3,7 @@ package UI;
 import Base.Card;
 import Elements.Column;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 public class ColumnView extends StackPane {
@@ -16,13 +17,14 @@ public class ColumnView extends StackPane {
 
     private void buildColumn(Column column) {
         int offset = 0;
-        for (int i = 0; i < column.cardCount(); i++) {
+        for (int i = column.cardCount()-1; 0<=i ; i--) {
             Card card = column.getCard(i);
             ImageView image = cardView.getImage(card);
-            image.setTranslateY(17*offset);
-            image.setStyle("-fx-border-color: black");
+            image.setTranslateY(20*offset);
             offset++;
             getChildren().add(image);
         }
     }
+
+
 }

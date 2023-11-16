@@ -1,12 +1,9 @@
 package UI;
 
-
-import Base.Card;
-import Base.Suit;
-import Base.Value;
+import Solitaire.Game;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 
@@ -15,10 +12,26 @@ public class StockView extends HBox {
 
     CardView cardView = new CardView();
     public Button showStock(){
+
         Button button = new Button();
-        button.setStyle("-fx-border-color: black;-fx-padding: 5,5,5,5");
+        button.setStyle("-fx-border-color: black;-fx-padding: 2,2,2,2");
         button.setGraphic(cardView.getBack());
         button.setStyle("-fx-background-color: transparent");
+
+        button.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ((Button)mouseEvent.getSource()).setStyle("-fx-padding: 3,1,1,3");
+            }
+        });
+
+        button.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ((Button)mouseEvent.getSource()).setStyle("-fx-padding: 2,2,2,2");
+            }
+        });
+
         return button;
     }
 
