@@ -8,7 +8,7 @@ import Base.Value;
 import Base.Card;
 
 
-public class Foundation extends Deck implements Visitable {
+public class Foundation extends Deck {
 
         private final Suit suit;
 
@@ -35,5 +35,4 @@ public class Foundation extends Deck implements Visitable {
                 return addCards(cardsCollection);
         }
 
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 }

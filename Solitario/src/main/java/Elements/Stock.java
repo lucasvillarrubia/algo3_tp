@@ -5,7 +5,7 @@ import Base.Card;
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends Deck implements Visitable {
+public class Stock extends Deck {
 
         public void showPreviousCard() {
                 Card card = deck.get(cardCount()-1);
@@ -27,7 +27,5 @@ public class Stock extends Deck implements Visitable {
         public boolean containsCard(Card card) {
                 return deck.contains(card);
         }
-
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 
 }
