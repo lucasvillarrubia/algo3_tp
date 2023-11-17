@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import Base.Card;
 
-public class Column extends Deck implements Visitable {
+public class Column extends Deck {
 
         public Card getCard(int pos){
                 return deck.get(pos);
@@ -45,7 +45,5 @@ public class Column extends Deck implements Visitable {
                 }
                 return addCards(cardsCollection);
         }
-
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 
 }

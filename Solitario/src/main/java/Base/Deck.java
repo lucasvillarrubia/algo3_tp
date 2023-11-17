@@ -19,7 +19,7 @@ public abstract class Deck implements Serializable {
                 return true;
         }
 
-        protected boolean addCards(Collection<Card> cards) {
+        public boolean addCards(Collection<Card> cards) {
                 if (cards == null) return false;
                 deck.addAll(0, cards);
                 return true;
@@ -41,15 +41,6 @@ public abstract class Deck implements Serializable {
 
         public int cardCount () {
                 return deck.size();
-        }
-
-        public boolean addCards(Column cards) {
-                if (cards == null) return false;
-                ArrayList<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(0, cards.getCard(i));
-                }
-                return addCards(cardsCollection);
         }
 
 }
