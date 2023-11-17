@@ -16,12 +16,12 @@ public class ColumnView extends StackPane {
 
     private int number;
 
-    private boolean clicked;
+    private boolean clickState;
 
     public ColumnView(Column column) {
         this.column = column;
         buildColumn(column);
-        clicked = false;
+        clickState = false;
     }
 
     public Column getColumn(){
@@ -50,15 +50,17 @@ public class ColumnView extends StackPane {
         return this.number;
     }
 
+    public void toggleColumnClick() { clickState = !clickState; }
 
     public void handleColumnClick(MouseEvent event) {
-        clicked = true;
+        toggleColumnClick();
         System.out.println("Column Clicked! Column ID: " + column.getCard(0).getValue()+ column.getCard(0).getSuit());
     }
 
     public boolean isClicked(){
-        return clicked;
+        return clickState;
     }
+
 
 
 }

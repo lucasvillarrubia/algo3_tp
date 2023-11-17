@@ -33,14 +33,14 @@ public class SpiderUI{
     @FXML
     Pane tableau;
     @FXML
-    Pane foundations ;
+    Pane foundations = new Pane();
     ClickState clickState;
     private Column clickedColumn;
 
     public void initialize(){
         SpiderRules spiderRules = new SpiderRules();
         Random random = new Random();
-        game = new Game(spiderRules, random.nextInt());
+        game = new Game(spiderRules, 10);
         clickState = ClickState.NO_CLICK;
     }
 
@@ -76,8 +76,8 @@ public class SpiderUI{
                     if (columnView.isClicked()) {
                         if (clickState == ClickState.NO_CLICK) {
                             clickedColumn = columnView.getColumn();
-                            clickState = ClickState.FIRST_CLICK;
-                        } else if (clickState == ClickState.FIRST_CLICK) {
+                            clickState = ClickState.CLICKED;
+                        } else if (clickState == ClickState.CLICKED) {
                             Column targetColumn = columnView.getColumn();
                             if (game.moveCards(clickedColumn, targetColumn)) {
                                 updateTableauView();

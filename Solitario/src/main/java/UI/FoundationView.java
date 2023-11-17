@@ -12,9 +12,12 @@ public class FoundationView extends StackPane {
     CardView cardView = new CardView();
     Suit suit;
     Foundation foundation;
+    private boolean clickState;
+
     public FoundationView(Foundation foundation) {
         this.suit = foundation.getSuit();
         this.foundation = foundation;
+        this.clickState = false;
         buildFoundation();
         setOnMouseClicked(this::handleFoundationClick);
     }
@@ -30,11 +33,18 @@ public class FoundationView extends StackPane {
         }
     }
 
+    public void toggleFoundationClick() { clickState = !clickState; }
+
     private void handleFoundationClick(MouseEvent event) {
-        System.out.println("Column Clicked! Suit: " + suit);
+        toggleFoundationClick();
+        System.out.println("Foundation Clicked! Suit: " + suit);
     }
 
     public Foundation getFoundation() {
         return foundation;
+    }
+
+    public boolean isClicked(){
+        return clickState;
     }
 }
