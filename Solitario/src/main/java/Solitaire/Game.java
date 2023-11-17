@@ -1,13 +1,13 @@
 package Solitaire;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
-import Elements.Column;
-import Elements.Foundation;
-import Elements.Stock;
+import Elements.*;
 import Base.Card;
 import Base.Suit;
+import Base.Deck;
 
 
 public class Game implements Serializable {
@@ -120,133 +120,179 @@ public class Game implements Serializable {
         return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
-    public boolean moveCards(Column from, Foundation to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
+    public boolean pensemos(Visitable from, Visitable to) {
+        if (from == null || to == null) { return false; }
+        if (!gameRules.givesCard(from)) { return false; }
+        return gameRules.acceptsCard(from, to);
     }
 
-    public boolean moveCards(Stock from, Foundation to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
+    public boolean pensemosSecuencia(Column from, Visitable to, int index) {
+        if (from == null || to == null) { return false; }
+        if (!gameRules.givesCard(from)) { return false; }
+        return (gameRules.admitsSequence(to, from.getSequence(index)));
     }
 
-    public boolean moveCards(Foundation from, Foundation to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
+    public boolean veamos(Deck from, Deck to) {
+        if (from.getLast() == null) { return false; }
+        return to.addCards(from.drawCard());
     }
 
-    public boolean moveCards(Column from, Column to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Stock from, Column to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Foundation from, Column to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Column from, Stock to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Stock from, Stock to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Foundation from, Stock to) {
-        if (!gameRules.givesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.acceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
-
-    public boolean moveCards(Column from, Column to, int index) {
-        if (!gameRules.givesCard(from)) return false;
+    public boolean veamosSecuencia(Column from, Deck to, int index) {
         Column moved = from.getSequence(index);
         if (moved == null) { return false; }
-        else if (gameRules.admitsSequence(to, moved)) {
-            return to.addCards(moved) && from.removeSequence(moved);
-        }
-        return false;
+        return to.addCards(moved) && from.removeSequence(moved);
     }
 
-    public boolean moveCards(Column from, Stock to, int index) {
-        if (!gameRules.givesCard(from)) return false;
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        else if (gameRules.admitsSequence(to, moved)) {
-            return to.addCards(moved) && from.removeSequence(moved);
-        }
-        return false;
-    }
+//    public boolean moveCards(Deck from, Deck to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
 
-    public boolean moveCards(Column from, Foundation to, int index) {
-        if (!gameRules.givesCard(from)) return false;
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        else if (gameRules.admitsSequence(to, moved)) {
-            return to.addCards(moved) && from.removeSequence(moved);
-        }
-        return false;
-    }
+//    public boolean moveCards(Column from, Foundation to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Stock from, Foundation to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Foundation from, Foundation to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Column from, Column to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Stock from, Column to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Foundation from, Column to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Column from, Stock to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Stock from, Stock to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Foundation from, Stock to) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Card moved = from.getLast();
+//        if (moved == null) { return false; }
+//        else if (gameRules.acceptsCard(to, moved)) {
+//            from.drawCard();
+//            return to.addCards(moved);
+//        }
+//        return false;
+//    }
+//
+
+
+//    public boolean moveCards(Column from, Deck to, int index) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Column moved = from.getSequence(index);
+//        if (moved == null) { return false; }
+//        else if (gameRules.admitsSequence(to, moved)) {
+//            return to.addCards(moved) && from.removeSequence(moved);
+//        }
+//        return false;
+//    }
+
+//    public boolean moveCards(Column from, Column to, int index) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Column moved = from.getSequence(index);
+//        if (moved == null) { return false; }
+//        else if (gameRules.admitsSequence(to, moved)) {
+//            return to.addCards(moved) && from.removeSequence(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Column from, Stock to, int index) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Column moved = from.getSequence(index);
+//        if (moved == null) { return false; }
+//        else if (gameRules.admitsSequence(to, moved)) {
+//            return to.addCards(moved) && from.removeSequence(moved);
+//        }
+//        return false;
+//    }
+//
+//    public boolean moveCards(Column from, Foundation to, int index) {
+//        if (!gameRules.givesCard(from)) return false;
+//        Column moved = from.getSequence(index);
+//        if (moved == null) { return false; }
+//        else if (gameRules.admitsSequence(to, moved)) {
+//            return to.addCards(moved) && from.removeSequence(moved);
+//        }
+//        return false;
+//    }
 
 }

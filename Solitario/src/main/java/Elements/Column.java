@@ -1,9 +1,12 @@
 package Elements;
 
 import Base.Deck;
+
+import java.util.ArrayList;
+
 import Base.Card;
 
-public class Column extends Deck {
+public class Column extends Deck implements Visitable {
 
         public Card getCard(int pos){
                 return deck.get(pos);
@@ -33,5 +36,16 @@ public class Column extends Deck {
                 if(!isEmpty() && !getLast().isFaceUp()) getLast().flip();
                 return true;
         }
+
+        public boolean addCards(Column cards) {
+                if (cards == null) return false;
+                ArrayList<Card> cardsCollection = new ArrayList<>();
+                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+                        cardsCollection.add(0, cards.getCard(i));
+                }
+                return addCards(cardsCollection);
+        }
+
+        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 
 }
