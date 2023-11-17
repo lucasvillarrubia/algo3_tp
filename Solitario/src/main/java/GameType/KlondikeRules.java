@@ -135,4 +135,25 @@ public class KlondikeRules implements Rules,Serializable{
                 return true;
         }
 
+        @Override public boolean deckAcceptsCard(Deck deck, Card card){
+                if (deck instanceof Column c) { return acceptsCard(c, card); }
+                else if (deck instanceof Stock s) { return acceptsCard(s, card); }
+                else if (deck instanceof Foundation f) { return acceptsCard(f, card); }
+                else { return false; }
+        }
+
+        @Override public boolean deckGivesCard(Deck deck){
+                if (deck instanceof Column c) { return givesCard(c); }
+                else if (deck instanceof Stock s) { return givesCard(s); }
+                else if (deck instanceof Foundation f) { return givesCard(f); }
+                else { return false; }
+        }
+
+        @Override public boolean deckAdmitsSequence(Deck deck, Column sequence){
+                if (deck instanceof Column c) { return admitsSequence(c, sequence); }
+                else if (deck instanceof Stock s) { return admitsSequence(s, sequence); }
+                else if (deck instanceof Foundation f) { return admitsSequence(f, sequence); }
+                else { return false; }
+        }
+
 }

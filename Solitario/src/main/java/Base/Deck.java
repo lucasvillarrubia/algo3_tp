@@ -19,19 +19,10 @@ public abstract class Deck implements Serializable {
                 return true;
         }
 
-        protected boolean addCards(Collection<Card> cards) {
+        public boolean addCards(Collection<Card> cards) {
                 if (cards == null) return false;
                 deck.addAll(0, cards);
                 return true;
-        }
-
-        public boolean addCards(Column cards) {
-                if (cards == null) return false;
-                ArrayList<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(0, cards.getCard(i));
-                }
-                return addCards(cardsCollection);
         }
 
         public Card getLast(){
