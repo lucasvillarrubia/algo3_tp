@@ -1,12 +1,8 @@
 package UI;
 
-
-import Base.Card;
-import Base.Suit;
-import Base.Value;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 
@@ -16,16 +12,34 @@ public class StockView extends HBox {
     CardView cardView = new CardView();
     public Button showStock(){
         Button button = new Button();
-        button.setStyle("-fx-border-color: black;-fx-padding: 5,5,5,5");
+        button.setStyle("-fx-background-color: transparent; ");
         button.setGraphic(cardView.getBack());
-        button.setStyle("-fx-background-color: transparent");
+        eventHandler(button);
         return button;
     }
 
 
+    public Button showEmptyStock(){
+        Button button = new Button();
+        button.setStyle("-fx-border-color: black; -fx-background-color: green; -fx-border-radius:2 ; -fx-pref-width: 61;-fx-pref-height: 79");
+        return button;
+    }
 
-    //Para obtener el valor de una carta
-    // Card card = new Card(Suit.HEART, Value.SEVEN);
-    //button.setGraphic(cardView.getImage(card));
+    public void eventHandler(Button button) {
+        button.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ((Button) mouseEvent.getSource()).setStyle("-fx-padding: 3,1,1,3");
+            }
+        });
+
+        button.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                ((Button) mouseEvent.getSource()).setStyle("-fx-padding: 2,2,2,2");
+            }
+        });
+    }
+
 
 }
