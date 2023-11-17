@@ -9,6 +9,7 @@ import Solitaire.Game;
 import GameType.KlondikeRules;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -36,11 +37,16 @@ public class KlondikeUI{
     @FXML
     Pane tableau;
 
+    ClickState clickState;
+    private Column clickedColumn;
+    private Foundation clickedFoundation;
+
 
     public void initialize(){
         KlondikeRules klondikeRules = new KlondikeRules();
         Random random = new Random();
         game = new Game(klondikeRules, random.nextInt());
+        this.clickState = ClickState.NO_CLICK;
     }
 
     public void setUpGame(Stage stage) throws IOException {
@@ -51,7 +57,7 @@ public class KlondikeUI{
         StockView stockView = new StockView();
         Button stockButton = stockView.showStock();
         stock.getChildren().add(stockButton);
-        initializeFoundations();
+        updateFoundations();
 
         updateTableauView();
         setEventHandlers();
@@ -65,18 +71,60 @@ public class KlondikeUI{
 
 
     private void setEventHandlers() {
-        tableau.setOnMouseClicked(this::handleTableauClick);
+        tableau.setOnMouseClicked(this::handleColumnClick);
         foundations.setOnMouseClicked(this::handleFoundationsClick);
         stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
 
     private void handleFoundationsClick(MouseEvent event) {
-        // Handle the click on the foundations area
-        // You can implement logic to move cards or perform other actions
-    }
-    private void handleTableauClick(MouseEvent event) {
+        if (event.getSource() instanceof Pane source) {
+            // Check if there's a clickedColumn and it's not empty
+            if (clickState == ClickState.FIRST_CLICK && !clickedColumn.isEmpty()) {
+                // Iterate through the foundation panes
+                for (Node child : source.getChildren()) {
+                    if (child instanceof StackPane) {
+                        FoundationView foundationView = (FoundationView) ((StackPane) child).getChildren().get(0);
+                        clickedFoundation = foundationView.getFoundation();
+                        // Perform the move to the foundation
+                        if (game.moveCards(clickedColumn, clickedFoundation)) {
+                            updateTableauView();
+                            updateFoundations();
+                        }
+
+                        // Reset click state
+                        clickState = ClickState.NO_CLICK;
+                    }
+                }
+            }
+        }
 
     }
+
+
+    private void handleColumnClick(MouseEvent event) {
+        if (event.getSource() instanceof Pane source) {
+            for (Node child : source.getChildren()) {
+                if (child instanceof StackPane) {
+                    ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
+                    if (columnView.isClicked()) {
+                        if (clickState == ClickState.NO_CLICK) {
+                            clickedColumn = columnView.getColumn();
+                            clickState = ClickState.FIRST_CLICK;
+                        } else if (clickState == ClickState.FIRST_CLICK) {
+                            Column targetColumn = columnView.getColumn();
+                            if (game.moveCards(clickedColumn, targetColumn)) {
+                                updateTableauView();
+                            }
+                            clickState = ClickState.NO_CLICK;
+                        }
+                        //break;
+                    }
+                }
+            }
+        }
+    }
+
+
 
     private void handleStockClick(MouseEvent event) {
         if(game.drawCardFromStock()){
@@ -89,7 +137,7 @@ public class KlondikeUI{
         updateStockButton();
     }
 
-    private void initializeFoundations(){
+    private void updateFoundations(){
         int i = 0;
         for (Suit suit: Suit.values()) {
             Foundation foundation = game.getFoundationBySuit(suit);
@@ -104,7 +152,7 @@ public class KlondikeUI{
         for(int i = 0 ;i<AMOUNT_COLUMNS; i++){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column);
-            columnView.setId(i);
+            columnView.setNumber(i);
             StackPane stackPane =(StackPane) tableau.getChildren().get(i);
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);

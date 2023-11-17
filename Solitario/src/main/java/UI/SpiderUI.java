@@ -34,11 +34,14 @@ public class SpiderUI{
     Pane tableau;
     @FXML
     Pane foundations ;
+    ClickState clickState;
+    private Column clickedColumn;
 
     public void initialize(){
         SpiderRules spiderRules = new SpiderRules();
         Random random = new Random();
         game = new Game(spiderRules, random.nextInt());
+        clickState = ClickState.NO_CLICK;
     }
 
     public void setUpGame(Stage stage) throws IOException {
@@ -61,10 +64,36 @@ public class SpiderUI{
     }
 
     private void setEventHandlers() {
-        //tableau.setOnMouseClicked(this::handleTableauClick);
+        tableau.setOnMouseClicked(this::handleColumnClick);
+        foundations.setOnMouseClicked(this::handleFoundationClick);
         stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
+    private void handleColumnClick(MouseEvent event) {
+        if (event.getSource() instanceof Pane source) {
+            for (Node child : source.getChildren()) {
+                if (child instanceof StackPane) {
+                    ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
+                    if (columnView.isClicked()) {
+                        if (clickState == ClickState.NO_CLICK) {
+                            clickedColumn = columnView.getColumn();
+                            clickState = ClickState.FIRST_CLICK;
+                        } else if (clickState == ClickState.FIRST_CLICK) {
+                            Column targetColumn = columnView.getColumn();
+                            if (game.moveCards(clickedColumn, targetColumn)) {
+                                updateTableauView();
+                            }
+                            clickState = ClickState.NO_CLICK;
+                        }
+                        //break;
+                    }
+                }
+            }
+        }
+    }
 
+    private void handleFoundationClick(MouseEvent event){
+
+    }
 
     private void handleStockClick(MouseEvent event) {
         if(game.drawCardFromStock()){
@@ -77,7 +106,7 @@ public class SpiderUI{
         for(int i = 0 ;i<10; i++ ){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column);
-            columnView.setId(i);
+            columnView.setNumber(i);
             StackPane stackPane =(StackPane) tableau.getChildren().get(i);
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);

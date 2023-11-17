@@ -14,12 +14,14 @@ public class ColumnView extends StackPane {
 
     private final Column column;
 
-    private int id;
+    private int number;
+
+    private boolean clicked;
 
     public ColumnView(Column column) {
         this.column = column;
         buildColumn(column);
-        setOnMouseClicked(this::handleColumnClick);
+        clicked = false;
     }
 
     public Column getColumn(){
@@ -34,21 +36,29 @@ public class ColumnView extends StackPane {
             image.setTranslateY(OFFSET*offset);
             offset++;
             getChildren().add(image);
-
+            setOnMouseClicked(this::handleColumnClick);
         }
     }
 
-    public void setId(int id){
-        this.id = id;
+
+
+    public void setNumber(int id){
+        this.number = id;
+    }
+
+    public int getNumber(){
+        return this.number;
     }
 
 
-    private void handleColumnClick(MouseEvent event) {
-        System.out.println("Column Clicked! Column ID: " + id);
+    public void handleColumnClick(MouseEvent event) {
+        clicked = true;
+        System.out.println("Column Clicked! Column ID: " + column.getCard(0).getValue()+ column.getCard(0).getSuit());
     }
 
-
-
+    public boolean isClicked(){
+        return clicked;
+    }
 
 
 }
