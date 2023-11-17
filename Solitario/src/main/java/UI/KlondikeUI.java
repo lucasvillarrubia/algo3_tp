@@ -1,6 +1,7 @@
 package UI;
 
 
+import Base.Card;
 import Base.Suit;
 import Elements.Column;
 import Elements.Foundation;
@@ -9,12 +10,12 @@ import GameType.KlondikeRules;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
 
 import java.io.IOException;
 import java.util.Random;
@@ -23,11 +24,13 @@ public class KlondikeUI{
 
     private static final int H =650;
     private static final int W =560;
-    private static KlondikeRules klondikeRules = new KlondikeRules();
-    private static Game game;
+    private Game game;
+    private final CardView cardView = new CardView();
     private static final int AMOUNT_COLUMNS = 7;
     @FXML
     HBox stock ;
+    @FXML
+    StackPane waste;
     @FXML
     Pane foundations;
     @FXML
@@ -35,6 +38,7 @@ public class KlondikeUI{
 
 
     public void initialize(){
+        KlondikeRules klondikeRules = new KlondikeRules();
         Random random = new Random();
         game = new Game(klondikeRules, random.nextInt());
     }
@@ -45,25 +49,12 @@ public class KlondikeUI{
         loader.setController(this);
         AnchorPane root = loader.load();
         StockView stockView = new StockView();
-        stock.getChildren().add(stockView.showStock());
+        Button stockButton = stockView.showStock();
+        stock.getChildren().add(stockButton);
+        initializeFoundations();
 
-        int i = 0;
-        for (Suit suit: Suit.values()) {
-            Foundation foundation = game.getFoundationBySuit(suit);
-            FoundationView foundationView = new FoundationView(foundation);
-            StackPane stackPane = (StackPane) foundations.getChildren().get(i);
-            stackPane.getChildren().clear();
-            foundations.getChildren().add(foundationView);
-            i ++;
-        }
-
-        for(i = 0 ;i<AMOUNT_COLUMNS; i++){
-            Column column =game.getColumn(i);
-            ColumnView columnView = new ColumnView(column);
-            StackPane stackPane =(StackPane) tableau.getChildren().get(i);
-            stackPane.getChildren().clear();
-            stackPane.getChildren().add(columnView);
-        }
+        updateTableauView();
+        setEventHandlers();
 
         Scene klondikeScene = new Scene(root,H, W);
         stage.setScene(klondikeScene);
@@ -73,21 +64,65 @@ public class KlondikeUI{
 
 
 
+    private void setEventHandlers() {
+        tableau.setOnMouseClicked(this::handleTableauClick);
+        foundations.setOnMouseClicked(this::handleFoundationsClick);
+        stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
+    }
 
-//Elementos del klondike
+    private void handleFoundationsClick(MouseEvent event) {
+        // Handle the click on the foundations area
+        // You can implement logic to move cards or perform other actions
+    }
+    private void handleTableauClick(MouseEvent event) {
+
+    }
+
+    private void handleStockClick(MouseEvent event) {
+        if(game.drawCardFromStock()){
+            Card card = game.getStock().getLast();
+            ImageView wasteView = cardView.getImage(card);
+            //evaluar si == a la primer carta
+            StackPane box = new StackPane(wasteView);
+            waste.getChildren().add(box);
+        }
+        updateStockButton();
+    }
+
+    private void initializeFoundations(){
+        int i = 0;
+        for (Suit suit: Suit.values()) {
+            Foundation foundation = game.getFoundationBySuit(suit);
+            FoundationView foundationView = new FoundationView(foundation);
+            StackPane stackPane = (StackPane) foundations.getChildren().get(i);
+            stackPane.getChildren().clear();
+            stackPane.getChildren().add(foundationView);
+            i++;
+        }
+    }
+    private void updateTableauView(){
+        for(int i = 0 ;i<AMOUNT_COLUMNS; i++){
+            Column column =game.getColumn(i);
+            ColumnView columnView = new ColumnView(column);
+            columnView.setId(i);
+            StackPane stackPane =(StackPane) tableau.getChildren().get(i);
+            stackPane.getChildren().clear();
+            stackPane.getChildren().add(columnView);
+        }
+    }
+
+    private void updateStockButton(){
+        StockView stockView = new StockView();
+        if(game.getStock().isEmpty()){
+            Button stockButton = stockView.showEmptyStock();
+            stock.getChildren().clear();
+            stock.getChildren().add(stockButton);
+        }
+    }
+
+
 /*
-* Waste
-* Foundation
-* */
+* Waste -> corregir!!
+*/
 
 }
-//        drawCardButton.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                Card card = game.getStock().getLast();
-//                StackPane waste = new StackPane();
-//                waste.setGraphic(cardView.getImage(card.getValue().getNumber()+card.getSuit().toString()));
-//                stock.getChildren().add(waste);
-//                game.drawCardFromStock();
-//            }
-//        });

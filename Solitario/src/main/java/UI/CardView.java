@@ -1,6 +1,7 @@
 package UI;
 
 import Base.Card;
+import Base.Suit;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -42,6 +43,15 @@ public class CardView extends ImageView {
         back.setFitWidth(61);
         return back;
     }
+
+    public ImageView getFoundationImage(Suit suit){
+        Image i = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + suit.toString() + IMAGE_SUFFIX)));
+        ImageView imageView = new ImageView(i);
+        imageView.setFitHeight(79);
+        imageView.setFitWidth(61);
+        return imageView;
+    }
+
 
 
 
