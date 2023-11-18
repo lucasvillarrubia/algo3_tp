@@ -135,8 +135,4 @@ public class KlondikeRules implements Rules,Serializable{
                 return true;
         }
 
-//        @Override public boolean acceptsCard(Deck column, Card card){ return false; }
-//        @Override public boolean givesCard(Deck column){ return false; }
-//        @Override public boolean admitsSequence(Deck column, Column sequence){ return false; }
-
 }
