@@ -169,19 +169,19 @@ public class KlondikeUI{
         }
     }
 
-    private void handleCardClickToFoundation(MouseEvent event) {
-        clickState = ClickState.CLICKED;
-        if(clickState == ClickState.CLICKED) { clickState = ClickState.NO_CLICK; }
-        if(clickedColumnView == null) return;
-        Foundation targetFoundation = clickedFoundation;
-        if (game.moveCards(game.getStock(), targetFoundation)) {
-            updateFoundations();
-            game.drawCardFromStock();
-            updateWaste();
-            clickedColumnView = null;
-            clickState = ClickState.NO_CLICK;
-        }
-    }
+//    private void handleCardClickToFoundation(MouseEvent event) {
+//        clickState = ClickState.CLICKED;
+//        if(clickState == ClickState.CLICKED) { clickState = ClickState.NO_CLICK; }
+//        if(clickedColumnView == null) return;
+//        Foundation targetFoundation = clickedFoundation;
+//        if (game.moveCards(game.getStock(), targetFoundation)) {
+//            updateFoundations();
+//            game.drawCardFromStock();
+//            updateWaste();
+//            clickedColumnView = null;
+//            clickState = ClickState.NO_CLICK;
+//        }
+//    }
 
     private void updateWaste() {
         if (stockIndex == game.getStock().cardCount()) {
@@ -195,10 +195,7 @@ public class KlondikeUI{
             ImageView wasteView = cardView.getImage(card);
             StackPane cardStackPane = new StackPane(wasteView);
             waste.getChildren().add(cardStackPane);
-            //cardStackPane.setOnMouseClicked(wasteCardEvent -> handleWasteCardClick(card));
             waste.setOnMouseClicked(this::handleWasteCardClick);
-//            waste.setOnMouseClicked(this::handleCardClickToFoundation);
-            //cardStackPane.setOnMouseClicked(wasteCardEvent -> handleCardClickToFoundation(wasteCardEvent));
             stockIndex++;
         }
     }

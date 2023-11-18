@@ -1,10 +1,9 @@
 package Elements;
 
 import Base.Deck;
-
+import Base.Card;
 import java.util.ArrayList;
 
-import Base.Card;
 
 public class Column extends Deck {
 
