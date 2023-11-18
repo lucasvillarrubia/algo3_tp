@@ -270,38 +270,38 @@ public class KlondikeUI{
         for (Node child : pane.getChildren()) {
             Clickable clickedDeck = (Clickable) ((StackPane) child).getChildren().get(0);
             if (clickedDeck.estaClickeado()) {
-                if (sourceDeck == null) {
-                    this.sourceDeck = clickedDeck;
-                }
-                else {
-                    this.destinationDeck = clickedDeck;
-                }
+                if (sourceDeck == null) this.sourceDeck = clickedDeck;
+                else this.destinationDeck = clickedDeck;
             }
         }
     }
 
     private void searchForClicked(HBox stockCard) {
         Clickable clickedDeck = (Clickable) stockCard;
-        if (sourceDeck == null) {
-            this.sourceDeck = clickedDeck;
+        if (sourceDeck == null) this.sourceDeck = clickedDeck;
+        else this.destinationDeck = clickedDeck;
+    }
+
+//    private void updateDeck(Clickable deck) {
+//    }
+
+    // Stock deberia estar como un atributo privado representado por su Pane
+    // el HBox stock de ahora debería renombrarse quizás como stockPile
+    private void handleClick(MouseEvent event) {
+        Pane clickedPane = (Pane) event.getSource();
+        if (clickedPane.getChildren().get(0) instanceof HBox stockPile) {
+            searchForClicked(stockPile);
         }
         else {
-            this.destinationDeck = clickedDeck;
+            searchForClicked(clickedPane);
         }
-    }
-
-    private void updateDeck(Pane pane) {
-
-    }
-
-    private void handleClick(MouseEvent event) {
-        if (event.getSource())
-        Pane clickedPane = (Pane) event.getSource();
 //        if (event.getSource() instanceof Pane pane)
-        searchForClicked(clickedPane);
         if (sourceDeck != null && destinationDeck != null) {
             if (game.moveCards(sourceDeck.getDeck(), destinationDeck.getDeck())) {
-                updateDeck(clickedPane);
+//                updateDeck(sourceDeck);
+//                updateDeck(destinationDeck);
+                updateTableauView();
+                updateFoundations();
             }
         }
     }
