@@ -1,7 +1,5 @@
 package Base;
 
-import Elements.Column;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -41,15 +39,6 @@ public abstract class Deck implements Serializable {
 
         public int cardCount () {
                 return deck.size();
-        }
-
-        public boolean addCards(Column cards) {
-                if (cards == null) return false;
-                ArrayList<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(0, cards.getCard(i));
-                }
-                return addCards(cardsCollection);
         }
 
 }

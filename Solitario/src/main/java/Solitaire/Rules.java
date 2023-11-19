@@ -1,7 +1,6 @@
 package Solitaire;
 
 import Base.Card;
-import Base.Deck;
 import Elements.*;
 
 import java.util.List;

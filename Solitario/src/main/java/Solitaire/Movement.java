@@ -1,67 +1,80 @@
 package Solitaire;
 
-import Base.Deck;
-import Elements.Column;
-import Elements.DeckVisitor;
-import Elements.Foundation;
-import Elements.Stock;
+import Elements.*;
 
 public class Movement implements DeckVisitor {
 
-    private Deck from;
-    private Deck to;
+    private final VisitableDeck from;
+
+    private final VisitableDeck to;
+
+    private Column sequenceToMove;
+
+    private Rules rules;
+
     private boolean validMove;
 
-    public Movement() {
-        this.from = null;
-        this.to = null;
-        this.validMove = true;
+    private int cardIndex;
+
+    private boolean sourceChecked;
+
+    public Movement (VisitableDeck source, VisitableDeck goal) {
+        this.from = source;
+        this.to = goal;
+        this.cardIndex = 0;
+        this.sourceChecked = false;
+    }
+
+    public Movement (Column source, VisitableDeck goal, int index) {
+        this(source, goal);
+        this.cardIndex = index;
+    }
+
+    protected boolean checkMoveByRules (Rules rules) {
+        this.rules = rules;
+        from.accept(this);
+        this.sourceChecked = true;
+        if (!validMove) return false;
+        to.accept(this);
+        if (!validMove) return false;
+        if (cardIndex == 0) return moveCards(from, to);
+        else return moveSequence(sequenceToMove, (Column)from, to);
     }
 
     @Override
     public void visit(Stock s) {
-        if (from == null) {
-            this.from = s;
-            this.validMove = moveRules.givesCard(s);
-        }
-        else {
-            this.to = s;
-            this.validMove = moveRules.acceptsCard(s, from.getLast());
-        }
+        if (!sourceChecked) this.validMove = rules.givesCard(s);
+        else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(s, sequenceToMove);
+        else this.validMove = rules.acceptsCard(s, from.getLast());
     }
 
     @Override
     public void visit(Foundation f) {
-        if (from == null) {
-            this.from = f;
-            this.validMove = moveRules.givesCard(f);
-        }
-        else {
-            this.to = f;
-            this.validMove = moveRules.acceptsCard(f, from.getLast());
-        }
+        if (!sourceChecked) this.validMove = rules.givesCard(f);
+        else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(f, sequenceToMove);
+        else this.validMove = rules.acceptsCard(f, from.getLast());
     }
 
     @Override
     public void visit(Column c) {
-        if (from == null) {
-            this.from = c;
-            this.validMove = moveRules.givesCard(c);
+        if (!sourceChecked) {
+            this.validMove = rules.givesCard(c);
+            if (cardIndex != 0) this.sequenceToMove = c.getSequence(cardIndex);
         }
         else {
-            this.to = c;
-            this.validMove = moveRules.acceptsCard(c, from.getLast());
+            if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(c, sequenceToMove);
+            else this.validMove = rules.acceptsCard(c, from.getLast());
         }
     }
 
-    public boolean moveCards(Deck from, Deck to) {
+    private boolean moveCards(VisitableDeck from, VisitableDeck to) {
         if (from.getLast() == null) { return false; }
         return to.addCards(from.drawCard());
     }
 
-    public boolean moveCards(Column from, Deck to, int index) {
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        return to.addCards(moved) && from.removeSequence(moved);
+    private boolean moveSequence(Column sequence, Column from, VisitableDeck to) {
+        if (sequence == null) { return false; }
+        return to.addCards(sequence) && from.removeSequence(sequence);
     }
+
 }

@@ -6,6 +6,7 @@ import Base.Value;
 import GameType.KlondikeRules;
 import GameType.SpiderRules;
 import Solitaire.Game;
+import Solitaire.Movement;
 import org.junit.Test;
 
 import java.io.*;
@@ -74,7 +75,8 @@ public class GameTest {
         tableau.add(wrongSequence);
 
         Game game = new Game(k, emptyFoundations, tableau, stock);
-        assertFalse(game.moveCards(game.getColumn(1), game.getColumn(0), 2));
+//        assertFalse(game.moveCards(game.getColumn(1), game.getColumn(0), 2));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(1), game.getColumn(0), 2)));
     }
 
     @Test
@@ -189,11 +191,16 @@ public class GameTest {
         }
         assertFalse(game.isGameWon());
         assertFalse(game.isGameOver());
-        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(4)));
-        assertTrue(game.moveCards(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS)));
+//        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(4)));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(4))));
+//        assertTrue(game.moveCards(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS)));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS))));
         assertTrue(game.drawCardFromStock());
         assertTrue(game.drawCardFromStock());
-        assertFalse(game.moveCards(game.getColumn(1),game.getColumn(2), 1 ));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock(), 1)));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock())));
+//        assertFalse(game.moveCards(game.getColumn(1),game.getColumn(2), 1 ));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(1),game.getColumn(2), 1 )));
     }
 
     //Tests de Game con Spider
@@ -215,12 +222,20 @@ public class GameTest {
         assertFalse(game.isGameWon());
         assertTrue(game.drawCardFromStock());
         assertEquals(game.getStock().cardCount(), 40);
-        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(5)));
-        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(7)));
-        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
-        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(9), 3));
-        assertTrue(game.moveCards(game.getColumn(1), game.getColumn(9), 1));
-        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
+        assertFalse(game.makeAMove(new Movement(game.getStock(), game.getColumn(0))));
+        assertFalse(game.makeAMove(new Movement(game.getFoundationBySuit(Suit.SPADES), game.getColumn(0))));
+//        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(5)));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(5))));
+//        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(7)));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getColumn(7))));
+//        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
+//        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(9), 3));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getColumn(9), 3)));
+//        assertTrue(game.moveCards(game.getColumn(1), game.getColumn(9), 1));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(1), game.getColumn(9), 1)));
+//        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
 //        assertEquals(game.getCantMovements(), 4);
     }
 

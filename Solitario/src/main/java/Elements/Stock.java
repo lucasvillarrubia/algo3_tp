@@ -5,7 +5,7 @@ import Base.Card;
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends Deck implements Visitable {
+public class Stock extends VisitableDeck {
 
         public void showPreviousCard() {
                 Card card = deck.get(cardCount()-1);
