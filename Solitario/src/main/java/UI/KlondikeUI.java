@@ -282,6 +282,17 @@ public class KlondikeUI{
         else this.destinationDeck = clickedDeck;
     }
 
+//    private void searchForClicked(StackPane column) {
+//        for (int i = 0; i < column.getChildren().size(); i++) {
+////        for (Node child : column.getChildren()) {
+//            Clickable clickedCard = (Clickable) column.getChildren().get(i);
+//            if (clickedCard.estaClickeado()) {
+//                if (i == 0) game.moveCards(sourceDeck.getDeck(), destinationDeck.getDeck());
+//                else game.moveCards(sourceDeck.getDeck(), destinationDeck.getDeck(), i);
+//            }
+//        }
+//    }
+
 //    private void updateDeck(Clickable deck) {
 //    }
 
