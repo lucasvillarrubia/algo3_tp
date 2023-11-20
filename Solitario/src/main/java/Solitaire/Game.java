@@ -1,13 +1,10 @@
 package Solitaire;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import Elements.*;
-import Base.Card;
 import Base.Suit;
-import Base.Deck;
 
 
 public class Game implements Serializable {
@@ -120,29 +117,9 @@ public class Game implements Serializable {
         return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
-    public boolean moveCards(Deck from, Deck to) {
-        if (!gameRules.deckGivesCard(from)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (gameRules.deckAcceptsCard(to, moved)) {
-            from.drawCard();
-            return to.addCards(moved);
-        }
-        return false;
-    }
 
-    public boolean moveCards(Column from, Deck to, int index) {
-        if (!gameRules.deckGivesCard(from)) return false;
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        else if (gameRules.deckAdmitsSequence(to, moved)) {
-            ArrayList<Card> cards = new ArrayList<>();
-            for (int i = 0; i < moved.cardCount(); i++) {
-                cards.add(moved.getCard(i));
-            }
-            return to.addCards(cards) && from.removeSequence(moved);
-        }
-        return false;
+    public boolean makeAMove (Movement move) {
+        return move.checkMoveByRules(gameRules);
     }
 
 }
