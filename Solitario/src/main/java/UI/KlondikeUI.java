@@ -40,6 +40,8 @@ public class KlondikeUI{
     private int stockIndex = 0;
     private ColumnView clickedColumnView;
     private Foundation clickedFoundation;
+    private Clickable sourceDeck;
+    private Clickable destinationDeck;
 
 
     public void initialize(){
@@ -259,6 +261,46 @@ public class KlondikeUI{
         stackPane.getChildren().clear();
         stackPane.getChildren().add(updatedColumnView);
         System.out.println("Column updated: " + columnIndex);
+    }
+
+    private void searchForClicked(Pane pane) {
+        for (Node child : pane.getChildren()) {
+            Clickable clickedDeck = (Clickable) ((StackPane) child).getChildren().get(0);
+            if (clickedDeck.estaClickeado()) {
+                if (sourceDeck == null) this.sourceDeck = clickedDeck;
+                else this.destinationDeck = clickedDeck;
+            }
+        }
+    }
+
+    private void searchForClicked(HBox stockCard) {
+        Clickable clickedDeck = (Clickable) stockCard;
+        if (sourceDeck == null) this.sourceDeck = clickedDeck;
+        else this.destinationDeck = clickedDeck;
+    }
+
+//    private void updateDeck(Clickable deck) {
+//    }
+
+    // Stock deberia estar como un atributo privado representado por su Pane
+    // el HBox stock de ahora debería renombrarse quizás como stockPile
+    private void handleClick(MouseEvent event) {
+        Pane clickedPane = (Pane) event.getSource();
+        if (clickedPane.getChildren().get(0) instanceof HBox stockPile) {
+            searchForClicked(stockPile);
+        }
+        else {
+            searchForClicked(clickedPane);
+        }
+//        if (event.getSource() instanceof Pane pane)
+        if (sourceDeck != null && destinationDeck != null) {
+            if (game.moveCards(sourceDeck.getDeck(), destinationDeck.getDeck())) {
+//                updateDeck(sourceDeck);
+//                updateDeck(destinationDeck);
+                updateTableauView();
+                updateFoundations();
+            }
+        }
     }
 
 /*
