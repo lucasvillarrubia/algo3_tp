@@ -3,6 +3,8 @@ package UI;
 import Base.Card;
 import Base.Deck;
 import Elements.Column;
+import Elements.VisitableDeck;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -10,7 +12,7 @@ import javafx.scene.layout.StackPane;
 
 public class ColumnView extends StackPane implements Clickable {
 
-    CardView cardView = new CardView();
+//    CardView cardView = new CardView();
     private final static int OFFSET = 20;
 
     private final Column column;
@@ -33,15 +35,39 @@ public class ColumnView extends StackPane implements Clickable {
         int offset = 0;
         for (int i = column.cardCount()-1; 0<=i ; i--) {
             Card card = column.getCard(i);
-            ImageView image = cardView.getImage(card);
-            image.setTranslateY(OFFSET*offset);
+            CardView cardView = new CardView(card, i);
+            cardView.setFitHeight(79);
+            cardView.setFitWidth(61);
+            //ImageView image = cardView.getImage(card);
+//            image.setTranslateY(OFFSET*offset);
+            cardView.setTranslateY(OFFSET*offset);
             offset++;
-            getChildren().add(image);
-            setOnMouseClicked(this::handleColumnClick);
+            getChildren().add(cardView);
+//            getChildren().add(image);
         }
+        setOnMouseClicked(this::handleColumnClick);
     }
 
-
+    public CardView getCardView(int i){
+         return (CardView) this.getChildren().get(i);
+    }
+//    public CardView getCardView(int i) {
+//        int childIndex = i * 2; // Assuming each card is followed by an ImageView
+//        if (childIndex >= 0 && childIndex < this.getChildren().size()) {
+//            Node node = this.getChildren().get(childIndex);
+//            if (node instanceof CardView) {
+//                return (CardView) node;
+//            } else {
+//                // Handle the case where the child at the specified index is not a CardView
+//                // You might want to throw an exception or return null, depending on your requirements.
+//                return null;
+//            }
+//        } else {
+//            // Handle the case where the specified index is out of bounds
+//            // You might want to throw an exception or return null, depending on your requirements.
+//            return null;
+//        }
+//    }
 
     public void setNumber(int id){
         this.number = id;
@@ -51,11 +77,13 @@ public class ColumnView extends StackPane implements Clickable {
         return this.number;
     }
 
-    public void toggleColumnClick() { clickState = !clickState; }
+    public void toggleColumnClick() {
+        clickState = !clickState;
+    }
 
     public void handleColumnClick(MouseEvent event) {
         toggleColumnClick();
-        System.out.println("Column Clicked! Column ID: " + column.getCard(0).getValue()+ column.getCard(0).getSuit());
+        System.out.println("Column clicked! Column ID: " + number);
     }
 
     public boolean isClicked(){
@@ -72,8 +100,8 @@ public class ColumnView extends StackPane implements Clickable {
         return isClicked();
     }
 
-    @Override
-    public Deck getDeck() {
+//    @Override
+    public VisitableDeck getDeck() {
         return column;
     }
 

@@ -1,5 +1,7 @@
 package UI;
 
+import Elements.Stock;
+import Elements.VisitableDeck;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -7,10 +9,18 @@ import javafx.scene.layout.HBox;
 
 
 
-public class StockView extends HBox {
+public class StockView extends HBox implements Clickable {
+
+    private int number;
+
+    private boolean clickState;
+
+    private Stock stock;
 
     CardView cardView = new CardView();
-    public Button showStock(){
+
+    public Button showStock(Stock stock){
+        this.stock = stock;
         Button button = new Button();
         button.setStyle("-fx-background-color: transparent; ");
         button.setGraphic(cardView.getBack());
@@ -41,5 +51,34 @@ public class StockView extends HBox {
         });
     }
 
+    public void toggleColumnClick() { clickState = !clickState; }
 
+    public boolean isClicked(){
+        return clickState;
+    }
+
+    @Override
+    public void handleClick(MouseEvent event) {
+        toggleColumnClick();
+    }
+
+    @Override
+    public boolean estaClickeado() {
+        return isClicked();
+    }
+
+   // @Override
+    public VisitableDeck getDeck() {
+        return stock;
+    }
+
+    @Override
+    public void setIndex(int id) {
+        this.number = id;
+    }
+
+    @Override
+    public int getIndex() {
+        return number;
+    }
 }

@@ -1,5 +1,6 @@
 package UI;
 
+import Elements.VisitableDeck;
 import javafx.scene.input.MouseEvent;
 import Base.Deck;
 
@@ -9,7 +10,7 @@ public interface Clickable {
 
     boolean estaClickeado();
 
-    Deck getDeck();
+//    VisitableDeck getDeck();
 
     public void setIndex(int id);
 

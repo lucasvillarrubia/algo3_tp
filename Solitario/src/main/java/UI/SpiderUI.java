@@ -3,6 +3,7 @@ package UI;
 import Elements.Column;
 import Solitaire.Game;
 import GameType.SpiderRules;
+import Solitaire.Movement;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -46,7 +47,7 @@ public class SpiderUI{
         loader.setController(this);
         AnchorPane root = loader.load();
         StockView stockView = new StockView();
-        stock.getChildren().add(stockView.showStock());
+        stock.getChildren().add(stockView.showStock(game.getStock()));
 
 
         updateTableauView();
@@ -79,7 +80,7 @@ public class SpiderUI{
                         } else if (clickState == ClickState.CLICKED) {
                             Column targetColumn = columnView.getColumn();
                             columnView.toggleColumnClick();
-                            if (game.moveCards(clickedColumnView.getColumn(), targetColumn)) {
+                            if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))){
                                 updateTableauView();
                                 clickedColumnView=null;
                             }

@@ -1,6 +1,5 @@
 package Elements;
 
-import Base.Deck;
 import Base.Card;
 import java.util.Collections;
 import java.util.Random;
@@ -29,4 +28,8 @@ public class Stock extends VisitableDeck {
                 return deck.contains(card);
         }
 
+        @Override
+        public void accept(DeckVisitor visitor) {
+                visitor.visit(this);
+        }
 }
