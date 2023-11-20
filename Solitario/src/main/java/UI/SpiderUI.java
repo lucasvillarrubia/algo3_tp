@@ -16,9 +16,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+
 
 public class SpiderUI{
 
@@ -27,15 +26,12 @@ public class SpiderUI{
     private Game game;
     @FXML
     HBox stock = new HBox();
-
-    @FXML
-    private Button drawCardButton;
     @FXML
     Pane tableau;
     @FXML
     Pane foundations = new Pane();
     ClickState clickState;
-    private Column clickedColumn;
+    private ColumnView clickedColumnView;
 
     public void initialize(){
         SpiderRules spiderRules = new SpiderRules();
@@ -68,28 +64,35 @@ public class SpiderUI{
         foundations.setOnMouseClicked(this::handleFoundationClick);
         stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
+
     private void handleColumnClick(MouseEvent event) {
         if (event.getSource() instanceof Pane source) {
             for (Node child : source.getChildren()) {
                 if (child instanceof StackPane) {
                     ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
                     if (columnView.isClicked()) {
+                        System.out.println("Column Clicked! Column ID: " + columnView.getNumber());
                         if (clickState == ClickState.NO_CLICK) {
-                            clickedColumn = columnView.getColumn();
+                            columnView.toggleColumnClick();
+                            clickedColumnView = columnView;
                             clickState = ClickState.CLICKED;
                         } else if (clickState == ClickState.CLICKED) {
                             Column targetColumn = columnView.getColumn();
-                            if (game.moveCards(clickedColumn, targetColumn)) {
+                            columnView.toggleColumnClick();
+                            if (game.moveCards(clickedColumnView.getColumn(), targetColumn)) {
                                 updateTableauView();
+                                clickedColumnView=null;
                             }
                             clickState = ClickState.NO_CLICK;
                         }
-                        //break;
                     }
                 }
             }
         }
     }
+
+    //cardView will need an index so each card has an identifier; and each card view will need a
+    //handleClick so it can be identified.
 
     private void handleFoundationClick(MouseEvent event){
 
