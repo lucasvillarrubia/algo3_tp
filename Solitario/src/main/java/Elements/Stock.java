@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class Stock extends VisitableDeck {
 
+
         public void showPreviousCard() {
                 Card card = deck.get(cardCount()-1);
                 deck.remove(card);
@@ -27,7 +28,5 @@ public class Stock extends VisitableDeck {
         public boolean containsCard(Card card) {
                 return deck.contains(card);
         }
-
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 
 }

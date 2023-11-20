@@ -118,6 +118,17 @@ public class FoundationTest {
         assertFalse(klondikeRules.acceptsCard(f, tenOfHeart));
     }
 
+    @Test
+    public void addSequenceTest() {
+        Column cards = new Column();
+        Card card1 = new Card(Suit.SPADES, Value.ACE);
+        Card card2 = new Card(Suit.SPADES, Value.TWO);
+        cards.addCards(card1);
+        cards.addCards(card2);
+        Foundation to = new Foundation(Suit.SPADES);
+        assertTrue(to.addCards(cards));
+    }
+
 //    @Test
 //    public void acceptSequenceKlondikeTest() {
 //        Foundation foundation = new Foundation(Suit.HEART);

@@ -5,6 +5,7 @@ import Base.Value;
 
 public class Foundation extends VisitableDeck {
 
+
         private final Suit suit;
 
         public Foundation(Suit suit) {
@@ -21,5 +22,7 @@ public class Foundation extends VisitableDeck {
                 return this.suit;
         }
 
+
         @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
+
 }

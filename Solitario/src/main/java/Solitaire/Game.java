@@ -117,6 +117,7 @@ public class Game implements Serializable {
         return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
+
     public boolean makeAMove (Movement move) {
         return move.checkMoveByRules(gameRules);
     }
