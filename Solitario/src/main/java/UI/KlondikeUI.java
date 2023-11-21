@@ -120,13 +120,11 @@ public class KlondikeUI{
                 if (source.getChildren().get(i) instanceof StackPane) {
                     ColumnView columnView = (ColumnView) ((StackPane) source.getChildren().get(i)).getChildren().get(0);
                     if (columnView.isClicked()) {
-                        //System.out.println("Column Clicked! Column ID: " + columnView.getNumber());
                         if (clickState == ClickState.NO_CLICK) {
                             columnView.toggleColumnClick();
                             clickedColumnView = columnView;
                             clickState = ClickState.CLICKED;
                             clickedCard = getClickedCard(clickedColumnView);
-                            //System.out.println("ACAAAA:"+clickedCard.getIndex());
                         } else if (clickState == ClickState.CLICKED) {
                             Column targetColumn = columnView.getColumn();
                             columnView.toggleColumnClick();
@@ -134,7 +132,6 @@ public class KlondikeUI{
                                 if (clickedCard.getIndex() == -1){
                                     System.out.println("ninguna carta figura clickeada");
                                 } else if (clickedCard.getIndex() == 0) {
-                                    System.out.println("ACAAAA:"+clickedCard.getIndex());
                                     if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))) {
                                         //updateTableauView();
                                         updateColumnView(clickedColumnView);
@@ -143,7 +140,6 @@ public class KlondikeUI{
                                         clickedCard = null;
                                     } else System.out.println("no se movió la carta");
                                 } else {
-                                    System.out.println("ACAAAA:"+clickedCard.getIndex());
                                     if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()))){
                                         //updateTableauView();
                                         updateColumnView(clickedColumnView);
@@ -166,10 +162,8 @@ public class KlondikeUI{
 
 
     private CardView getClickedCard (ColumnView cv) {
-        //for(int i = 0; i < cv.getColumn().cardCount();i++){
         for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
             CardView card = cv.getCardView(i);
-           // System.out.println("indexxx: " + i);
             if (card.estaClickeado()) {
                 card.toggleCardClick();
                 return card;
@@ -180,7 +174,6 @@ public class KlondikeUI{
 
 
     private void handleStockClick(MouseEvent event) {
-        System.out.println(stockIndex);
         if (stockIndex != game.getStock().cardCount() + 1) {
             game.drawCardFromStock();
         }
@@ -202,7 +195,6 @@ public class KlondikeUI{
             }
         } else if (clickedFoundation !=null) {
             Foundation targetFoundation = clickedFoundation;
-            System.out.println("Foundationnnnn"+clickedFoundation.getSuit());
             if (game.makeAMove(new Movement(game.getStock(), targetFoundation))) {
                 updateFoundations();
                 game.drawCardFromStock();
@@ -264,7 +256,6 @@ public class KlondikeUI{
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);
         }
-        System.out.println("Termino");
     }
 
     private void updateStockButton(){

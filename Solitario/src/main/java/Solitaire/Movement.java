@@ -32,20 +32,15 @@ public class Movement implements DeckVisitor {
     }
 
     protected boolean checkMoveByRules (Rules rules) {
-        System.out.println("checkeo de move by rules");
         this.rules = rules;
         from.accept(this);
         this.sourceChecked = true;
-        System.out.println("primero");
         if (!validMove) return false;
         to.accept(this);
-        System.out.println("segundo");
         if (!validMove) return false;
-        System.out.println("segundo");
         if (cardIndex == 0) {
             return moveCards(from, to);
         }else{
-            System.out.println("tercero");
             return moveSequence(sequenceToMove, (Column)from, to);
         }
     }
@@ -72,10 +67,8 @@ public class Movement implements DeckVisitor {
                 this.sequenceToMove = c.getSequence(cardIndex);
             }
         } else if (cardIndex != 0 && sequenceToMove != null){
-            System.out.println("HERE 1");
             this.validMove = rules.admitsSequence(c, sequenceToMove);
         } else{
-            System.out.println("HERE 2");
             this.validMove = rules.acceptsCard(c, from.getLast());
         }
 
@@ -87,12 +80,9 @@ public class Movement implements DeckVisitor {
     }
 
     private boolean moveSequence(Column sequence, Column from, VisitableDeck to) {
-        System.out.println("Entro aca en el movimiento de sec ");
         if (sequence == null) {
-            System.out.println("Retorno FALSSO");
             return false;
         }
-        System.out.println("Retorno VERDADERO");
         return to.addCards(sequence) && from.removeSequence(sequence);
     }
 
