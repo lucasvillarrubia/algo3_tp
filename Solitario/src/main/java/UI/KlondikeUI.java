@@ -126,29 +126,34 @@ public class KlondikeUI{
                             clickedColumnView = columnView;
                             clickState = ClickState.CLICKED;
                             clickedCard = getClickedCard(clickedColumnView);
-                            System.out.println("ACAAAA:"+clickedCard.getIndex());
+                            //System.out.println("ACAAAA:"+clickedCard.getIndex());
                         } else if (clickState == ClickState.CLICKED) {
                             Column targetColumn = columnView.getColumn();
                             columnView.toggleColumnClick();
-                            if (clickedCard.getIndex() == -1){
-                                System.out.println("ninguna carta figura clickeada");
-                            } else if (clickedCard.getIndex() == 0) {
-                                System.out.println("ACAAAA:"+clickedCard.getIndex());
-                                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))) {
-                                    //updateTableauView();
-                                    updateColumnView(clickedColumnView);
-                                    updateColumnView(columnView);
-                                    clickedColumnView = null;
-                                } else System.out.println("no se movió la carta");
-                            } else {
-                                System.out.println("ACAAAA:"+clickedCard.getIndex());
-                                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()))){
-                                    //updateTableauView();
-                                    updateColumnView(clickedColumnView);
-                                    updateColumnView(columnView);
-                                    clickedColumnView = null;
+                            if(clickedCard != null){
+                                if (clickedCard.getIndex() == -1){
+                                    System.out.println("ninguna carta figura clickeada");
+                                } else if (clickedCard.getIndex() == 0) {
+                                    System.out.println("ACAAAA:"+clickedCard.getIndex());
+                                    if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))) {
+                                        //updateTableauView();
+                                        updateColumnView(clickedColumnView);
+                                        updateColumnView(columnView);
+                                        clickedColumnView = null;
+                                        clickedCard = null;
+                                    } else System.out.println("no se movió la carta");
+                                } else {
+                                    System.out.println("ACAAAA:"+clickedCard.getIndex());
+                                    if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()))){
+                                        //updateTableauView();
+                                        updateColumnView(clickedColumnView);
+                                        updateColumnView(columnView);
+                                        clickedColumnView = null;
+                                        clickedCard = null;
+                                    } else {
+                                        System.out.println("no se movió la secuencia");
+                                    }
                                 }
-                                else System.out.println("no se movió la secuencia");
                             }
                             clickState = ClickState.NO_CLICK;
                         }
@@ -161,10 +166,10 @@ public class KlondikeUI{
 
 
     private CardView getClickedCard (ColumnView cv) {
-        for(int i = 0; i < cv.getColumn().cardCount();i++){
-        //for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
+        //for(int i = 0; i < cv.getColumn().cardCount();i++){
+        for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
             CardView card = cv.getCardView(i);
-            System.out.println("indexxx: " + i);
+           // System.out.println("indexxx: " + i);
             if (card.estaClickeado()) {
                 card.toggleCardClick();
                 return card;

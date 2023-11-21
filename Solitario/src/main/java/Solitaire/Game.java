@@ -119,6 +119,7 @@ public class Game implements Serializable {
 
 
     public boolean makeAMove (Movement move) {
+        System.out.println("Entro en make a move");
         return move.checkMoveByRules(gameRules);
     }
 

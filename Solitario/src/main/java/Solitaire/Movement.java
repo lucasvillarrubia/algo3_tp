@@ -28,17 +28,26 @@ public class Movement implements DeckVisitor {
     public Movement (Column source, VisitableDeck goal, int index) {
         this(source, goal);
         this.cardIndex = index;
+        this.sourceChecked = false;
     }
 
     protected boolean checkMoveByRules (Rules rules) {
+        System.out.println("checkeo de move by rules");
         this.rules = rules;
         from.accept(this);
         this.sourceChecked = true;
+        System.out.println("primero");
         if (!validMove) return false;
         to.accept(this);
+        System.out.println("segundo");
         if (!validMove) return false;
-        if (cardIndex == 0) return moveCards(from, to);
-        else return moveSequence(sequenceToMove, (Column)from, to);
+        System.out.println("segundo");
+        if (cardIndex == 0) {
+            return moveCards(from, to);
+        }else{
+            System.out.println("tercero");
+            return moveSequence(sequenceToMove, (Column)from, to);
+        }
     }
 
     @Override
@@ -59,12 +68,17 @@ public class Movement implements DeckVisitor {
     public void visit(Column c) {
         if (!sourceChecked) {
             this.validMove = rules.givesCard(c);
-            if (cardIndex != 0) this.sequenceToMove = c.getSequence(cardIndex);
+            if (cardIndex != 0){
+                this.sequenceToMove = c.getSequence(cardIndex);
+            }
+        } else if (cardIndex != 0 && sequenceToMove != null){
+            System.out.println("HERE 1");
+            this.validMove = rules.admitsSequence(c, sequenceToMove);
+        } else{
+            System.out.println("HERE 2");
+            this.validMove = rules.acceptsCard(c, from.getLast());
         }
-        else {
-            if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(c, sequenceToMove);
-            else this.validMove = rules.acceptsCard(c, from.getLast());
-        }
+
     }
 
     private boolean moveCards(VisitableDeck from, VisitableDeck to) {
@@ -73,7 +87,12 @@ public class Movement implements DeckVisitor {
     }
 
     private boolean moveSequence(Column sequence, Column from, VisitableDeck to) {
-        if (sequence == null) { return false; }
+        System.out.println("Entro aca en el movimiento de sec ");
+        if (sequence == null) {
+            System.out.println("Retorno FALSSO");
+            return false;
+        }
+        System.out.println("Retorno VERDADERO");
         return to.addCards(sequence) && from.removeSequence(sequence);
     }
 

@@ -33,7 +33,9 @@ public class Column extends VisitableDeck {
                 return true;
         }
 
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
+        @Override public void accept(DeckVisitor visitor) {
+                visitor.visit(this);
+        }
 
 
 }
