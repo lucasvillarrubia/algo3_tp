@@ -1,8 +1,9 @@
 package Elements;
 
 import Base.Card;
+import Base.Deck;
 
-public class Column extends VisitableDeck {
+public class Column extends Deck implements Visitable {
 
         public Card getCard(int pos){
                 return deck.get(pos);

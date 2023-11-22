@@ -1,7 +1,7 @@
 package UI;
 
 import Elements.Stock;
-import Elements.VisitableDeck;
+import Elements.Visitable;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -68,9 +68,9 @@ public class StockView extends HBox implements Clickable {
     }
 
    // @Override
-    public VisitableDeck getDeck() {
-        return stock;
-    }
+//    public Visitable getDeck() {
+//        return stock;
+//    }
 
     @Override
     public void setIndex(int id) {

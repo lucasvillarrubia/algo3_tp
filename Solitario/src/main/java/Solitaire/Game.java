@@ -2,7 +2,6 @@ package Solitaire;
 
 import java.io.*;
 import java.util.List;
-
 import Elements.*;
 import Base.Suit;
 
@@ -16,6 +15,8 @@ public class Game implements Serializable {
     private final List<Foundation> foundations;
     private final List<Column> tableau;
     private final Stock stock;
+
+    private final File saveFile = new File("savedGame.txt");
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
@@ -57,14 +58,17 @@ public class Game implements Serializable {
     }
 
     public void winGame(){
-        if (areAllFoundationsFull() && stock.isEmpty() && tableau.isEmpty()) {
+        if (areAllFoundationsFull() && stock.isEmpty() && areAllColumnsEmpty()) {
             gameWon = true;
             gameOver = true;
         }
+        System.out.println("Foundations: " + areAllFoundationsFull());
+        System.out.println("Stock: " + stock.isEmpty());
+        System.out.println("COlumns: " + areAllColumnsEmpty());
     }
 
     public boolean gameStatus() {
-        return gameOver;
+        return gameOver && gameWon;
     }
 
     public int getCantMovements() {
@@ -106,15 +110,36 @@ public class Game implements Serializable {
         return true;
     }
 
-    public void serialize(OutputStream os) throws IOException {
-        ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
-        objectOutStream.writeObject(this);
-        objectOutStream.flush();
+    public boolean areAllColumnsEmpty() {
+        for (Column column: tableau) {
+            if (!column.isEmpty()){
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static Game deserialize(InputStream is) throws IOException, ClassNotFoundException {
-        ObjectInputStream objectInStream = new ObjectInputStream(is);
-        return (Game) objectInStream.readObject();
+//    public void serializeOld(OutputStream os) throws IOException {
+//        ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
+//        objectOutStream.writeObject(this);
+//        objectOutStream.flush();
+//    }
+    public void serialize() throws IOException {
+        try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(this.saveFile))) {
+            objectOutStream.writeObject(this);
+            objectOutStream.flush();
+        }
+    }
+
+//    public static Game deserializeOld(InputStream is) throws IOException, ClassNotFoundException {
+//        ObjectInputStream objectInStream = new ObjectInputStream(is);
+//        return (Game) objectInStream.readObject();
+//    }
+
+    public static Game deserialize(File file) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInStream = new ObjectInputStream(new FileInputStream(file))) {
+            return (Game) objectInStream.readObject();
+        }
     }
 
     public boolean drawCardFromStock(){
@@ -123,7 +148,11 @@ public class Game implements Serializable {
 
 
     public boolean makeAMove (Movement move) {
-        return move.checkMoveByRules(gameRules);
+        if (move.checkMoveByRules(gameRules)) {
+            winGame();
+            return true;
+        }
+        else return false;
     }
 
 }

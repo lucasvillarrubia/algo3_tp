@@ -6,6 +6,8 @@ import Base.Value;
 import org.junit.Test;
 
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class ColumnTest {
@@ -145,7 +147,11 @@ public class ColumnTest {
         cards.addCards(card1);
         cards.addCards(card2);
         Column to = new Column();
-        assertTrue(to.addCards(cards));
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, cards.getCard(i));
+        }
+        assertTrue(to.addCards(cardsCollection));
     }
 
     @Test
@@ -156,7 +162,11 @@ public class ColumnTest {
         cards.addCards(card1);
         cards.addCards(card2);
         Column to = new Column();
-        assertTrue(to.addCards(cards));
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, cards.getCard(i));
+        }
+        assertTrue(to.addCards(cardsCollection));
         assertFalse(to.isEmpty());
         assertEquals(cards.getCard(0), card2);
         assertEquals(cards.getCard(1), card1);

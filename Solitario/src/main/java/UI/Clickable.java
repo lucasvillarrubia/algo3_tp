@@ -1,8 +1,7 @@
 package UI;
 
-import Elements.VisitableDeck;
+
 import javafx.scene.input.MouseEvent;
-import Base.Deck;
 
 public interface Clickable {
 

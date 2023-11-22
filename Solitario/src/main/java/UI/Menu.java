@@ -2,7 +2,6 @@ package UI;
 
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class Menu {
@@ -25,8 +24,5 @@ public class Menu {
             spiderUI.setUpGame(stage);
         }
     }
-
-
-
 
 }
