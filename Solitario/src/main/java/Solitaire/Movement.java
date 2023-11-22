@@ -1,12 +1,16 @@
 package Solitaire;
 
+import Base.Card;
+import Base.Deck;
 import Elements.*;
+
+import java.util.ArrayList;
 
 public class Movement implements DeckVisitor {
 
-    private final VisitableDeck from;
+    private final Visitable from;
 
-    private final VisitableDeck to;
+    private final Visitable to;
 
     private Column sequenceToMove;
 
@@ -18,14 +22,14 @@ public class Movement implements DeckVisitor {
 
     private boolean sourceChecked;
 
-    public Movement (VisitableDeck source, VisitableDeck goal) {
+    public Movement (Visitable source, Visitable goal) {
         this.from = source;
         this.to = goal;
         this.cardIndex = 0;
         this.sourceChecked = false;
     }
 
-    public Movement (Column source, VisitableDeck goal, int index) {
+    public Movement (Visitable source, Visitable goal, int index) {
         this(source, goal);
         this.cardIndex = index;
         this.sourceChecked = false;
@@ -39,9 +43,9 @@ public class Movement implements DeckVisitor {
         to.accept(this);
         if (!validMove) return false;
         if (cardIndex == 0) {
-            return moveCards(from, to);
+            return moveCards((Deck)from, (Deck)to);
         }else{
-            return moveSequence(sequenceToMove, (Column)from, to);
+            return moveSequence(sequenceToMove, (Column)from, (Deck)to);
         }
     }
 
@@ -49,14 +53,16 @@ public class Movement implements DeckVisitor {
     public void visit(Stock s) {
         if (!sourceChecked) this.validMove = rules.givesCard(s);
         else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(s, sequenceToMove);
-        else this.validMove = rules.acceptsCard(s, from.getLast());
+        else if (cardIndex == 0) this.validMove = rules.acceptsCard(s, ((Deck)from).getLast());
+        else validMove = false;
     }
 
     @Override
     public void visit(Foundation f) {
         if (!sourceChecked) this.validMove = rules.givesCard(f);
         else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(f, sequenceToMove);
-        else this.validMove = rules.acceptsCard(f, from.getLast());
+        else if (cardIndex == 0) this.validMove = rules.acceptsCard(f, ((Deck)from).getLast());
+        else validMove = false;
     }
 
     @Override
@@ -66,24 +72,24 @@ public class Movement implements DeckVisitor {
             if (cardIndex != 0){
                 this.sequenceToMove = c.getSequence(cardIndex);
             }
-        } else if (cardIndex != 0 && sequenceToMove != null){
-            this.validMove = rules.admitsSequence(c, sequenceToMove);
-        } else{
-            this.validMove = rules.acceptsCard(c, from.getLast());
         }
-
+        else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(c, sequenceToMove);
+        else if (cardIndex == 0) this.validMove = rules.acceptsCard(c, ((Deck)from).getLast());
+        else validMove = false;
     }
 
-    private boolean moveCards(VisitableDeck from, VisitableDeck to) {
+    private boolean moveCards(Deck from, Deck to) {
         if (from.getLast() == null) { return false; }
         return to.addCards(from.drawCard());
     }
 
-    private boolean moveSequence(Column sequence, Column from, VisitableDeck to) {
-        if (sequence == null) {
-            return false;
+    private boolean moveSequence(Column sequence, Column from, Deck to) {
+        if (sequence == null) { return false; }
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = sequence.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, sequence.getCard(i));
         }
-        return to.addCards(sequence) && from.removeSequence(sequence);
+        return to.addCards(cardsCollection) && from.removeSequence(sequence);
     }
 
 }

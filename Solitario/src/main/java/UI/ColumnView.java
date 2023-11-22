@@ -1,11 +1,8 @@
 package UI;
 
 import Base.Card;
-import Base.Deck;
 import Elements.Column;
-import Elements.VisitableDeck;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
+import Elements.Visitable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
@@ -101,9 +98,9 @@ public class ColumnView extends StackPane implements Clickable {
     }
 
 //    @Override
-    public VisitableDeck getDeck() {
-        return column;
-    }
+//    public Visitable getDeck() {
+//        return column;
+//    }
 
     @Override
     public void setIndex(int id) {

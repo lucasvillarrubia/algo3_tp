@@ -1,10 +1,12 @@
 package Elements;
 
 import Base.Card;
+import Base.Deck;
+
 import java.util.Collections;
 import java.util.Random;
 
-public class Stock extends VisitableDeck {
+public class Stock extends Deck implements Visitable {
 
 
         public void showPreviousCard() {

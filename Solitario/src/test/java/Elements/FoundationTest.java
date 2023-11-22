@@ -8,6 +8,8 @@ import GameType.KlondikeRules;
 import org.junit.Test;
 
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class FoundationTest {
@@ -126,7 +128,11 @@ public class FoundationTest {
         cards.addCards(card1);
         cards.addCards(card2);
         Foundation to = new Foundation(Suit.SPADES);
-        assertTrue(to.addCards(cards));
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, cards.getCard(i));
+        }
+        assertTrue(to.addCards(cardsCollection));
     }
 
 //    @Test

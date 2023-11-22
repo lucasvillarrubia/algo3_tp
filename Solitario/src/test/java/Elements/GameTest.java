@@ -144,20 +144,36 @@ public class GameTest {
         assertFalse(game.areAllFoundationsFull());
     }
 
-    @Test public void serializationTest() throws IOException, ClassNotFoundException {
+//    @Test public void serializationTest() throws IOException, ClassNotFoundException {
+//        ArrayList<Foundation> foundations = new ArrayList<>();
+//        foundations.add(new Foundation(Suit.CLUBS));
+//        ArrayList<Column> tableau = new ArrayList<>();
+//        KlondikeRules k = new KlondikeRules();
+//        Game game = new Game(k, foundations, tableau, new Stock());
+//        game.addMovement();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        game.serialize(outputStream);
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+//        Game deserializedGame = Game.deserialize(inputStream);
+//        assertNotNull(deserializedGame);
+//        assertEquals(deserializedGame.getCantMovements(), 1);
+//    }
+
+    @Test public void serializationTestNew() throws IOException, ClassNotFoundException {
         ArrayList<Foundation> foundations = new ArrayList<>();
         foundations.add(new Foundation(Suit.CLUBS));
         ArrayList<Column> tableau = new ArrayList<>();
         KlondikeRules k = new KlondikeRules();
         Game game = new Game(k, foundations, tableau, new Stock());
         game.addMovement();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        game.serialize(outputStream);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        Game deserializedGame = Game.deserialize(inputStream);
+        File saveFile = new File("savedGame.txt");
+        game.serialize();
+       // ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
         assertEquals(deserializedGame.getCantMovements(), 1);
     }
+
 
     @Test
     public void completeSerializationTest() throws IOException, ClassNotFoundException {
@@ -168,10 +184,11 @@ public class GameTest {
         List<Column> tableau = new ArrayList<>();
         Game game = new Game(kr, false, false, cant, stock, foundations, tableau);
         game.addMovement();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        game.serialize(outputStream);
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        Game deserializedGame = Game.deserialize(inputStream);
+        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        game.serialize();
+        //ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+        File saveFile = new File("savedGame.txt");
+        Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
         assertEquals(deserializedGame.getCantMovements(), 21);
         assertNotNull(deserializedGame.getFoundation(Suit.HEART));

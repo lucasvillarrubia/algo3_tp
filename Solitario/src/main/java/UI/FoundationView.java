@@ -2,7 +2,7 @@ package UI;
 
 import Base.Suit;
 import Elements.Foundation;
-import Elements.VisitableDeck;
+import Elements.Visitable;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -61,9 +61,9 @@ public class FoundationView extends StackPane implements Clickable {
     }
 
     //@Override
-    public VisitableDeck getDeck() {
-        return foundation;
-    }
+//    public Visitable getDeck() {
+//        return foundation;
+//    }
 
     @Override
     public void setIndex(int id) {

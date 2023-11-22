@@ -18,8 +18,7 @@ public class CardView extends ImageView implements Clickable{
     private static final String BACK_IMAGE_NAME = "back-card";
     private boolean clickState;
     private int cardIndex;
-//    private Image cardImage;
-//    private ImageView backView;
+
 
 
     public CardView() {

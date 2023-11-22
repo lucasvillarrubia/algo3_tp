@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class SpiderUI{
+public class SpiderUI extends GameUI{
 
     private static final int H =780;
     private static final int W =520;
@@ -42,35 +42,45 @@ public class SpiderUI{
     private CardView clickedCard;
     private Foundation clickedFoundation;
 
+    private Stage LocalStage;
 
     public Game gameStartsWithOneFullColumn () {
         ArrayList<Foundation> fs = new ArrayList<>();
         ArrayList<Column> t = new ArrayList<>();
         Stock s = new Stock();
-        Column c = new Column();
-        for (int i = Value.values().length - 1; i >= 0; i--) {
-            Card ca = new Card(Suit.SPADES, Value.values()[i]);
-            ca.flip();
-            c.addCards(ca);
-        }
+        //Column c = new Column();
+//        for (int j = Value.values().length - 1; j >= 0; j--) {
+//            Card ca = new Card(Suit.SPADES, Value.values()[j]);
+//            ca.flip();
+//            c.addCards(ca);
+//        }
         for (int i = 0; i < 8; i++) {
             fs.add(new Foundation(Suit.SPADES));
         }
-        for (int i = 0; i < 9; i++) {
-            t.add(new Column());
+        for (int i = 0; i < 8; i++) {
+            Column c = new Column();
+            for (int j = Value.values().length - 1; j >= 0; j--) {
+                Card ca = new Card(Suit.SPADES, Value.values()[j]);
+                ca.flip();
+                c.addCards(ca);
+            }
+            t.add(c);
         }
-        t.add(c);
+        t.add(new Column());
+        t.add(new Column());
         return new Game(new SpiderRules(),fs, t, s);
     }
 
+    @Override
     public void initialize(){
         SpiderRules spiderRules = new SpiderRules();
         Random random = new Random();
-        game = new Game(spiderRules, 10);
-        //game = gameStartsWithOneFullColumn();
-        clickState = ClickState.NO_CLICK;
+        //game = new Game(spiderRules, 10);
+        game = gameStartsWithOneFullColumn();
+        this.clickState = ClickState.NO_CLICK;
     }
 
+    @Override
     public void setUpGame(Stage stage) throws IOException {
         initialize();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SpiderBase.fxml"));
@@ -78,7 +88,6 @@ public class SpiderUI{
         AnchorPane root = loader.load();
         StockView stockView = new StockView();
         stock.getChildren().add(stockView.showStock(game.getStock()));
-
         updateFoundations();
         updateTableauView();
         setEventHandlers();
@@ -87,12 +96,19 @@ public class SpiderUI{
         stage.setScene(klondikeScene);
         stage.setTitle("Spider Solitaire");
         stage.show();
-
+        this.LocalStage = stage;
     }
 
-    private void setEventHandlers() {
+    @Override
+    public void setEventHandlers() {
         tableau.setOnMouseClicked(this::handleColumnClick);
-        foundations.setOnMouseClicked(this::handleFoundationClick);
+        foundations.setOnMouseClicked(event -> {
+            try {
+                handleFoundationClick(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
 
@@ -121,7 +137,8 @@ public class SpiderUI{
         }
     }
 
-    private void handleColumnClick(MouseEvent event) {
+    @Override
+    public void handleColumnClick(MouseEvent event) {
         if (event.getSource() instanceof Pane source) {
             for (int i = 0; i < source.getChildren().size(); i++) {
                 if (source.getChildren().get(i) instanceof StackPane) {
@@ -170,8 +187,8 @@ public class SpiderUI{
 
 
 
-
-    private void handleFoundationClick(MouseEvent event){
+    @Override
+    public void handleFoundationClick(MouseEvent event) throws IOException {
         if (event.getSource() instanceof Pane source) {
             for (Node child : source.getChildren()) {
                 if (child instanceof StackPane) {
@@ -197,38 +214,30 @@ public class SpiderUI{
                                     }
                                 }
                             }
-//                            System.out.println(" la clickedCard es nula ;/");
                         }
                         clickState = ClickState.NO_CLICK;
+                        System.out.println("ganado: " + game.isGameWon()+ "terminado:" + game.isGameOver() );
+                        if (game.gameStatus()) {
+                            showWinScene(LocalStage);
+                            return;
+                        }
                     }
                 }
             }
         }
     }
 
-    private CardView getClickedCard (ColumnView cv) {
-        for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
-            CardView card = cv.getCardView(i);
-            if (card.estaClickeado()) {
-                card.toggleCardClick();
-                System.out.println("Salió del for, la carta clickeada fue guardada");
-                return card;
-            }
-        }
-        System.out.println("Termino el For ninguna carta fue clickeada");
-        return null;
-    }
-
-
-
-    private void handleStockClick(MouseEvent event) {
+    @Override
+    public void handleStockClick(MouseEvent event) {
         if(game.drawCardFromStock()){
             updateTableauView();
         }
         updateStockButton();
     }
 
-    private void updateTableauView(){
+
+    @Override
+    public void updateTableauView(){
         for(int i = 0 ;i<10; i++ ){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column);
@@ -239,17 +248,8 @@ public class SpiderUI{
         }
     }
 
-
-    private void updateStockButton(){
-        StockView stockView = new StockView();
-        if(game.getStock().isEmpty()){
-            Button stockButton = stockView.showEmptyStock();
-            stock.getChildren().clear();
-            stock.getChildren().add(stockButton);
-        }
-    }
-
-    private void updateFoundations(){
+    @Override
+    public void updateFoundations(){
         for (int i = 0; i < 8; i++) {
             Foundation foundation = game.getFoundation(i);
             FoundationView foundationView = new FoundationView(foundation);
@@ -260,8 +260,8 @@ public class SpiderUI{
         }
     }
 
-
-    private void updateColumnView(ColumnView columnView){
+    @Override
+    public void updateColumnView(ColumnView columnView){
         int columnIndex = columnView.getNumber();
         Column column = game.getColumn(columnIndex);
         boolean isClicked = columnView.isClicked();
@@ -275,6 +275,19 @@ public class SpiderUI{
         stackPane.getChildren().add(updatedColumnView);
 //        System.out.println("Column updated: " + columnIndex);
     }
+
+    @Override
+    public void updateStockButton(){
+        StockView stockView = new StockView();
+        if(game.getStock().isEmpty()){
+            Button stockButton = stockView.showEmptyStock();
+            stock.getChildren().clear();
+            stock.getChildren().add(stockButton);
+        }
+    }
+
+
+
 
 
 }
