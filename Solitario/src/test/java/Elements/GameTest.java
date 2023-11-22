@@ -98,7 +98,7 @@ public class GameTest {
         foundations.add(new Foundation(Suit.CLUBS));
         KlondikeRules k = new KlondikeRules();
         Game game = new Game(k,foundations,tableau, stock);
-        assertNotNull(game.getFoundationBySuit(Suit.CLUBS));
+        assertNotNull(game.getFoundation(Suit.CLUBS));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class GameTest {
                 foundation.addCards(card);
             }
         }
-        game.getFoundationBySuit(Suit.SPADES).drawCard();
+        game.getFoundation(Suit.SPADES).drawCard();
         assertFalse(game.areAllFoundationsFull());
     }
 
@@ -174,7 +174,7 @@ public class GameTest {
         Game deserializedGame = Game.deserialize(inputStream);
         assertNotNull(deserializedGame);
         assertEquals(deserializedGame.getCantMovements(), 21);
-        assertNotNull(deserializedGame.getFoundationBySuit(Suit.HEART));
+        assertNotNull(deserializedGame.getFoundation(Suit.HEART));
         assertTrue(deserializedGame.getStock().getLast().isTheSameAs(new Card(Suit.CLUBS,Value.KING)));
     }
 
@@ -194,7 +194,7 @@ public class GameTest {
 //        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(4)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(4))));
 //        assertTrue(game.moveCards(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS)));
-        assertTrue(game.makeAMove(new Movement(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS))));
+        assertTrue(game.makeAMove(new Movement(game.getColumn(5), game.getFoundation(Suit.CLUBS))));
         assertTrue(game.drawCardFromStock());
         assertTrue(game.drawCardFromStock());
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock(), 1)));
@@ -223,7 +223,7 @@ public class GameTest {
         assertTrue(game.drawCardFromStock());
         assertEquals(game.getStock().cardCount(), 40);
         assertFalse(game.makeAMove(new Movement(game.getStock(), game.getColumn(0))));
-        assertFalse(game.makeAMove(new Movement(game.getFoundationBySuit(Suit.SPADES), game.getColumn(0))));
+        assertFalse(game.makeAMove(new Movement(game.getFoundation(Suit.SPADES), game.getColumn(0))));
 //        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(5)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(5))));
 //        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(7)));
@@ -235,7 +235,7 @@ public class GameTest {
 //        assertTrue(game.moveCards(game.getColumn(1), game.getColumn(9), 1));
         assertTrue(game.makeAMove(new Movement(game.getColumn(1), game.getColumn(9), 1)));
 //        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
-        assertTrue(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
+        assertFalse(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
 //        assertEquals(game.getCantMovements(), 4);
     }
 

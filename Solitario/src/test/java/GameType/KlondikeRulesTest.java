@@ -65,7 +65,7 @@ public class KlondikeRulesTest {
         assertFalse(game.isGameWon());
         assertEquals(game.getCantMovements(),0);
         for(Suit s: Suit.values()){
-            assertNotNull(game.getFoundationBySuit(s));
+            assertNotNull(game.getFoundation(s));
         }
     }
 
@@ -83,7 +83,7 @@ public class KlondikeRulesTest {
         ArrayList<Column> tableau = new ArrayList<>();
         Game game = new Game(kr, foundations, tableau,new Stock());
         assertFalse(game.isGameWon());
-        assertEquals(game.getFoundationBySuit(Suit.HEART).getLast(), three);
+        assertEquals(game.getFoundation(Suit.HEART).getLast(), three);
     }
 
 

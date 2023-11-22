@@ -39,7 +39,7 @@ public class FoundationView extends StackPane implements Clickable {
 
     private void handleFoundationClick(MouseEvent event) {
         toggleFoundationClick();
-        System.out.println("Foundation Clicked! Suit: " + suit);
+        System.out.println("Foundation Clicked! index: " + getIndex());
     }
 
     public Foundation getFoundation() {

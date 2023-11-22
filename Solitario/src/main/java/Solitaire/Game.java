@@ -75,7 +75,7 @@ public class Game implements Serializable {
         cantMovements++;
     }
 
-    public Foundation getFoundationBySuit (Suit suit) {
+    public Foundation getFoundation(Suit suit) {
         Foundation foundation = null;
         for (Foundation foundationBySuit: foundations) {
             if (foundationBySuit.getSuit() == suit) {
@@ -83,6 +83,10 @@ public class Game implements Serializable {
             }
         }
         return foundation;
+    }
+
+    public Foundation getFoundation(int index) {
+        return foundations.get(index);
     }
 
     public Stock getStock() {

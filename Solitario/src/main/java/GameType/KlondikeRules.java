@@ -73,9 +73,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean admitsSequence(Column column, Column sequence) {
-                if (!isSequenceValid(column.getLast(), sequence.getCard(sequence.cardCount()-1))){
-                        return false;
-                }
+                if (!acceptsCard(column, sequence.getCard(sequence.cardCount()-1))) { return false; }
                 for (int i = sequence.cardCount() - 1; i >0; i--) {
                         if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i-1))) return false;
                 }
