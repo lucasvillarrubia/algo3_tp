@@ -28,6 +28,7 @@ public class Movement implements DeckVisitor {
     public Movement (Column source, VisitableDeck goal, int index) {
         this(source, goal);
         this.cardIndex = index;
+        this.sourceChecked = false;
     }
 
     protected boolean checkMoveByRules (Rules rules) {
@@ -37,8 +38,11 @@ public class Movement implements DeckVisitor {
         if (!validMove) return false;
         to.accept(this);
         if (!validMove) return false;
-        if (cardIndex == 0) return moveCards(from, to);
-        else return moveSequence(sequenceToMove, (Column)from, to);
+        if (cardIndex == 0) {
+            return moveCards(from, to);
+        }else{
+            return moveSequence(sequenceToMove, (Column)from, to);
+        }
     }
 
     @Override
@@ -59,12 +63,15 @@ public class Movement implements DeckVisitor {
     public void visit(Column c) {
         if (!sourceChecked) {
             this.validMove = rules.givesCard(c);
-            if (cardIndex != 0) this.sequenceToMove = c.getSequence(cardIndex);
+            if (cardIndex != 0){
+                this.sequenceToMove = c.getSequence(cardIndex);
+            }
+        } else if (cardIndex != 0 && sequenceToMove != null){
+            this.validMove = rules.admitsSequence(c, sequenceToMove);
+        } else{
+            this.validMove = rules.acceptsCard(c, from.getLast());
         }
-        else {
-            if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(c, sequenceToMove);
-            else this.validMove = rules.acceptsCard(c, from.getLast());
-        }
+
     }
 
     private boolean moveCards(VisitableDeck from, VisitableDeck to) {
@@ -73,7 +80,9 @@ public class Movement implements DeckVisitor {
     }
 
     private boolean moveSequence(Column sequence, Column from, VisitableDeck to) {
-        if (sequence == null) { return false; }
+        if (sequence == null) {
+            return false;
+        }
         return to.addCards(sequence) && from.removeSequence(sequence);
     }
 

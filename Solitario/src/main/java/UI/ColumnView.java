@@ -83,7 +83,7 @@ public class ColumnView extends StackPane implements Clickable {
 
     public void handleColumnClick(MouseEvent event) {
         toggleColumnClick();
-        System.out.println("Column clicked! Column ID: " + number);
+//        System.out.println("Column clicked! Column ID: " + number);
     }
 
     public boolean isClicked(){

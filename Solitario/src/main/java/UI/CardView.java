@@ -96,8 +96,8 @@ public class CardView extends ImageView implements Clickable{
 
     public void toggleCardClick() {
         this.clickState = !clickState;
-        if (clickState) { System.out.println("Card Selected"); }
-        else System.out.println("Card descliqueada");
+//        if (clickState) { System.out.println("Card Selected"); }
+//        else System.out.println("Card descliqueada");
     }
 
     @Override

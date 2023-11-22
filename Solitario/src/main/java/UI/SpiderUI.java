@@ -1,6 +1,11 @@
 package UI;
 
+import Base.Card;
+import Base.Suit;
+import Base.Value;
 import Elements.Column;
+import Elements.Foundation;
+import Elements.Stock;
 import Solitaire.Game;
 import GameType.SpiderRules;
 import Solitaire.Movement;
@@ -17,6 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -30,14 +36,38 @@ public class SpiderUI{
     @FXML
     Pane tableau;
     @FXML
-    Pane foundations = new Pane();
+    Pane foundations;
     ClickState clickState;
     private ColumnView clickedColumnView;
+    private CardView clickedCard;
+    private Foundation clickedFoundation;
+
+
+    public Game gameStartsWithOneFullColumn () {
+        ArrayList<Foundation> fs = new ArrayList<>();
+        ArrayList<Column> t = new ArrayList<>();
+        Stock s = new Stock();
+        Column c = new Column();
+        for (int i = Value.values().length - 1; i >= 0; i--) {
+            Card ca = new Card(Suit.SPADES, Value.values()[i]);
+            ca.flip();
+            c.addCards(ca);
+        }
+        for (int i = 0; i < 8; i++) {
+            fs.add(new Foundation(Suit.SPADES));
+        }
+        for (int i = 0; i < 9; i++) {
+            t.add(new Column());
+        }
+        t.add(c);
+        return new Game(new SpiderRules(),fs, t, s);
+    }
 
     public void initialize(){
         SpiderRules spiderRules = new SpiderRules();
         Random random = new Random();
         game = new Game(spiderRules, 10);
+        //game = gameStartsWithOneFullColumn();
         clickState = ClickState.NO_CLICK;
     }
 
@@ -49,7 +79,7 @@ public class SpiderUI{
         StockView stockView = new StockView();
         stock.getChildren().add(stockView.showStock(game.getStock()));
 
-
+        updateFoundations();
         updateTableauView();
         setEventHandlers();
 
@@ -66,13 +96,12 @@ public class SpiderUI{
         stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
 
-    private void handleColumnClick(MouseEvent event) {
+    private void handleColumnClick2(MouseEvent event) {
         if (event.getSource() instanceof Pane source) {
             for (Node child : source.getChildren()) {
                 if (child instanceof StackPane) {
                     ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
                     if (columnView.isClicked()) {
-                        System.out.println("Column Clicked! Column ID: " + columnView.getNumber());
                         if (clickState == ClickState.NO_CLICK) {
                             columnView.toggleColumnClick();
                             clickedColumnView = columnView;
@@ -92,12 +121,105 @@ public class SpiderUI{
         }
     }
 
-    //cardView will need an index so each card has an identifier; and each card view will need a
-    //handleClick so it can be identified.
+    private void handleColumnClick(MouseEvent event) {
+        if (event.getSource() instanceof Pane source) {
+            for (int i = 0; i < source.getChildren().size(); i++) {
+                if (source.getChildren().get(i) instanceof StackPane) {
+                    ColumnView columnView = (ColumnView) ((StackPane) source.getChildren().get(i)).getChildren().get(0);
+                    if (columnView.isClicked()) {
+                        if (clickState == ClickState.NO_CLICK) {
+                            columnView.toggleColumnClick();
+                            clickedColumnView = columnView;
+                            clickState = ClickState.CLICKED;
+                            clickedCard = getClickedCard(clickedColumnView);
+                        } else if (clickState == ClickState.CLICKED) {
+                            Column targetColumn = columnView.getColumn();
+                            columnView.toggleColumnClick();
+                            if(clickedCard != null){
+                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
+                                if (clickedCard.getIndex() == -1){
+                                    System.out.println("ninguna carta figura clickeada"); //revisar esto no deberia haber prints
+                                } else if (clickedCard.getIndex() == 0) {
+                                    if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))) {
+                                        //updateTableauView();
+                                        updateColumnView(clickedColumnView);
+                                        updateColumnView(columnView);
+                                        clickedColumnView = null;
+                                        clickedCard = null;
+                                    } else System.out.println("no se movió la carta"); //REVISAR
+                                } else {
+                                    if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()))){
+                                        updateColumnView(clickedColumnView);
+                                        updateColumnView(columnView);
+                                        clickedColumnView = null;
+                                        clickedCard = null;
+                                    } else {
+                                        clickedCard.toggleCardClick();
+                                        System.out.println("no se movió la secuencia desde columnn"); //REVISAR
+                                    }
+                                }
+                            }
+                            clickState = ClickState.NO_CLICK;
+                        }
+                        //break;
+                    }
+                }
+            }
+        }
+    }
+
+
+
 
     private void handleFoundationClick(MouseEvent event){
-
+        if (event.getSource() instanceof Pane source) {
+            for (Node child : source.getChildren()) {
+                if (child instanceof StackPane) {
+                    FoundationView foundationView = (FoundationView) ((StackPane) child).getChildren().get(0);
+                    if (foundationView.isClicked()){
+                        foundationView.toggleFoundationClick();
+                        clickedFoundation = foundationView.getFoundation();
+                        if (clickedColumnView != null) {
+                            Column column = clickedColumnView.getColumn();
+                            if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
+                            if(clickedCard != null) {
+                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
+                                if (clickedCard.getIndex() == 12) {
+                                    if (game.makeAMove(new Movement(column, clickedFoundation, 12))) {
+                                        updateColumnView(clickedColumnView);
+                                        updateFoundations();
+                                        clickedColumnView = null;
+                                        clickedFoundation = null;
+                                        clickedCard = null;
+                                    } else{
+                                        clickedCard.toggleCardClick();
+                                        System.out.println("no se movió la secuencia"); //REVISAR
+                                    }
+                                }
+                            }
+//                            System.out.println(" la clickedCard es nula ;/");
+                        }
+                        clickState = ClickState.NO_CLICK;
+                    }
+                }
+            }
+        }
     }
+
+    private CardView getClickedCard (ColumnView cv) {
+        for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
+            CardView card = cv.getCardView(i);
+            if (card.estaClickeado()) {
+                card.toggleCardClick();
+                System.out.println("Salió del for, la carta clickeada fue guardada");
+                return card;
+            }
+        }
+        System.out.println("Termino el For ninguna carta fue clickeada");
+        return null;
+    }
+
+
 
     private void handleStockClick(MouseEvent event) {
         if(game.drawCardFromStock()){
@@ -115,7 +237,6 @@ public class SpiderUI{
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);
         }
-
     }
 
 
@@ -127,4 +248,33 @@ public class SpiderUI{
             stock.getChildren().add(stockButton);
         }
     }
+
+    private void updateFoundations(){
+        for (int i = 0; i < 8; i++) {
+            Foundation foundation = game.getFoundation(i);
+            FoundationView foundationView = new FoundationView(foundation);
+            foundationView.setIndex(i);
+            StackPane stackPane = (StackPane) foundations.getChildren().get(i);
+            stackPane.getChildren().clear();
+            stackPane.getChildren().add(foundationView);
+        }
+    }
+
+
+    private void updateColumnView(ColumnView columnView){
+        int columnIndex = columnView.getNumber();
+        Column column = game.getColumn(columnIndex);
+        boolean isClicked = columnView.isClicked();
+        ColumnView updatedColumnView = new ColumnView(column);
+        updatedColumnView.setNumber(columnIndex);
+        if (isClicked) {
+            updatedColumnView.toggleColumnClick();
+        }
+        StackPane stackPane = (StackPane) tableau.getChildren().get(columnIndex);
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add(updatedColumnView);
+//        System.out.println("Column updated: " + columnIndex);
+    }
+
+
 }

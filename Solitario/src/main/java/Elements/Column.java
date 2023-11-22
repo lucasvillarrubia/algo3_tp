@@ -9,9 +9,9 @@ public class Column extends VisitableDeck {
         }
 
         public Column getSequence(int upToIndex) {
-                if(!getCard(upToIndex).isFaceUp()) return null;
+                if (upToIndex == 0 || !getCard(upToIndex).isFaceUp()) return null;
                 Column subColumn = new Column();
-                if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
+                if (!subColumn.addCards(deck.subList(0, upToIndex+1))) return null;
                 return subColumn;
         }
 
@@ -33,7 +33,9 @@ public class Column extends VisitableDeck {
                 return true;
         }
 
-        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
+        @Override public void accept(DeckVisitor visitor) {
+                visitor.visit(this);
+        }
 
 
 }

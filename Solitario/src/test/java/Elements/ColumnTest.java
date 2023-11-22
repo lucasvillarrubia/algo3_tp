@@ -39,7 +39,7 @@ public class ColumnTest {
         Column subColumn = column.getSequence(2);
 
         assertNotNull(subColumn);
-        assertEquals(2, subColumn.cardCount());
+        assertEquals(3, subColumn.cardCount());
         assertEquals(card2, subColumn.getCard(1));
         assertEquals(card3, subColumn.getCard(0));
     }
