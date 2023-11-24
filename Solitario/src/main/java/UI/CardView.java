@@ -5,7 +5,6 @@ import Base.Suit;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,8 +26,6 @@ public class CardView extends ImageView implements Clickable{
     public CardView(Card card, int cardIndex) {
         this.cardIndex = cardIndex;
         this.clickState = false;
-
-//        this.cardImage = getPhoto(card);
         if (card.isFaceUp()) {
             setImage(getPhoto(card));
             setOnMouseClicked(event -> handleCardClick(card));
@@ -42,7 +39,6 @@ public class CardView extends ImageView implements Clickable{
             Image image = cards.get(card);
             if(image == null){
                 image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString() + IMAGE_SUFFIX)));
-                //ImageView i = new ImageView(image);
                 cards.put(card, image);
             }
             ImageView i = new ImageView(image);
@@ -60,7 +56,6 @@ public class CardView extends ImageView implements Clickable{
         Image image = cards.get(card);
         if(image == null){
             image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString() + IMAGE_SUFFIX)));
-            //ImageView i = new ImageView(image);
             cards.put(card, image);
         }
         return image;
@@ -95,8 +90,6 @@ public class CardView extends ImageView implements Clickable{
 
     public void toggleCardClick() {
         this.clickState = !clickState;
-//        if (clickState) { System.out.println("Card Selected"); }
-//        else System.out.println("Card descliqueada");
     }
 
     @Override

@@ -28,8 +28,8 @@ import java.util.Random;
 
 public class SpiderUI extends GameUI{
 
-    private static final int H =780;
-    private static final int W =520;
+    private static final int W =780;
+    private static final int H =620;
     private Game game;
     @FXML
     HBox stock = new HBox();
@@ -72,17 +72,10 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void initialize(){
-        SpiderRules spiderRules = new SpiderRules();
-        Random random = new Random();
-        //game = new Game(spiderRules, 10);
-        game = gameStartsWithOneFullColumn();
+    public void setUpGame(Stage stage, Game game) throws IOException {
         this.clickState = ClickState.NO_CLICK;
-    }
-
-    @Override
-    public void setUpGame(Stage stage) throws IOException {
-        initialize();
+        this.LocalStage = stage;
+        this.game = game;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SpiderBase.fxml"));
         loader.setController(this);
         AnchorPane root = loader.load();
@@ -92,11 +85,19 @@ public class SpiderUI extends GameUI{
         updateTableauView();
         setEventHandlers();
 
-        Scene klondikeScene = new Scene(root,H, W);
+        Scene klondikeScene = new Scene(root,W, H);
         stage.setScene(klondikeScene);
         stage.setTitle("Spider Solitaire");
+        stage.setOnCloseRequest(event -> {
+            try {
+                game.serialize();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
         stage.show();
-        this.LocalStage = stage;
+
     }
 
     @Override
@@ -153,17 +154,19 @@ public class SpiderUI extends GameUI{
                             Column targetColumn = columnView.getColumn();
                             columnView.toggleColumnClick();
                             if(clickedCard != null){
-                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
-                                if (clickedCard.getIndex() == -1){
-                                    System.out.println("ninguna carta figura clickeada"); //revisar esto no deberia haber prints
-                                } else if (clickedCard.getIndex() == 0) {
+//                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
+//                                if (clickedCard.getIndex() == -1){
+//                                    System.out.println("ninguna carta figura clickeada"); //revisar esto no deberia haber prints
+//                                } else
+                                if (clickedCard.getIndex() == 0) {
                                     if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))) {
                                         //updateTableauView();
                                         updateColumnView(clickedColumnView);
                                         updateColumnView(columnView);
                                         clickedColumnView = null;
                                         clickedCard = null;
-                                    } else System.out.println("no se movió la carta"); //REVISAR
+                                    }
+//                                    else System.out.println("no se movió la carta"); //REVISAR
                                 } else {
                                     if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()))){
                                         updateColumnView(clickedColumnView);
@@ -172,13 +175,12 @@ public class SpiderUI extends GameUI{
                                         clickedCard = null;
                                     } else {
                                         clickedCard.toggleCardClick();
-                                        System.out.println("no se movió la secuencia desde columnn"); //REVISAR
+//                                        System.out.println("no se movió la secuencia desde columnn"); //REVISAR
                                     }
                                 }
                             }
                             clickState = ClickState.NO_CLICK;
                         }
-                        //break;
                     }
                 }
             }
@@ -200,7 +202,7 @@ public class SpiderUI extends GameUI{
                             Column column = clickedColumnView.getColumn();
                             if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
                             if(clickedCard != null) {
-                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
+//                                System.out.println("Index de carta clickeada: " + clickedCard.getIndex());
                                 if (clickedCard.getIndex() == 12) {
                                     if (game.makeAMove(new Movement(column, clickedFoundation, 12))) {
                                         updateColumnView(clickedColumnView);
@@ -210,13 +212,13 @@ public class SpiderUI extends GameUI{
                                         clickedCard = null;
                                     } else{
                                         clickedCard.toggleCardClick();
-                                        System.out.println("no se movió la secuencia"); //REVISAR
+//                                        System.out.println("no se movió la secuencia"); //REVISAR
                                     }
                                 }
                             }
                         }
                         clickState = ClickState.NO_CLICK;
-                        System.out.println("ganado: " + game.isGameWon()+ "terminado:" + game.isGameOver() );
+//                        System.out.println("ganado: " + game.isGameWon()+ "terminado:" + game.isGameOver() );
                         if (game.gameStatus()) {
                             showWinScene(LocalStage);
                             return;
@@ -273,7 +275,6 @@ public class SpiderUI extends GameUI{
         StackPane stackPane = (StackPane) tableau.getChildren().get(columnIndex);
         stackPane.getChildren().clear();
         stackPane.getChildren().add(updatedColumnView);
-//        System.out.println("Column updated: " + columnIndex);
     }
 
     @Override
@@ -285,8 +286,6 @@ public class SpiderUI extends GameUI{
             stock.getChildren().add(stockButton);
         }
     }
-
-
 
 
 

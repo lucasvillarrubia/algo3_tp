@@ -2,14 +2,12 @@ package UI;
 
 import Base.Card;
 import Elements.Column;
-import Elements.Visitable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 
 public class ColumnView extends StackPane implements Clickable {
 
-//    CardView cardView = new CardView();
     private final static int OFFSET = 20;
 
     private final Column column;
@@ -35,12 +33,9 @@ public class ColumnView extends StackPane implements Clickable {
             CardView cardView = new CardView(card, i);
             cardView.setFitHeight(79);
             cardView.setFitWidth(61);
-            //ImageView image = cardView.getImage(card);
-//            image.setTranslateY(OFFSET*offset);
             cardView.setTranslateY(OFFSET*offset);
             offset++;
             getChildren().add(cardView);
-//            getChildren().add(image);
         }
         setOnMouseClicked(this::handleColumnClick);
     }
@@ -48,23 +43,6 @@ public class ColumnView extends StackPane implements Clickable {
     public CardView getCardView(int i){
          return (CardView) this.getChildren().get(i);
     }
-//    public CardView getCardView(int i) {
-//        int childIndex = i * 2; // Assuming each card is followed by an ImageView
-//        if (childIndex >= 0 && childIndex < this.getChildren().size()) {
-//            Node node = this.getChildren().get(childIndex);
-//            if (node instanceof CardView) {
-//                return (CardView) node;
-//            } else {
-//                // Handle the case where the child at the specified index is not a CardView
-//                // You might want to throw an exception or return null, depending on your requirements.
-//                return null;
-//            }
-//        } else {
-//            // Handle the case where the specified index is out of bounds
-//            // You might want to throw an exception or return null, depending on your requirements.
-//            return null;
-//        }
-//    }
 
     public void setNumber(int id){
         this.number = id;
@@ -80,7 +58,6 @@ public class ColumnView extends StackPane implements Clickable {
 
     public void handleColumnClick(MouseEvent event) {
         toggleColumnClick();
-//        System.out.println("Column clicked! Column ID: " + number);
     }
 
     public boolean isClicked(){
@@ -97,10 +74,6 @@ public class ColumnView extends StackPane implements Clickable {
         return isClicked();
     }
 
-//    @Override
-//    public Visitable getDeck() {
-//        return column;
-//    }
 
     @Override
     public void setIndex(int id) {

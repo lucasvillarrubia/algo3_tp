@@ -135,4 +135,8 @@ public class KlondikeRules implements Rules,Serializable{
                 return true;
         }
 
+        public String getRulesString(){
+                return "Klondike";
+        }
+
 }

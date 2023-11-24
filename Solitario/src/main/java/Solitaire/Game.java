@@ -12,11 +12,10 @@ public class Game implements Serializable {
     private boolean gameOver;
     private boolean gameWon;
     private int cantMovements;
-    private final List<Foundation> foundations;
+    private List<Foundation> foundations;
     private final List<Column> tableau;
     private final Stock stock;
 
-    private final File saveFile = new File("savedGame.txt");
 
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
@@ -49,6 +48,7 @@ public class Game implements Serializable {
         this.tableau = tableau;
     }
 
+
     public boolean isGameWon() {
         return gameWon;
     }
@@ -62,9 +62,9 @@ public class Game implements Serializable {
             gameWon = true;
             gameOver = true;
         }
-        System.out.println("Foundations: " + areAllFoundationsFull());
-        System.out.println("Stock: " + stock.isEmpty());
-        System.out.println("COlumns: " + areAllColumnsEmpty());
+//        System.out.println("Foundations: " + areAllFoundationsFull());
+//        System.out.println("Stock: " + stock.isEmpty());
+//        System.out.println("COlumns: " + areAllColumnsEmpty());
     }
 
     public boolean gameStatus() {
@@ -125,7 +125,8 @@ public class Game implements Serializable {
 //        objectOutStream.flush();
 //    }
     public void serialize() throws IOException {
-        try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(this.saveFile))) {
+        File file = new File("savedGame.txt");
+        try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(file))) {
             objectOutStream.writeObject(this);
             objectOutStream.flush();
         }
@@ -143,16 +144,23 @@ public class Game implements Serializable {
     }
 
     public boolean drawCardFromStock(){
+        addMovement();
         return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
 
     public boolean makeAMove (Movement move) {
         if (move.checkMoveByRules(gameRules)) {
+            addMovement();
             winGame();
             return true;
         }
         else return false;
     }
+
+    public String getGameRules(){
+        return gameRules.getRulesString();
+    }
+
 
 }

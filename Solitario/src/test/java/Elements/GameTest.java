@@ -182,7 +182,7 @@ public class GameTest {
         int cant = 20;
         List<Foundation> foundations = kr.initFoundations();
         List<Column> tableau = new ArrayList<>();
-        Game game = new Game(kr, false, false, cant, stock, foundations, tableau);
+        Game game = new Game(kr, false, false, cant,stock, foundations, tableau);
         game.addMovement();
         //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         game.serialize();
@@ -198,7 +198,7 @@ public class GameTest {
     //Tests de Game con Klondike
 
     @Test
-    public void klondikeGameTest(){
+    public void klondikeGameTest() throws IOException, ClassNotFoundException {
         KlondikeRules klondikeRules = new KlondikeRules();
         Game game = new Game(klondikeRules, 10);
         assertEquals(game.getStock().cardCount(), 24);
@@ -218,6 +218,13 @@ public class GameTest {
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock())));
 //        assertFalse(game.moveCards(game.getColumn(1),game.getColumn(2), 1 ));
         assertFalse(game.makeAMove(new Movement(game.getColumn(1),game.getColumn(2), 1 )));
+
+        game.serialize();
+        File saveFile = new File("savedGame.txt");
+        game = Game.deserialize(saveFile);
+        assertEquals(4, game.getCantMovements());
+
+        assertTrue(game.getFoundation(Suit.CLUBS).getLast().isTheSameAs(new Card(Suit.CLUBS, Value.ACE)));
     }
 
     //Tests de Game con Spider
