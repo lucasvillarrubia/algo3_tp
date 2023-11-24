@@ -128,6 +128,8 @@ public class KlondikeUI extends GameUI{
                                     updateColumnView(clickedColumnView);
                                     game.drawCardFromStock();
                                     updateWaste();
+                                    stockIndex--;
+                                    stockIndex--;
                                 }
                                 clickedColumnView = null;
                                 clickedCard = null;
@@ -193,6 +195,8 @@ public class KlondikeUI extends GameUI{
                                 updateFoundations();
                                 game.drawCardFromStock();
                                 updateWaste();
+                                stockIndex--;
+                                stockIndex--;
                             }
 //                            } else System.out.println("no se hizo el move de stock a foundation");
                             clickedFoundation = null;
@@ -212,7 +216,7 @@ public class KlondikeUI extends GameUI{
 
     @Override
     public void handleStockClick(MouseEvent event) throws IOException {
-        if (stockIndex != game.getStock().cardCount() + 1) {
+        if (stockIndex != game.getStock().cardCount()+1) {
             game.drawCardFromStock();
         }
         updateStockButton();
@@ -280,8 +284,7 @@ public class KlondikeUI extends GameUI{
                     throw new RuntimeException(e);
                 }
             });
-        }
-        else if (stockIndex == game.getStock().cardCount() + 1) {
+        } else if (stockIndex == game.getStock().cardCount() + 1) {
             Button stockButton = stockView.showStock(game.getStock());
             stockPile.getChildren().clear();
             stockPile.getChildren().add(stockButton);
@@ -296,6 +299,9 @@ public class KlondikeUI extends GameUI{
         }
     }
 
+
+
+
     //se me ocutte crear un contador que vaya contando cada vez que se
     // realiza un movimiento desde el stock y ahi vas restandole al card count que
     //no parece ir como queremos
@@ -309,11 +315,9 @@ public class KlondikeUI extends GameUI{
     private void updateWaste() {
         if (stockIndex == game.getStock().cardCount()) {
             stockIndex++;
-        }
-        else if (stockIndex == game.getStock().cardCount() + 1) {
+        } else if (stockIndex == game.getStock().cardCount()) {
             waste.getChildren().clear();
-        }
-        else {
+        } else {
             Card card = game.getStock().getLast();
             ImageView wasteView = cardView.getImage(card);
             StackPane cardStackPane = new StackPane(wasteView);
@@ -322,6 +326,7 @@ public class KlondikeUI extends GameUI{
             stockIndex++;
         }
     }
+
 
 
     private void searchForClicked(Pane pane) {
@@ -342,7 +347,6 @@ public class KlondikeUI extends GameUI{
         else this.destinationDeck = sv;
     }
 
-
     private void handleClick(MouseEvent event) {
         Pane clickedPane = (Pane) event.getSource();
         if (clickedPane.getChildren().get(0) instanceof HBox stockkkk) {
@@ -361,6 +365,5 @@ public class KlondikeUI extends GameUI{
 //            }
         }
     }
-
 
 }

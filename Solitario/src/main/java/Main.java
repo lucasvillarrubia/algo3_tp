@@ -48,7 +48,7 @@ public class Main extends Application {
                     showMenu(root, stage);
                 } else if (buttonType == continueButton) {
                     try {
-                        openSavedGame(stage);
+                        openSavedGame(root,stage);
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -107,8 +107,9 @@ public class Main extends Application {
         return file.exists();
     }
 
-    private void openSavedGame(Stage stage) throws IOException, ClassNotFoundException {
+    private void openSavedGame(StackPane root, Stage stage) throws IOException, ClassNotFoundException {
         Game savedGame = Game.deserialize(file);
+        if(savedGame.gameStatus()) showMenu(root,stage);
         switch (savedGame.getGameRules()) {
             case "Klondike" -> {
                 KlondikeUI klondikeUI = new KlondikeUI();
