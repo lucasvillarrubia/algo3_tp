@@ -7,6 +7,8 @@ import UI.KlondikeUI;
 import UI.SpiderUI;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -33,37 +35,50 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         StackPane root = new StackPane();
-        try {
-            if (savedGameExists()) {
-                openSavedGame(stage);
-
-            } else {
-                root.setStyle("-fx-background-color: #000177");
-                ComboBox<String> dropdown = dropDownMenu();
-                root.getChildren().add(dropdown);
-
-                dropdown.setOnAction(e -> {
+        if (savedGameExists()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Solitaire");
+            alert.setHeaderText("Saved game found!");
+            alert.setContentText("Do you want to start a new game or continue the saved one?");
+            ButtonType newGameButton = new ButtonType("New Game");
+            ButtonType continueButton = new ButtonType("Continue");
+            alert.getButtonTypes().setAll(newGameButton, continueButton);
+            alert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == newGameButton) {
+                    showMenu(root, stage);
+                } else if (buttonType == continueButton) {
                     try {
-                        openGame(stage, dropdown.getValue());
-
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                        openSavedGame(stage);
+                    } catch (IOException | ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
-                });
-                Scene scene = new Scene(root, H, W);
-                stage.setScene(scene);
-                stage.setTitle(TITLE);
-                stage.getIcons().add(new Image("/images/extras/app-logo.png"));
-                stage.setResizable(false);
-                stage.show();
-
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            throw new RuntimeException(ex);
+                }
+            });
+        } else {
+                showMenu(root, stage);
         }
-
     }
 
+
+    public void showMenu(StackPane root, Stage stage){
+        root.setStyle("-fx-background-color: #000177");
+        ComboBox<String> dropdown = dropDownMenu();
+        root.getChildren().add(dropdown);
+        dropdown.setOnAction(e -> {
+            try {
+                openGame(stage, dropdown.getValue());
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        Scene scene = new Scene(root, H, W);
+        stage.setScene(scene);
+        stage.setTitle(TITLE);
+        stage.getIcons().add(new Image("/images/extras/app-logo.png"));
+        stage.setResizable(false);
+        stage.show();
+    }
 
     public ComboBox<String> dropDownMenu(){
         ComboBox<String> gameTypeCB = new ComboBox<>();
