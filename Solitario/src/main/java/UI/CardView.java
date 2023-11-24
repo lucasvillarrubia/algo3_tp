@@ -80,7 +80,6 @@ public class CardView extends ImageView implements Clickable{
 
     public void handleCardClick(Card card) {
         toggleCardClick();
-        System.out.println("Card!"+ card.getSuit()+ "__"+ card.getValue());
     }
 
     @Override

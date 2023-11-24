@@ -20,14 +20,13 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 public class KlondikeUI extends GameUI{
 
     private static final int W =650;
     private static final int H =600;
-    private final Rules klondikeRules = new KlondikeRules();
     private Game game;
     private final CardView cardView = new CardView();
     private static final int AMOUNT_COLUMNS = 7;
@@ -200,7 +199,7 @@ public class KlondikeUI extends GameUI{
                             wasteIsClicked = false;
                             clickState = ClickState.NO_CLICK;
                         }
-//                        System.out.println("ganado: " + game.isGameWon()+ "terminado:" + game.isGameOver() );
+
                         if (game.gameStatus()) {
                             showWinScene(stage);
                             return;
@@ -301,30 +300,6 @@ public class KlondikeUI extends GameUI{
     // realiza un movimiento desde el stock y ahi vas restandole al card count que
     //no parece ir como queremos
 
-//    @Override
-//    public void updateStockButton() {
-//        StockView stockView = new StockView();
-//        int stockCount = game.getStock().cardCount();
-//        if (game.getStock().isEmpty()) {
-//            Button stockButton = stockView.showEmptyStock();
-//            configureStockButton(stockButton);
-//        } else {
-//            if (stockIndex == stockCount) {
-//                Button stockButton = stockView.showEmptyStock();
-//                configureStockButton(stockButton);
-//                stockIndex = 0;
-//            } else {
-//                Button stockButton = stockView.showStock(game.getStock());
-//                configureStockButton(stockButton);
-//                stockIndex++;
-//            }
-//        }
-//    }
-//    private void configureStockButton(Button stockButton) {
-//        stockPile.getChildren().clear();
-//        stockPile.getChildren().add(stockButton);
-//        stockPile.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
-//    }
 
     private void handleWasteCardClick(MouseEvent event) {
         clickState = ClickState.CLICKED;

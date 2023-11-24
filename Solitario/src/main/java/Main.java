@@ -57,6 +57,7 @@ public class Main extends Application {
         } else {
                 showMenu(root, stage);
         }
+
     }
 
 
@@ -108,16 +109,16 @@ public class Main extends Application {
 
     private void openSavedGame(Stage stage) throws IOException, ClassNotFoundException {
         Game savedGame = Game.deserialize(file);
-            switch (savedGame.getGameRules()) {
-                case "Klondike" -> {
-                    KlondikeUI klondikeUI = new KlondikeUI();
-                    klondikeUI.setUpGame(stage, savedGame);
-                }
-                case "Spider" -> {
-                    SpiderUI spiderUI = new SpiderUI();
-                    spiderUI.setUpGame (stage, savedGame);
-                }
+        switch (savedGame.getGameRules()) {
+            case "Klondike" -> {
+                KlondikeUI klondikeUI = new KlondikeUI();
+                klondikeUI.setUpGame(stage, savedGame);
             }
+            case "Spider" -> {
+                SpiderUI spiderUI = new SpiderUI();
+                spiderUI.setUpGame (stage, savedGame);
+            }
+        }
 
     }
 
