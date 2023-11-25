@@ -101,8 +101,8 @@ public abstract class GameUI {
         return null;
     }
 
-    public void updateTableauView(int amount_columns){
-        for(int i = 0 ;i< amount_columns; i++){
+    public void updateTableauView(int amountColumns){
+        for(int i = 0 ;i< amountColumns; i++){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column);
             columnView.setIndex(i);
@@ -112,8 +112,8 @@ public abstract class GameUI {
         }
     }
 
-    public void updateFoundations(int amount_foundations){
-        for (int i = 0; i < amount_foundations; i++) {
+    public void updateFoundations(int amountFoundations){
+        for (int i = 0; i < amountFoundations; i++) {
             Foundation foundation = game.getFoundation(i);
             FoundationView foundationView = new FoundationView(foundation);
             foundationView.setIndex(i);
