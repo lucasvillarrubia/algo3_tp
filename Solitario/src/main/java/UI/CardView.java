@@ -4,8 +4,6 @@ import Base.Card;
 import Base.Suit;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,11 +25,9 @@ public class CardView extends ImageView implements Clickable{
     public CardView(Card card, int cardIndex) {
         this.cardIndex = cardIndex;
         this.clickState = false;
-
-//        this.cardImage = getPhoto(card);
         if (card.isFaceUp()) {
             setImage(getPhoto(card));
-            setOnMouseClicked(event -> handleCardClick(card));
+            setOnMouseClicked(event -> handleCardClick());
         }
         else setImage(new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX))));
     }
@@ -39,17 +35,12 @@ public class CardView extends ImageView implements Clickable{
 
     public ImageView getImage(Card card){
         if(card.isFaceUp()){
-            Image image = cards.get(card);
-            if(image == null){
-                image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString() + IMAGE_SUFFIX)));
-                //ImageView i = new ImageView(image);
-                cards.put(card, image);
-            }
+            Image image = getPhoto(card);
             ImageView i = new ImageView(image);
             i.setFitHeight(79);
             i.setFitWidth(61);
             i.setStyle("-fx-border-radius: 2; -fx-border-color: black");
-            i.setOnMouseClicked(event -> handleCardClick(card));
+            i.setOnMouseClicked(event -> handleCardClick());
             return i;
         } else {
             return getBack();
@@ -60,7 +51,6 @@ public class CardView extends ImageView implements Clickable{
         Image image = cards.get(card);
         if(image == null){
             image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString() + IMAGE_SUFFIX)));
-            //ImageView i = new ImageView(image);
             cards.put(card, image);
         }
         return image;
@@ -82,32 +72,24 @@ public class CardView extends ImageView implements Clickable{
         return imageView;
     }
 
-
-    public void handleCardClick(Card card) {
-        toggleCardClick();
-        System.out.println("Card!"+ card.getSuit()+ "__"+ card.getValue());
-    }
-
-    @Override
-    public void handleClick(MouseEvent event) {
+    public void handleCardClick() {
         toggleCardClick();
     }
+
 
     public void toggleCardClick() {
         this.clickState = !clickState;
-//        if (clickState) { System.out.println("Card Selected"); }
-//        else System.out.println("Card descliqueada");
     }
 
     @Override
-    public boolean estaClickeado() {
+    public boolean isClicked() {
         return clickState;
     }
 
 
     @Override
-    public void setIndex(int id) {
-        this.cardIndex = id;
+    public void setIndex(int i) {
+        this.cardIndex = i;
     }
 
     @Override

@@ -2,7 +2,6 @@ package Elements;
 
 import Base.Deck;
 import Base.Suit;
-import Base.Value;
 
 public class Foundation extends Deck implements Visitable {
 

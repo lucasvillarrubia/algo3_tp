@@ -291,57 +291,5 @@ public class KlondikeRulesTest {
         assertTrue(kr.drawCardFromStock(filledStock, emptyTableau));
     }
 
-    //                 D E C K    M E T H O D S
-
-//    @Test
-//    public void testColumnDeckGivesCard() {
-//        Column c = new Column();
-//        KlondikeRules kr = new KlondikeRules();
-//        assertTrue(kr.deckGivesCard(c));
-//    }
-//
-//    @Test
-//    public void testStockDeckMethods() {
-//        Stock s = new Stock();
-//        Column sequence = new Column();
-//        Card card1 = new Card(Suit.HEART, Value.ACE);
-//        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-//        KlondikeRules kr = new KlondikeRules();
-//        sequence.addCards(card1);
-//        sequence.addCards(card2);
-//        assertFalse(kr.deckAcceptsCard(s, card1));
-//        assertFalse(kr.deckGivesCard(s));
-//        assertFalse(kr.deckAdmitsSequence(s, sequence));
-//    }
-//
-//    @Test
-//    public void testFoundationDeckMethods() {
-//        Foundation f = new Foundation(Suit.SPADES);
-//        Column sequence = new Column();
-//        Card card1 = new Card(Suit.HEART, Value.ACE);
-//        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-//        KlondikeRules kr = new KlondikeRules();
-//        sequence.addCards(card1);
-//        sequence.addCards(card2);
-//        assertFalse(kr.deckAcceptsCard(f, card1));
-//        assertTrue(kr.deckGivesCard(f));
-//        assertFalse(kr.deckAdmitsSequence(f, sequence));
-//    }
-//
-//    @Test
-//    public void testUnknownDeckMethodsDoesntWork() {
-//        class Unknown extends Deck {
-//        }
-//        Deck u = new Unknown();
-//        Column sequence = new Column();
-//        Card card1 = new Card(Suit.HEART, Value.ACE);
-//        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-//        KlondikeRules kr = new KlondikeRules();
-//        sequence.addCards(card1);
-//        sequence.addCards(card2);
-//        assertFalse(kr.deckAcceptsCard(u, card1));
-//        assertFalse(kr.deckGivesCard(u));
-//        assertFalse(kr.deckAdmitsSequence(u, sequence));
-//    }
 
 }

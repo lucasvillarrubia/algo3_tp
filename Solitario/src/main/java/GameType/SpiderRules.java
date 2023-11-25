@@ -1,7 +1,6 @@
 package GameType;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
@@ -153,5 +152,7 @@ public class SpiderRules implements Rules, Serializable {
         return true;
     }
 
-
+    public String getRulesString(){
+        return "Spider";
+    }
 }
