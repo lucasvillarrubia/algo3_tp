@@ -28,10 +28,6 @@ public class Main extends Application {
 
     private File file = new File(SAVE_PATH);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage stage) {
         StackPane root = new StackPane();
@@ -48,7 +44,7 @@ public class Main extends Application {
                     showMenu(root, stage);
                 } else if (buttonType == continueButton) {
                     try {
-                        openSavedGame(root,stage);
+                        openSavedGame(root, stage);
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -109,7 +105,6 @@ public class Main extends Application {
 
     private void openSavedGame(StackPane root, Stage stage) throws IOException, ClassNotFoundException {
         Game savedGame = Game.deserialize(file);
-        if(savedGame.gameStatus()) showMenu(root,stage);
         switch (savedGame.getGameRules()) {
             case "Klondike" -> {
                 KlondikeUI klondikeUI = new KlondikeUI();

@@ -44,10 +44,6 @@ public class FoundationView extends StackPane implements Clickable {
         return foundation;
     }
 
-    public boolean isClicked(){
-        return clickState;
-    }
-
     @Override
     public void handleClick(MouseEvent event) {
         toggleFoundationClick();
@@ -55,7 +51,7 @@ public class FoundationView extends StackPane implements Clickable {
 
     @Override
     public boolean estaClickeado() {
-        return isClicked();
+        return clickState;
     }
 
     @Override

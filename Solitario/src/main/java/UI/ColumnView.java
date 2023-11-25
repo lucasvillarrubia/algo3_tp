@@ -44,24 +44,12 @@ public class ColumnView extends StackPane implements Clickable {
          return (CardView) this.getChildren().get(i);
     }
 
-    public void setNumber(int id){
-        this.number = id;
-    }
-
-    public int getNumber(){
-        return this.number;
-    }
-
     public void toggleColumnClick() {
         clickState = !clickState;
     }
 
     public void handleColumnClick(MouseEvent event) {
         toggleColumnClick();
-    }
-
-    public boolean isClicked(){
-        return clickState;
     }
 
     @Override
@@ -71,13 +59,12 @@ public class ColumnView extends StackPane implements Clickable {
 
     @Override
     public boolean estaClickeado() {
-        return isClicked();
+        return clickState;
     }
 
-
     @Override
-    public void setIndex(int id) {
-        this.number = id;
+    public void setIndex(int i) {
+        this.number = i;
     }
 
     @Override

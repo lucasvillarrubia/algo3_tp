@@ -28,7 +28,7 @@ public class CardView extends ImageView implements Clickable{
         this.clickState = false;
         if (card.isFaceUp()) {
             setImage(getPhoto(card));
-            setOnMouseClicked(event -> handleCardClick(card));
+            setOnMouseClicked(event -> handleCardClick());
         }
         else setImage(new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX))));
     }
@@ -36,16 +36,12 @@ public class CardView extends ImageView implements Clickable{
 
     public ImageView getImage(Card card){
         if(card.isFaceUp()){
-            Image image = cards.get(card);
-            if(image == null){
-                image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString() + IMAGE_SUFFIX)));
-                cards.put(card, image);
-            }
+            Image image = getPhoto(card);
             ImageView i = new ImageView(image);
             i.setFitHeight(79);
             i.setFitWidth(61);
             i.setStyle("-fx-border-radius: 2; -fx-border-color: black");
-            i.setOnMouseClicked(event -> handleCardClick(card));
+            i.setOnMouseClicked(event -> handleCardClick());
             return i;
         } else {
             return getBack();
@@ -77,8 +73,7 @@ public class CardView extends ImageView implements Clickable{
         return imageView;
     }
 
-
-    public void handleCardClick(Card card) {
+    public void handleCardClick() {
         toggleCardClick();
     }
 
@@ -98,8 +93,8 @@ public class CardView extends ImageView implements Clickable{
 
 
     @Override
-    public void setIndex(int id) {
-        this.cardIndex = id;
+    public void setIndex(int i) {
+        this.cardIndex = i;
     }
 
     @Override

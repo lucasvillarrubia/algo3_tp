@@ -50,16 +50,13 @@ public class StockView extends HBox implements Clickable {
         });
     }
 
-    public void toggleColumnClick() { clickState = !clickState; }
+    public void toggleColumnClick() {
+        clickState = !clickState; }
 
     public boolean isClicked(){
         return clickState;
     }
 
-    @Override
-    public void handleClick(MouseEvent event) {
-        toggleColumnClick();
-    }
 
     @Override
     public boolean estaClickeado() {

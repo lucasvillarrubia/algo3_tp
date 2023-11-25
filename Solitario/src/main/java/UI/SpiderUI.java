@@ -31,13 +31,7 @@ public class SpiderUI extends GameUI{
 
     private static final int W =780;
     private static final int H =620;
-    private Game game;
-    @FXML
-    HBox stock = new HBox();
-    @FXML
-    Pane tableau;
-    @FXML
-    Pane foundations;
+
     ClickState clickState;
     private ColumnView clickedColumnView;
     private CardView clickedCard;
@@ -81,7 +75,7 @@ public class SpiderUI extends GameUI{
         loader.setController(this);
         AnchorPane root = loader.load();
         StockView stockView = new StockView();
-        stock.getChildren().add(stockView.showStock(game.getStock()));
+        stockPile.getChildren().add(stockView.showStock(game.getStock()));
         updateFoundations();
         updateTableauView();
         setEventHandlers();
@@ -101,43 +95,6 @@ public class SpiderUI extends GameUI{
 
     }
 
-    @Override
-    public void setEventHandlers() {
-        tableau.setOnMouseClicked(this::handleColumnClick);
-        foundations.setOnMouseClicked(event -> {
-            try {
-                handleFoundationClick(event);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
-    }
-
-    private void handleColumnClick2(MouseEvent event) {
-        if (event.getSource() instanceof Pane source) {
-            for (Node child : source.getChildren()) {
-                if (child instanceof StackPane) {
-                    ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
-                    if (columnView.isClicked()) {
-                        if (clickState == ClickState.NO_CLICK) {
-                            columnView.toggleColumnClick();
-                            clickedColumnView = columnView;
-                            clickState = ClickState.CLICKED;
-                        } else if (clickState == ClickState.CLICKED) {
-                            Column targetColumn = columnView.getColumn();
-                            columnView.toggleColumnClick();
-                            if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn))){
-                                updateTableauView();
-                                clickedColumnView=null;
-                            }
-                            clickState = ClickState.NO_CLICK;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     @Override
     public void handleColumnClick(MouseEvent event) {
@@ -145,7 +102,7 @@ public class SpiderUI extends GameUI{
             for (int i = 0; i < source.getChildren().size(); i++) {
                 if (source.getChildren().get(i) instanceof StackPane) {
                     ColumnView columnView = (ColumnView) ((StackPane) source.getChildren().get(i)).getChildren().get(0);
-                    if (columnView.isClicked()) {
+                    if (columnView.estaClickeado()) {
                         if (clickState == ClickState.NO_CLICK) {
                             columnView.toggleColumnClick();
                             clickedColumnView = columnView;
@@ -196,7 +153,7 @@ public class SpiderUI extends GameUI{
             for (Node child : source.getChildren()) {
                 if (child instanceof StackPane) {
                     FoundationView foundationView = (FoundationView) ((StackPane) child).getChildren().get(0);
-                    if (foundationView.isClicked()){
+                    if (foundationView.estaClickeado()){
                         foundationView.toggleFoundationClick();
                         clickedFoundation = foundationView.getFoundation();
                         if (clickedColumnView != null) {
@@ -244,7 +201,7 @@ public class SpiderUI extends GameUI{
         for(int i = 0 ;i<10; i++ ){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column);
-            columnView.setNumber(i);
+            columnView.setIndex(i);
             StackPane stackPane =(StackPane) tableau.getChildren().get(i);
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);
@@ -264,30 +221,14 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void updateColumnView(ColumnView columnView){
-        int columnIndex = columnView.getNumber();
-        Column column = game.getColumn(columnIndex);
-        boolean isClicked = columnView.isClicked();
-        ColumnView updatedColumnView = new ColumnView(column);
-        updatedColumnView.setNumber(columnIndex);
-        if (isClicked) {
-            updatedColumnView.toggleColumnClick();
-        }
-        StackPane stackPane = (StackPane) tableau.getChildren().get(columnIndex);
-        stackPane.getChildren().clear();
-        stackPane.getChildren().add(updatedColumnView);
-    }
-
-    @Override
     public void updateStockButton(){
         StockView stockView = new StockView();
         if(game.getStock().isEmpty()){
             Button stockButton = stockView.showEmptyStock();
-            stock.getChildren().clear();
-            stock.getChildren().add(stockButton);
+            stockPile.getChildren().clear();
+            stockPile.getChildren().add(stockButton);
         }
     }
-
 
 
 }
