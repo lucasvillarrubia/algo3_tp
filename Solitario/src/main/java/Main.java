@@ -104,11 +104,11 @@ public class Main extends Application {
         Random random = new Random();
         if ("Klondike".equals(selectedGame)) {
             KlondikeUI klondikeUI = new KlondikeUI();
-            Game game = new Game(new KlondikeRules(),10);
+            Game game = new Game(new KlondikeRules(),random.nextInt());
             klondikeUI.setUpGame(stage, game);
         } else if ("Spider".equals(selectedGame)) {
             SpiderUI spiderUI = new SpiderUI();
-            Game game = new Game(new SpiderRules(),10);
+            Game game = new Game(new SpiderRules(),random.nextInt());
             spiderUI.setUpGame(stage, game);
         }
     }
