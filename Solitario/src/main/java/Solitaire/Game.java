@@ -12,7 +12,7 @@ public class Game implements Serializable {
     private boolean gameOver;
     private boolean gameWon;
     private int cantMovements;
-    private List<Foundation> foundations;
+    private final List<Foundation> foundations;
     private final List<Column> tableau;
     private final Stock stock;
 
@@ -62,9 +62,6 @@ public class Game implements Serializable {
             gameWon = true;
             gameOver = true;
         }
-//        System.out.println("Foundations: " + areAllFoundationsFull());
-//        System.out.println("Stock: " + stock.isEmpty());
-//        System.out.println("COlumns: " + areAllColumnsEmpty());
     }
 
     public boolean gameStatus() {
@@ -119,11 +116,6 @@ public class Game implements Serializable {
         return true;
     }
 
-//    public void serializeOld(OutputStream os) throws IOException {
-//        ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
-//        objectOutStream.writeObject(this);
-//        objectOutStream.flush();
-//    }
     public void serialize() throws IOException {
         File file = new File("savedGame.txt");
         try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(file))) {
@@ -131,11 +123,6 @@ public class Game implements Serializable {
             objectOutStream.flush();
         }
     }
-
-//    public static Game deserializeOld(InputStream is) throws IOException, ClassNotFoundException {
-//        ObjectInputStream objectInStream = new ObjectInputStream(is);
-//        return (Game) objectInStream.readObject();
-//    }
 
     public static Game deserialize(File file) throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInStream = new ObjectInputStream(new FileInputStream(file))) {

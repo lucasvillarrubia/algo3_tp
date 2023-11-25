@@ -3,7 +3,7 @@ package UI;
 
 public interface Clickable {
 
-    boolean estaClickeado();
+    boolean isClicked();
 
     void setIndex(int i);
 

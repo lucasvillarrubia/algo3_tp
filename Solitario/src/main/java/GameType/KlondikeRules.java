@@ -12,7 +12,6 @@ public class KlondikeRules implements Rules,Serializable{
 
         private static final int AMOUNT_COLUMNS = 7;
         private Card waste = null;
-        private int stockIndex = 0;
 
         @Override
         public boolean isSequenceValid(Card prev, Card next) {
@@ -135,45 +134,6 @@ public class KlondikeRules implements Rules,Serializable{
                 waste = stock.getLast();
                 return true;
         }
-
-//        @Override
-//        public boolean drawCardFromStock(Stock stock, List<Column> tableau) {
-//                if (stock == null || tableau == null || stock.isEmpty()) return false;
-//                if (stockIndex == stock.cardCount()) {
-////                        stock.getLast().flip();
-//                        //stock.showNextCard();
-//                        System.out.println("Se da vuelta 1");
-//                        stockIndex = 0;
-//                        return false;
-//                }
-//                if (waste == null) {
-//                        waste = stock.getLast();
-//                        System.out.println("Se da vuelta 2");
-//                } else {
-//                        if (!stock.containsCard(waste)) {
-//                                stockIndex--;
-//                                stockIndex--;
-//                                if (stockIndex != 0) {
-//                                        stock.showPreviousCard();
-//                                        waste = stock.getLast();
-//                                        System.out.println("Se da vuelta 3");
-////                                        stock.getLast().flip();
-//                                } else {
-//                                        waste = null;
-//                                }
-//                        } else {
-//                                stock.getLast().flip();
-//                                stock.showNextCard();
-//                                waste = stock.getLast();
-//                                System.out.println("Se da vuelta 4");
-//                        }
-//                }
-//                stock.getLast().flip();
-//                stockIndex++;
-//                System.out.println(stockIndex);
-//                return true;
-//        }
-
 
 
         public String getRulesString(){

@@ -6,11 +6,13 @@ import Base.Deck;
 public class Column extends Deck implements Visitable {
 
         public Card getCard(int pos){
+                if (pos > cardCount()) return null;
                 return deck.get(pos);
         }
 
         public Column getSequence(int upToIndex) {
-                if (upToIndex == 0 || !getCard(upToIndex).isFaceUp()) return null;
+                if (upToIndex == 0 || getCard(upToIndex) == null || upToIndex > cardCount()) return null;
+                if (!getCard(upToIndex).isFaceUp()) return null;
                 Column subColumn = new Column();
                 if (!subColumn.addCards(deck.subList(0, upToIndex+1))) return null;
                 return subColumn;

@@ -4,7 +4,6 @@ import Base.Card;
 import Base.Suit;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -77,17 +76,13 @@ public class CardView extends ImageView implements Clickable{
         toggleCardClick();
     }
 
-    @Override
-    public void handleClick(MouseEvent event) {
-        toggleCardClick();
-    }
 
     public void toggleCardClick() {
         this.clickState = !clickState;
     }
 
     @Override
-    public boolean estaClickeado() {
+    public boolean isClicked() {
         return clickState;
     }
 

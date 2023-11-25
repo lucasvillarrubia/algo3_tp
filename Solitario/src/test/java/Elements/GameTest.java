@@ -75,7 +75,6 @@ public class GameTest {
         tableau.add(wrongSequence);
 
         Game game = new Game(k, emptyFoundations, tableau, stock);
-//        assertFalse(game.moveCards(game.getColumn(1), game.getColumn(0), 2));
         assertFalse(game.makeAMove(new Movement(game.getColumn(1), game.getColumn(0), 2)));
     }
 
@@ -144,20 +143,6 @@ public class GameTest {
         assertFalse(game.areAllFoundationsFull());
     }
 
-//    @Test public void serializationTest() throws IOException, ClassNotFoundException {
-//        ArrayList<Foundation> foundations = new ArrayList<>();
-//        foundations.add(new Foundation(Suit.CLUBS));
-//        ArrayList<Column> tableau = new ArrayList<>();
-//        KlondikeRules k = new KlondikeRules();
-//        Game game = new Game(k, foundations, tableau, new Stock());
-//        game.addMovement();
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        game.serialize(outputStream);
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-//        Game deserializedGame = Game.deserialize(inputStream);
-//        assertNotNull(deserializedGame);
-//        assertEquals(deserializedGame.getCantMovements(), 1);
-//    }
 
     @Test public void serializationTestNew() throws IOException, ClassNotFoundException {
         ArrayList<Foundation> foundations = new ArrayList<>();
@@ -168,7 +153,6 @@ public class GameTest {
         game.addMovement();
         File saveFile = new File("savedGame.txt");
         game.serialize();
-       // ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
         assertEquals(deserializedGame.getCantMovements(), 1);
@@ -184,9 +168,7 @@ public class GameTest {
         List<Column> tableau = new ArrayList<>();
         Game game = new Game(kr, false, false, cant,stock, foundations, tableau);
         game.addMovement();
-        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         game.serialize();
-        //ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         File saveFile = new File("savedGame.txt");
         Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
@@ -208,15 +190,12 @@ public class GameTest {
         }
         assertFalse(game.isGameWon());
         assertFalse(game.isGameOver());
-//        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(4)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(4))));
-//        assertTrue(game.moveCards(game.getColumn(5), game.getFoundationBySuit(Suit.CLUBS)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(5), game.getFoundation(Suit.CLUBS))));
         assertTrue(game.drawCardFromStock());
         assertTrue(game.drawCardFromStock());
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock(), 1)));
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getStock())));
-//        assertFalse(game.moveCards(game.getColumn(1),game.getColumn(2), 1 ));
         assertFalse(game.makeAMove(new Movement(game.getColumn(1),game.getColumn(2), 1 )));
 
         game.serialize();
@@ -248,19 +227,13 @@ public class GameTest {
         assertEquals(game.getStock().cardCount(), 40);
         assertFalse(game.makeAMove(new Movement(game.getStock(), game.getColumn(0))));
         assertFalse(game.makeAMove(new Movement(game.getFoundation(Suit.SPADES), game.getColumn(0))));
-//        assertTrue(game.moveCards(game.getColumn(0), game.getColumn(5)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(0), game.getColumn(5))));
-//        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(7)));
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getColumn(7))));
-//        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
         assertTrue(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
-//        assertFalse(game.moveCards(game.getColumn(2), game.getColumn(9), 3));
         assertFalse(game.makeAMove(new Movement(game.getColumn(2), game.getColumn(9), 3)));
-//        assertTrue(game.moveCards(game.getColumn(1), game.getColumn(9), 1));
         assertTrue(game.makeAMove(new Movement(game.getColumn(1), game.getColumn(9), 1)));
-//        assertTrue(game.moveCards(game.getColumn(4), game.getColumn(1)));
         assertFalse(game.makeAMove(new Movement(game.getColumn(4), game.getColumn(1))));
-//        assertEquals(game.getCantMovements(), 4);
+
     }
 
 }

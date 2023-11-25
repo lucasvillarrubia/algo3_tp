@@ -59,43 +59,5 @@ public class StockTest {
         assertTrue(stock.addCards(new Card(Suit.CLUBS, Value.SEVEN)));
     }
 
-//    @Test
-//    public void acceptSequenceTest() {
-//        KlondikeRules klondikeRules = new KlondikeRules();
-//        Stock s = new Stock();
-//        Column column = new Column();
-//        column.acceptCard(klondikeRules, new Card(Suit.CLUBS, Value.TEN));
-//        column.acceptCard(klondikeRules, new Card(Suit.HEART, Value.FIVE));
-//        assertFalse(s.acceptSequence(klondikeRules, column));
-//    }
-//
-//
-//    @Test
-//    public void givesCardTest() {
-//        KlondikeRules klondikeRules = new KlondikeRules();
-//        Stock sKlondike = klondikeRules.initStock();
-//        assertFalse(sKlondike.givesCard(klondikeRules));
-//        SpiderRules spiderRules = new SpiderRules();
-//        Stock sSpider = spiderRules.initStock();
-//        assertTrue(sSpider.givesCard(spiderRules));
-//    }
-//
-//
-//    @Test
-//    public void emptyStockGivesCardTest() {
-//        KlondikeRules klondikeRules = new KlondikeRules();
-//        SpiderRules spiderRules = new SpiderRules();
-//        Stock s = new Stock();
-//        assertFalse(s.givesCard(klondikeRules));
-//        assertFalse(s.givesCard(spiderRules));
-//    }
-//
-//    @Test
-//    public void acceptCardTest() {
-//        KlondikeRules klondikeRules = new KlondikeRules();
-//        Stock s = new Stock();
-//        Card c = new Card(Suit.SPADES, Value.QUEEN);
-//        s.acceptCard(klondikeRules, c);
-//        assertFalse(s.acceptCard(klondikeRules, c));
-//    }
+
 }

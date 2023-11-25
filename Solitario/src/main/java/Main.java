@@ -6,12 +6,17 @@ import UI.KlondikeUI;
 //import UI.Menu;
 import UI.SpiderUI;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -44,7 +49,7 @@ public class Main extends Application {
                     showMenu(root, stage);
                 } else if (buttonType == continueButton) {
                     try {
-                        openSavedGame(root, stage);
+                        openSavedGame(stage);
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -59,8 +64,18 @@ public class Main extends Application {
 
     public void showMenu(StackPane root, Stage stage){
         root.setStyle("-fx-background-color: #000177");
+        root.setAlignment(Pos.CENTER);
+        Text title = new Text("SOLITAIRE");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 48));
+        title.setFill(Color.WHITE);
+        Text text = new Text("Choose your gametype");
+        text.setFont(Font.font("Arial", 28));
+        text.setFill(Color.WHITE);
         ComboBox<String> dropdown = dropDownMenu();
-        root.getChildren().add(dropdown);
+        VBox vBox = new VBox(title,text, dropdown);
+        vBox.setSpacing(20);
+        vBox.setAlignment(Pos.CENTER);
+        root.getChildren().add(vBox);
         dropdown.setOnAction(e -> {
             try {
                 openGame(stage, dropdown.getValue());
@@ -86,14 +101,13 @@ public class Main extends Application {
     }
 
     public void openGame(Stage stage, String selectedGame) throws IOException {
+        Random random = new Random();
         if ("Klondike".equals(selectedGame)) {
             KlondikeUI klondikeUI = new KlondikeUI();
-            Random random = new Random();
             Game game = new Game(new KlondikeRules(),10);
             klondikeUI.setUpGame(stage, game);
         } else if ("Spider".equals(selectedGame)) {
             SpiderUI spiderUI = new SpiderUI();
-            Random random = new Random();
             Game game = new Game(new SpiderRules(),10);
             spiderUI.setUpGame(stage, game);
         }
@@ -103,7 +117,7 @@ public class Main extends Application {
         return file.exists();
     }
 
-    private void openSavedGame(StackPane root, Stage stage) throws IOException, ClassNotFoundException {
+    private void openSavedGame(Stage stage) throws IOException, ClassNotFoundException {
         Game savedGame = Game.deserialize(file);
         switch (savedGame.getGameRules()) {
             case "Klondike" -> {

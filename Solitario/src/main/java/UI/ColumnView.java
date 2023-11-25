@@ -52,13 +52,9 @@ public class ColumnView extends StackPane implements Clickable {
         toggleColumnClick();
     }
 
-    @Override
-    public void handleClick(MouseEvent event) {
-        toggleColumnClick();
-    }
 
     @Override
-    public boolean estaClickeado() {
+    public boolean isClicked() {
         return clickState;
     }
 

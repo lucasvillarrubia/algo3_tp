@@ -27,6 +27,11 @@
                   <Font size="48.0" />
                </font>
             </Text>
+            <Text fx:id="moves" layoutX="242" layoutY="417.0" strokeType="OUTSIDE" strokeWidth="0.0" >
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
    </children>

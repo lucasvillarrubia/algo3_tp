@@ -9,8 +9,6 @@
    <children>
       <HBox fx:id="stockPile" layoutX="24.0" layoutY="23.0" prefHeight="79.0" prefWidth="134.0">
          <children>
-            <!--             <Button fx:id="drawCardButton"/>-->
-            <!--             <Button fx:id="drawCardButton" mnemonicParsing="false" prefHeight="79.0" prefWidth="61.0" style="-fx-background-color: black; -fx-border-color: black;" textAlignment="CENTER" textFill="#046512" textOverrun="LEADING_WORD_ELLIPSIS" />-->
          </children>
       </HBox>
       <Pane fx:id="foundations" layoutX="169.0" layoutY="24.0">
