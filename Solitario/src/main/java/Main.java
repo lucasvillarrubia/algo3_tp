@@ -68,7 +68,7 @@ public class Main extends Application {
         Text title = new Text("SOLITAIRE");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 48));
         title.setFill(Color.WHITE);
-        Text text = new Text("Choose your gametype");
+        Text text = new Text("Choose your game type");
         text.setFont(Font.font("Arial", 28));
         text.setFill(Color.WHITE);
         ComboBox<String> dropdown = dropDownMenu();
