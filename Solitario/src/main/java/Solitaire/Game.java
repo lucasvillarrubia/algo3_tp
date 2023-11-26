@@ -28,16 +28,6 @@ public class Game implements Serializable {
         this.cantMovements = 0;
     }
 
-    public Game(Rules rules, List<Foundation> foundations, List<Column> tableau, Stock stock) {
-        this.gameRules = rules;
-        this.foundations = foundations;
-        this.tableau = tableau;
-        this.stock = stock;
-        this.gameOver = false;
-        this.gameWon = false;
-        this.cantMovements = 0;
-    }
-
     public Game(Rules rules, boolean gameOver, boolean gameWon, int cantMovements, Stock stock, List<Foundation> foundations, List<Column> tableau){
         this.gameRules = rules;
         this.gameOver = gameOver;
@@ -48,6 +38,9 @@ public class Game implements Serializable {
         this.tableau = tableau;
     }
 
+    public Game(Rules rules, List<Foundation> foundations, List<Column> tableau, Stock stock) {
+        this(rules, false, false, 0, stock, foundations, tableau);
+    }
 
     public boolean isGameWon() {
         return gameWon;
