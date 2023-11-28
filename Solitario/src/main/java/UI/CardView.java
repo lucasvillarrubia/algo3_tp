@@ -50,14 +50,14 @@ public class CardView extends ImageView implements Clickable{
     public Image getPhoto(Card card){
         Image image = cards.get(card);
         if(image == null){
-            image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION.toLowerCase() + card.getValue().getNumber() + card.getSuit().toString().toLowerCase() + IMAGE_SUFFIX.toLowerCase())));
+            image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString().toLowerCase() + IMAGE_SUFFIX)));
             cards.put(card, image);
         }
         return image;
     }
 
     public ImageView getBack(){
-        Image image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION.toLowerCase() + BACK_IMAGE_NAME.toLowerCase() + IMAGE_SUFFIX.toLowerCase())));
+        Image image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX)));
         ImageView back = new ImageView(image);
         back.setFitHeight(79);
         back.setFitWidth(61);
@@ -65,7 +65,7 @@ public class CardView extends ImageView implements Clickable{
     }
 
     public ImageView getFoundationImage(Suit suit){
-        Image i = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION.toLowerCase() + suit.toString().toLowerCase() + IMAGE_SUFFIX.toLowerCase())));
+        Image i = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + suit.toString().toLowerCase() + IMAGE_SUFFIX)));
         ImageView imageView = new ImageView(i);
         imageView.setFitHeight(79);
         imageView.setFitWidth(61);
