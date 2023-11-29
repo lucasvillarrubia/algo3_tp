@@ -1,126 +1,90 @@
 package UI;
 
-import Elements.Column;
 import Solitaire.Game;
-import GameType.SpiderRules;
-import javafx.fxml.FXML;
+import Solitaire.Movement;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
-public class SpiderUI{
 
-    private static final int H =780;
-    private static final int W =520;
-    private Game game;
-    @FXML
-    HBox stock = new HBox();
 
-    @FXML
-    private Button drawCardButton;
-    @FXML
-    Pane tableau;
-    @FXML
-    Pane foundations = new Pane();
-    ClickState clickState;
-    private Column clickedColumn;
+public class SpiderUI extends GameUI{
 
-    public void initialize(){
-        SpiderRules spiderRules = new SpiderRules();
-        Random random = new Random();
-        game = new Game(spiderRules, 10);
-        clickState = ClickState.NO_CLICK;
-    }
+    private static final int W = 780;
+    private static final int H = 620;
+    private static final  int AMOUNT_COLUMNS = 10;
+    private static final  int AMOUNT_FOUNDATIONS = 8;
 
-    public void setUpGame(Stage stage) throws IOException {
-        initialize();
+    private static final String FILE_PATH = "savedGame.txt";
+
+    @Override
+    public void setUpGame(Stage stage, Game game) throws IOException {
+        this.clickState = ClickState.NO_CLICK;
+        this.LocalStage = stage;
+        this.game = game;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SpiderBase.fxml"));
         loader.setController(this);
         AnchorPane root = loader.load();
         StockView stockView = new StockView();
-        stock.getChildren().add(stockView.showStock());
+        stockPile.getChildren().add(stockView.showStock());
+        updateFoundations(AMOUNT_FOUNDATIONS);
+        updateTableauView(AMOUNT_COLUMNS);
+        setEventHandlers(AMOUNT_COLUMNS, AMOUNT_FOUNDATIONS);
 
-
-        updateTableauView();
-        setEventHandlers();
-
-        Scene klondikeScene = new Scene(root,H, W);
+        Scene klondikeScene = new Scene(root,W, H);
         stage.setScene(klondikeScene);
         stage.setTitle("Spider Solitaire");
-        stage.show();
-
-    }
-
-    private void setEventHandlers() {
-        tableau.setOnMouseClicked(this::handleColumnClick);
-        foundations.setOnMouseClicked(this::handleFoundationClick);
-        stock.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
-    }
-    private void handleColumnClick(MouseEvent event) {
-        if (event.getSource() instanceof Pane source) {
-            for (Node child : source.getChildren()) {
-                if (child instanceof StackPane) {
-                    ColumnView columnView = (ColumnView) ((StackPane) child).getChildren().get(0);
-                    if (columnView.isClicked()) {
-                        if (clickState == ClickState.NO_CLICK) {
-                            clickedColumn = columnView.getColumn();
-                            clickState = ClickState.CLICKED;
-                        } else if (clickState == ClickState.CLICKED) {
-                            Column targetColumn = columnView.getColumn();
-                            if (game.moveCards(clickedColumn, targetColumn)) {
-                                updateTableauView();
-                            }
-                            clickState = ClickState.NO_CLICK;
-                        }
-                        //break;
-                    }
-                }
+        stage.setOnCloseRequest(event -> {
+            try {
+                game.serialize();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        });
+        stage.show();
+    }
+
+    @Override
+    public void acceptMoveToFoundation() throws IOException{
+        if (clickedColumnView != null) {
+            if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
+            if(clickedCard != null) {
+                clickedCard.toggleCardClick();
+                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), clickedFoundation, 12))) {
+                    updateColumnView(clickedColumnView);
+                    updateFoundations(AMOUNT_FOUNDATIONS);
+                }
+                clickedCard = null;
+            }
+            clickedColumnView = null;
         }
+        clickedFoundation = null;
+        clickState = ClickState.NO_CLICK;
+        updateFoundations(AMOUNT_FOUNDATIONS);
+        checkWinningCondition(FILE_PATH);
     }
 
-    private void handleFoundationClick(MouseEvent event){
-
-    }
-
-    private void handleStockClick(MouseEvent event) {
+    @Override
+    public void handleStockClick(MouseEvent event) {
         if(game.drawCardFromStock()){
-            updateTableauView();
+            updateTableauView(AMOUNT_COLUMNS);
         }
         updateStockButton();
     }
 
-    private void updateTableauView(){
-        for(int i = 0 ;i<10; i++ ){
-            Column column =game.getColumn(i);
-            ColumnView columnView = new ColumnView(column);
-            columnView.setNumber(i);
-            StackPane stackPane =(StackPane) tableau.getChildren().get(i);
-            stackPane.getChildren().clear();
-            stackPane.getChildren().add(columnView);
-        }
-
-    }
-
-
-    private void updateStockButton(){
+    @Override
+    public void updateStockButton(){
         StockView stockView = new StockView();
         if(game.getStock().isEmpty()){
             Button stockButton = stockView.showEmptyStock();
-            stock.getChildren().clear();
-            stock.getChildren().add(stockButton);
+            stockPile.getChildren().clear();
+            stockPile.getChildren().add(stockButton);
         }
     }
+
 }

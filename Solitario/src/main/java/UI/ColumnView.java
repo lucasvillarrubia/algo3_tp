@@ -1,16 +1,13 @@
 package UI;
 
 import Base.Card;
-import Base.Deck;
 import Elements.Column;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 
 public class ColumnView extends StackPane implements Clickable {
 
-    CardView cardView = new CardView();
     private final static int OFFSET = 20;
 
     private final Column column;
@@ -33,53 +30,37 @@ public class ColumnView extends StackPane implements Clickable {
         int offset = 0;
         for (int i = column.cardCount()-1; 0<=i ; i--) {
             Card card = column.getCard(i);
-            ImageView image = cardView.getImage(card);
-            image.setTranslateY(OFFSET*offset);
+            CardView cardView = new CardView(card, i);
+            cardView.setFitHeight(79);
+            cardView.setFitWidth(61);
+            cardView.setTranslateY(OFFSET*offset);
             offset++;
-            getChildren().add(image);
-            setOnMouseClicked(this::handleColumnClick);
+            getChildren().add(cardView);
         }
+        setOnMouseClicked(this::handleColumnClick);
     }
 
-
-
-    public void setNumber(int id){
-        this.number = id;
+    public CardView getCardView(int i){
+         return (CardView) this.getChildren().get(i);
     }
 
-    public int getNumber(){
-        return this.number;
+    public void toggleColumnClick() {
+        clickState = !clickState;
     }
-
-    public void toggleColumnClick() { clickState = !clickState; }
 
     public void handleColumnClick(MouseEvent event) {
         toggleColumnClick();
-        System.out.println("Column Clicked! Column ID: " + column.getCard(0).getValue()+ column.getCard(0).getSuit());
     }
 
-    public boolean isClicked(){
+
+    @Override
+    public boolean isClicked() {
         return clickState;
     }
 
     @Override
-    public void handleClick(MouseEvent event) {
-        toggleColumnClick();
-    }
-
-    @Override
-    public boolean estaClickeado() {
-        return isClicked();
-    }
-
-    @Override
-    public Deck getDeck() {
-        return column;
-    }
-
-    @Override
-    public void setIndex(int id) {
-        this.number = id;
+    public void setIndex(int i) {
+        this.number = i;
     }
 
     @Override

@@ -7,12 +7,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 
-public class FoundationView extends StackPane {
+public class FoundationView extends StackPane implements Clickable {
 
     CardView cardView = new CardView();
     Suit suit;
     Foundation foundation;
     private boolean clickState;
+    private int number;
 
     public FoundationView(Foundation foundation) {
         this.suit = foundation.getSuit();
@@ -23,12 +24,12 @@ public class FoundationView extends StackPane {
     }
 
     private void buildFoundation(){
-        if(foundation.isEmpty()) {
-            ImageView image = cardView.getFoundationImage(suit);
-            image.setStyle("-fx-opacity: 10%");
+        if(!foundation.isEmpty()) {
+            ImageView image = cardView.getImage(foundation.getLast());
             getChildren().add(image);
         } else {
-            ImageView image = cardView.getImage(foundation.getLast());
+            ImageView image = cardView.getFoundationImage(suit);
+            image.setStyle("-fx-opacity: 10%");
             getChildren().add(image);
         }
     }
@@ -37,14 +38,25 @@ public class FoundationView extends StackPane {
 
     private void handleFoundationClick(MouseEvent event) {
         toggleFoundationClick();
-        System.out.println("Foundation Clicked! Suit: " + suit);
     }
 
     public Foundation getFoundation() {
         return foundation;
     }
 
-    public boolean isClicked(){
+
+    @Override
+    public boolean isClicked() {
         return clickState;
+    }
+
+    @Override
+    public void setIndex(int id) {
+        this.number = id;
+    }
+
+    @Override
+    public int getIndex() {
+        return number;
     }
 }

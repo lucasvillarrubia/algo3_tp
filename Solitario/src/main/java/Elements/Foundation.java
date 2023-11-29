@@ -1,14 +1,9 @@
 package Elements;
 
-import java.util.ArrayList;
-
 import Base.Deck;
 import Base.Suit;
-import Base.Value;
-import Base.Card;
 
-
-public class Foundation extends Deck {
+public class Foundation extends Deck implements Visitable {
 
         private final Suit suit;
 
@@ -19,20 +14,14 @@ public class Foundation extends Deck {
 
         public boolean isFull(){
                 if (deck.isEmpty()) return false;
-                return this.getLast().getValue() == Value.KING;
+                return getLast().getNumber() == 13 || getLast().getNumber() == 1;
         }
 
         public Suit getSuit(){
                 return this.suit;
         }
 
-        public boolean addCards(Column cards) {
-                if (cards == null) return false;
-                ArrayList<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(0, cards.getCard(i));
-                }
-                return addCards(cardsCollection);
-        }
+
+        @Override public void accept(DeckVisitor visitor) { visitor.visit(this); }
 
 }

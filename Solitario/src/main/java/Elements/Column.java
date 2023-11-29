@@ -1,21 +1,20 @@
 package Elements;
 
+import Base.Card;
 import Base.Deck;
 
-import java.util.ArrayList;
-
-import Base.Card;
-
-public class Column extends Deck {
+public class Column extends Deck implements Visitable {
 
         public Card getCard(int pos){
+                if (pos > cardCount()) return null;
                 return deck.get(pos);
         }
 
         public Column getSequence(int upToIndex) {
-                if(!getCard(upToIndex).isFaceUp()) return null;
+                if (upToIndex == 0 || getCard(upToIndex) == null || upToIndex > cardCount()) return null;
+                if (!getCard(upToIndex).isFaceUp()) return null;
                 Column subColumn = new Column();
-                if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
+                if (!subColumn.addCards(deck.subList(0, upToIndex+1))) return null;
                 return subColumn;
         }
 
@@ -37,13 +36,9 @@ public class Column extends Deck {
                 return true;
         }
 
-        public boolean addCards(Column cards) {
-                if (cards == null) return false;
-                ArrayList<Card> cardsCollection = new ArrayList<>();
-                for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                        cardsCollection.add(0, cards.getCard(i));
-                }
-                return addCards(cardsCollection);
+        @Override public void accept(DeckVisitor visitor) {
+                visitor.visit(this);
         }
+
 
 }

@@ -1,7 +1,6 @@
 package GameType;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
@@ -82,6 +81,7 @@ public class SpiderRules implements Rules, Serializable {
 
     @Override
     public boolean admitsSequence(Column column, Column sequence) {
+        if (!acceptsCard(column, sequence.getCard(sequence.cardCount()-1))) { return false; }
         for (int i = sequence.cardCount() - 1; i > 0; i--) {
             if (!isSequenceValid(sequence.getCard(i), sequence.getCard(i - 1))) return false;
         }
@@ -152,25 +152,7 @@ public class SpiderRules implements Rules, Serializable {
         return true;
     }
 
-    @Override public boolean deckAcceptsCard(Deck deck, Card card){
-        if (deck instanceof Column c) { return acceptsCard(c, card); }
-        else if (deck instanceof Stock s) { return acceptsCard(s, card); }
-        else if (deck instanceof Foundation f) { return acceptsCard(f, card); }
-        else { return false; }
+    public String getRulesString(){
+        return "Spider";
     }
-
-    @Override public boolean deckGivesCard(Deck deck){
-        if (deck instanceof Column c) { return givesCard(c); }
-        else if (deck instanceof Stock s) { return givesCard(s); }
-        else if (deck instanceof Foundation f) { return givesCard(f); }
-        else { return false; }
-    }
-
-    @Override public boolean deckAdmitsSequence(Deck deck, Column sequence){
-        if (deck instanceof Column c) { return admitsSequence(c, sequence); }
-        else if (deck instanceof Stock s) { return admitsSequence(s, sequence); }
-        else if (deck instanceof Foundation f) { return admitsSequence(f, sequence); }
-        else { return false; }
-    }
-
 }

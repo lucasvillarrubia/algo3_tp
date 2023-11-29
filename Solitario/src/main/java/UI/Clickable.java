@@ -1,18 +1,12 @@
 package UI;
 
-import javafx.scene.input.MouseEvent;
-import Base.Deck;
 
 public interface Clickable {
 
-    void handleClick(MouseEvent event);
+    boolean isClicked();
 
-    boolean estaClickeado();
+    void setIndex(int i);
 
-    Deck getDeck();
-
-    public void setIndex(int id);
-
-    public int getIndex();
+    int getIndex();
 
 }

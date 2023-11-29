@@ -1,7 +1,6 @@
 package GameType;
 
 import Base.Card;
-import Base.Deck;
 import Base.Suit;
 import Base.Value;
 import Elements.Column;
@@ -183,59 +182,6 @@ public class SpiderRulesTest {
         Game game = new Game(spiderRules,foundations,tableau,stock);
         assertEquals(game.getStock().cardCount(),104);
         assertFalse(spiderRules.drawCardFromStock(stock, tableau));
-    }
-
-    //           D E C K    M E T H O D S
-
-    @Test
-    public void testColumnDeckGivesCard() {
-        Column c = new Column();
-        SpiderRules sr = new SpiderRules();
-        assertTrue(sr.deckGivesCard(c));
-    }
-
-    @Test
-    public void testStockDeckMethods() {
-        Stock s = new Stock();
-        Column sequence = new Column();
-        Card card1 = new Card(Suit.HEART, Value.ACE);
-        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-        SpiderRules sr = new SpiderRules();
-        sequence.addCards(card1);
-        sequence.addCards(card2);
-        assertFalse(sr.deckAcceptsCard(s, card1));
-        assertFalse(sr.deckGivesCard(s));
-        assertFalse(sr.deckAdmitsSequence(s, sequence));
-    }
-
-    @Test
-    public void testFoundationDeckMethods() {
-        Foundation f = new Foundation(Suit.SPADES);
-        Column sequence = new Column();
-        Card card1 = new Card(Suit.HEART, Value.ACE);
-        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-        SpiderRules sr = new SpiderRules();
-        sequence.addCards(card1);
-        sequence.addCards(card2);
-        assertFalse(sr.deckAcceptsCard(f, card1));
-        assertFalse(sr.deckGivesCard(f));
-        assertFalse(sr.deckAdmitsSequence(f, sequence));
-    }
-
-    @Test
-    public void testUnknownDeckMethodsDoesntWork() {
-        class Unknown extends Deck {
-        }
-        Deck u = new Unknown();
-        Column sequence = new Column();
-        Card card1 = new Card(Suit.HEART, Value.ACE);
-        Card card2 = new Card(Suit.HEART, Value.EIGHT);
-        SpiderRules sr = new SpiderRules();
-        sequence.addCards(card1);
-        sequence.addCards(card2);
-        assertFalse(sr.deckAcceptsCard(u, card1));
-        assertFalse(sr.deckGivesCard(u));
-        assertFalse(sr.deckAdmitsSequence(u, sequence));
     }
 
 }
