@@ -29,12 +29,13 @@ public abstract class GameUI {
     @FXML
     Text moves ;
 
-    public Game game;
-    public ClickState clickState;
-    public ColumnView clickedColumnView;
-    public Foundation clickedFoundation;
-    public CardView clickedCard;
-    public Stage LocalStage;
+    protected Game game;
+    protected ClickState clickState;
+    protected ColumnView clickedColumnView;
+    protected FoundationView clickedFoundationView;
+    protected CardView clickedCard;
+    protected Stage LocalStage;
+    protected static final String FILE_PATH = "savedGame.txt";
 
     public void handleColumnClick(MouseEvent event){
         ColumnView columnView = (ColumnView) ((StackPane)event.getSource()).getChildren().get(0);
@@ -48,7 +49,7 @@ public abstract class GameUI {
 
     public void handleFoundationClick(MouseEvent event) {
         FoundationView foundationView = (FoundationView) ((StackPane) event.getSource()).getChildren().get(0);
-        clickedFoundation = foundationView.getFoundation();
+        clickedFoundationView = foundationView;
         clickState = ClickState.CLICKED;
         try {
             acceptMoveToFoundation();
@@ -58,16 +59,18 @@ public abstract class GameUI {
     }
 
     public void acceptMoveToColumn(ColumnView columnView){
-        if (clickState != ClickState.CLICKED) return;
-        Column targetColumn = columnView.getColumn();
-        clickedCard.toggleCardClick();
-        clickState = ClickState.NO_CLICK;
-        if (clickedCard.getIndex() == 0) game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn));
-        else game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()));
-        updateColumnView(clickedColumnView);
-        updateColumnView(columnView);
-        clickedColumnView = null;
-        clickedCard = null;
+        if (clickState == ClickState.CLICKED) {
+            Column targetColumn = columnView.getColumn();
+            clickedCard.toggleCardClick();
+            clickState = ClickState.NO_CLICK;
+            if (clickedCard.getIndex() == 0){
+                game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn));
+            } else{
+                game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()));
+            }
+            updateColumnView(clickedColumnView);
+            updateColumnView(columnView);
+        }
     }
 
     public void checkWinningCondition(String file_path) throws IOException {
@@ -94,7 +97,6 @@ public abstract class GameUI {
         for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
             CardView card = cv.getCardView(i);
             if (card.isClicked()) {
-                card.toggleCardClick();
                 return card;
             }
         }

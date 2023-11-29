@@ -15,12 +15,10 @@ import java.io.IOException;
 
 public class SpiderUI extends GameUI{
 
-    private static final int W = 780;
-    private static final int H = 620;
+    private static final int W = 880;
+    private static final int H = 718;
     private static final  int AMOUNT_COLUMNS = 10;
     private static final  int AMOUNT_FOUNDATIONS = 8;
-
-    private static final String FILE_PATH = "savedGame.txt";
 
     @Override
     public void setUpGame(Stage stage, Game game) throws IOException {
@@ -55,7 +53,7 @@ public class SpiderUI extends GameUI{
             if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
             if(clickedCard != null) {
                 clickedCard.toggleCardClick();
-                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), clickedFoundation, 12))) {
+                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), clickedFoundationView.getFoundation(), 12))) {
                     updateColumnView(clickedColumnView);
                     updateFoundations(AMOUNT_FOUNDATIONS);
                 }
@@ -63,7 +61,7 @@ public class SpiderUI extends GameUI{
             }
             clickedColumnView = null;
         }
-        clickedFoundation = null;
+        clickedFoundationView = null;
         clickState = ClickState.NO_CLICK;
         updateFoundations(AMOUNT_FOUNDATIONS);
         checkWinningCondition(FILE_PATH);

@@ -3,10 +3,8 @@ import GameType.KlondikeRules;
 import GameType.SpiderRules;
 import Solitaire.Game;
 import UI.KlondikeUI;
-//import UI.Menu;
 import UI.SpiderUI;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,8 +24,8 @@ import java.util.Random;
 
 public class Main extends Application {
 
-    private static final int H =640;
-    private static final int W =480;
+    private static final int H =754;
+    private static final int W =680;
     private static final String TITLE = "Solitaire";
     private static final String SAVE_PATH = "savedGame.txt";
 
@@ -104,7 +102,7 @@ public class Main extends Application {
         Random random = new Random();
         if ("Klondike".equals(selectedGame)) {
             KlondikeUI klondikeUI = new KlondikeUI();
-            Game game = new Game(new KlondikeRules(),random.nextInt());
+            Game game = new Game(new KlondikeRules(), random.nextInt());
             klondikeUI.setUpGame(stage, game);
         } else if ("Spider".equals(selectedGame)) {
             SpiderUI spiderUI = new SpiderUI();

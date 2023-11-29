@@ -2,6 +2,7 @@ package UI;
 
 import Base.Card;
 import Base.Suit;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import java.util.HashMap;
@@ -16,60 +17,48 @@ public class CardView extends ImageView implements Clickable{
     private static final String BACK_IMAGE_NAME = "back-card";
     private boolean clickState;
     private int cardIndex;
+    private static final int H = 96;
+    private static final int W = 74;
 
+    private static final DropShadow SELECTED_EFFECT = new DropShadow();
+    static {
+        SELECTED_EFFECT.setColor(javafx.scene.paint.Color.YELLOW);
+        SELECTED_EFFECT.setWidth(W);
+        SELECTED_EFFECT.setHeight(H);
+    }
 
 
     public CardView() {
+        this.clickState = false;
+        setImage(new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX))));
+        setFitHeight(H);
+        setFitWidth(W);
+        setStyle("-fx-border-radius: 2; -fx-border-color: black");
+        setSmooth(true);
+    }
+
+    public CardView(Suit suit) {
+        this();
+        setImage(new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + suit.toString().toLowerCase() + IMAGE_SUFFIX))));
     }
 
     public CardView(Card card, int cardIndex) {
+        this();
         this.cardIndex = cardIndex;
-        this.clickState = false;
-        if (card.isFaceUp()) {
-            setImage(getPhoto(card));
-            setOnMouseClicked(event -> handleCardClick());
-        }
-        else setImage(new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX))));
-    }
-
-
-    public ImageView getImage(Card card){
-        if(card.isFaceUp()){
-            Image image = getPhoto(card);
-            ImageView i = new ImageView(image);
-            i.setFitHeight(79);
-            i.setFitWidth(61);
-            i.setStyle("-fx-border-radius: 2; -fx-border-color: black");
-            i.setOnMouseClicked(event -> handleCardClick());
-            return i;
-        } else {
-            return getBack();
-        }
+        setImage(getPhoto(card));
+        if(card.isFaceUp()) setOnMouseClicked(event -> handleCardClick());
     }
 
     public Image getPhoto(Card card){
-        Image image = cards.get(card);
-        if(image == null){
-            image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString().toLowerCase() + IMAGE_SUFFIX)));
-            cards.put(card, image);
+        if (card.isFaceUp()) {
+            Image image = cards.get(card);
+            if(image == null){
+                image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + card.getValue().getNumber() + card.getSuit().toString().toLowerCase() + IMAGE_SUFFIX)));
+                cards.put(card, image);
+            }
+            return image;
         }
-        return image;
-    }
-
-    public ImageView getBack(){
-        Image image = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX)));
-        ImageView back = new ImageView(image);
-        back.setFitHeight(79);
-        back.setFitWidth(61);
-        return back;
-    }
-
-    public ImageView getFoundationImage(Suit suit){
-        Image i = new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + suit.toString().toLowerCase() + IMAGE_SUFFIX)));
-        ImageView imageView = new ImageView(i);
-        imageView.setFitHeight(79);
-        imageView.setFitWidth(61);
-        return imageView;
+        else return (new Image(Objects.requireNonNull(CardView.class.getClassLoader().getResourceAsStream(IMAGE_LOCATION + BACK_IMAGE_NAME + IMAGE_SUFFIX))));
     }
 
     public void handleCardClick() {
@@ -79,6 +68,8 @@ public class CardView extends ImageView implements Clickable{
 
     public void toggleCardClick() {
         this.clickState = !clickState;
+        if(clickState) setEffect(SELECTED_EFFECT);
+        else setEffect(null);
     }
 
     @Override

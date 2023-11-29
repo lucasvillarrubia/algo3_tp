@@ -31,8 +31,6 @@ public class ColumnView extends StackPane implements Clickable {
         for (int i = column.cardCount()-1; 0<=i ; i--) {
             Card card = column.getCard(i);
             CardView cardView = new CardView(card, i);
-            cardView.setFitHeight(79);
-            cardView.setFitWidth(61);
             cardView.setTranslateY(OFFSET*offset);
             offset++;
             getChildren().add(cardView);

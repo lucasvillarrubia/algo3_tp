@@ -6,19 +6,19 @@ import javafx.scene.layout.HBox;
 
 public class StockView extends HBox{
 
-    CardView cardView = new CardView();
+//    CardView cardView = new CardView();
 
     public Button showStock() {
         Button button = new Button();
         button.setStyle("-fx-background-color: transparent; ");
-        button.setGraphic(cardView.getBack());
+        button.setGraphic(new CardView());
         eventHandler(button);
         return button;
     }
 
     public Button showEmptyStock() {
         Button button = new Button();
-        button.setStyle("-fx-border-color: black; -fx-background-color: green; -fx-border-radius:2 ; -fx-pref-width: 61;-fx-pref-height: 79");
+        button.setStyle("-fx-border-color: black; -fx-background-color: green; -fx-border-radius:2 ; -fx-pref-width: 74;-fx-pref-height: 96");
         return button;
     }
 

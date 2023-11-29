@@ -15,6 +15,7 @@ public class KlondikeRules implements Rules,Serializable{
 
         @Override
         public boolean isSequenceValid(Card prev, Card next) {
+                if(prev == null || next == null) return false;
                 int prevValue = prev.getNumber();
                 int nextValue = next.getNumber();
                 Color prevColor = prev.getColor();
