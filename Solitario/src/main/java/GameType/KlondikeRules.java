@@ -7,6 +7,7 @@ import java.util.List;
 import Base.*;
 import Elements.*;
 import Solitaire.Rules;
+import Solitaire.SolitaireType;
 
 public class KlondikeRules implements Rules,Serializable{
 
@@ -137,8 +138,8 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
 
-        public String getRulesString(){
-                return "Klondike";
+        public SolitaireType getType(){
+                return SolitaireType.KLONDIKE;
         }
 
 }

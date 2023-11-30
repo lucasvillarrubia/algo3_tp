@@ -2,6 +2,7 @@
 import GameType.KlondikeRules;
 import GameType.SpiderRules;
 import Solitaire.Game;
+import Solitaire.SolitaireType;
 import UI.KlondikeUI;
 import UI.SpiderUI;
 import javafx.application.Application;
@@ -27,7 +28,7 @@ public class Main extends Application {
     private static final int H =754;
     private static final int W =680;
     private static final String TITLE = "Solitaire";
-    private static final String SAVE_PATH = "savedGame.txt";
+    private static final String SAVE_PATH = "savedGame.ser";
 
     private File file = new File(SAVE_PATH);
 
@@ -69,7 +70,7 @@ public class Main extends Application {
         Text text = new Text("Choose your game type");
         text.setFont(Font.font("Arial", 28));
         text.setFill(Color.WHITE);
-        ComboBox<String> dropdown = dropDownMenu();
+        ComboBox<SolitaireType> dropdown = dropDownMenu();
         VBox vBox = new VBox(title,text, dropdown);
         vBox.setSpacing(20);
         vBox.setAlignment(Pos.CENTER);
@@ -90,21 +91,20 @@ public class Main extends Application {
         stage.show();
     }
 
-    public ComboBox<String> dropDownMenu(){
-        ComboBox<String> gameTypeCB = new ComboBox<>();
+    public ComboBox<SolitaireType> dropDownMenu(){
+        ComboBox<SolitaireType> gameTypeCB = new ComboBox<>();
         gameTypeCB.setPrefWidth(100);
-        gameTypeCB.getItems().addAll("Klondike", "Spider");
-        gameTypeCB.setValue("Choose...");
+        gameTypeCB.getItems().addAll(SolitaireType.KLONDIKE, SolitaireType.SPIDER);
         return gameTypeCB;
     }
 
-    public void openGame(Stage stage, String selectedGame) throws IOException {
+    public void openGame(Stage stage, SolitaireType selectedGame) throws IOException {
         Random random = new Random();
-        if ("Klondike".equals(selectedGame)) {
+        if (SolitaireType.KLONDIKE == selectedGame) {
             KlondikeUI klondikeUI = new KlondikeUI();
             Game game = new Game(new KlondikeRules(), random.nextInt());
             klondikeUI.setUpGame(stage, game);
-        } else if ("Spider".equals(selectedGame)) {
+        } else if (SolitaireType.SPIDER == selectedGame) {
             SpiderUI spiderUI = new SpiderUI();
             Game game = new Game(new SpiderRules(),random.nextInt());
             spiderUI.setUpGame(stage, game);
@@ -118,11 +118,11 @@ public class Main extends Application {
     private void openSavedGame(Stage stage) throws IOException, ClassNotFoundException {
         Game savedGame = Game.deserialize(file);
         switch (savedGame.getGameRules()) {
-            case "Klondike" -> {
+            case KLONDIKE -> {
                 KlondikeUI klondikeUI = new KlondikeUI();
                 klondikeUI.setUpGame(stage, savedGame);
             }
-            case "Spider" -> {
+            case SPIDER -> {
                 SpiderUI spiderUI = new SpiderUI();
                 spiderUI.setUpGame (stage, savedGame);
             }

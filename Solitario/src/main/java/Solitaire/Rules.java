@@ -30,6 +30,6 @@ public interface Rules {
 
         boolean isSequenceValid(Card prev, Card next);
 
-        String getRulesString();
+        SolitaireType getType();
 }
 

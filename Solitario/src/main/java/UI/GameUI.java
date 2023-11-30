@@ -35,7 +35,7 @@ public abstract class GameUI {
     protected FoundationView clickedFoundationView;
     protected CardView clickedCard;
     protected Stage LocalStage;
-    protected static final String FILE_PATH = "savedGame.txt";
+    protected static final String FILE_PATH = "savedGame.ser";
 
     public void handleColumnClick(MouseEvent event){
         ColumnView columnView = (ColumnView) ((StackPane)event.getSource()).getChildren().get(0);

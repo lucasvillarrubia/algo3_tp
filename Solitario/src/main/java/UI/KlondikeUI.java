@@ -51,6 +51,7 @@ public class KlondikeUI extends GameUI{
                 e.printStackTrace();
             }
         });
+        stage.setResizable(false);
         stage.show();
     }
 
