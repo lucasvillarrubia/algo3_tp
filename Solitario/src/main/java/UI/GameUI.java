@@ -55,7 +55,7 @@ public abstract class GameUI {
         }
         else {
             try {
-                acceptMoveToFoundation();
+                acceptMoveToFoundation(foundationView);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -63,7 +63,7 @@ public abstract class GameUI {
     }
 
     public void acceptMoveToColumn(ColumnView columnView){
-        if (clickState == ClickState.CLICKED) {
+        if (clickState == ClickState.CLICKED && clickedFoundationView == null) {
             Column targetColumn = columnView.getColumn();
             clickedCard.toggleCardClick();
             clickState = ClickState.NO_CLICK;
@@ -75,12 +75,13 @@ public abstract class GameUI {
             updateColumnView(clickedColumnView);
             updateColumnView(columnView);
         }
+        clickState = ClickState.NO_CLICK;
     }
 
-    public void checkWinningCondition(String filePath) throws IOException {
+    public void checkWinningCondition() throws IOException {
         if (game.gameStatus()) {
             showWinScene(LocalStage);
-            File file = new File(filePath);
+            File file = new File(FILE_PATH);
             if (file.exists()) {
                 file.deleteOnExit();
             }
@@ -158,7 +159,7 @@ public abstract class GameUI {
 
     public abstract void handleStockClick(MouseEvent event);
 
-    public abstract void acceptMoveToFoundation() throws IOException;
+    public abstract void acceptMoveToFoundation(FoundationView foundationView) throws IOException;
 
     public abstract void updateStockButton();
 

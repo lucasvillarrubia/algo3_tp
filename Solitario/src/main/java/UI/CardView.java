@@ -5,6 +5,8 @@ import Base.Suit;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +24,7 @@ public class CardView extends ImageView implements Clickable{
 
     private static final DropShadow SELECTED_EFFECT = new DropShadow();
     static {
-        SELECTED_EFFECT.setColor(javafx.scene.paint.Color.YELLOW);
+        SELECTED_EFFECT.setColor(Color.YELLOW);
         SELECTED_EFFECT.setWidth(W);
         SELECTED_EFFECT.setHeight(H);
     }
