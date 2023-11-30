@@ -1,5 +1,6 @@
 package UI;
 
+import Elements.Foundation;
 import Solitaire.Game;
 import Solitaire.Movement;
 import javafx.fxml.FXMLLoader;
@@ -48,12 +49,13 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void acceptMoveToFoundation() throws IOException{
+    public void acceptMoveToFoundation(FoundationView foundationView) throws IOException{
         if (clickedColumnView != null) {
+            Foundation targetFoundation = foundationView.getFoundation();
             if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
             if(clickedCard != null) {
                 clickedCard.toggleCardClick();
-                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), clickedFoundationView.getFoundation(), 12))) {
+                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetFoundation, 12))) {
                     updateColumnView(clickedColumnView);
                     updateFoundations(AMOUNT_FOUNDATIONS);
                 }
@@ -64,11 +66,12 @@ public class SpiderUI extends GameUI{
         clickedFoundationView = null;
         clickState = ClickState.NO_CLICK;
         updateFoundations(AMOUNT_FOUNDATIONS);
-        checkWinningCondition(FILE_PATH);
+        checkWinningCondition();
     }
 
     @Override
     public void handleStockClick(MouseEvent event) {
+        if (clickState == ClickState.CLICKED) clickState = ClickState.NO_CLICK;
         if(game.drawCardFromStock()){
             updateTableauView(AMOUNT_COLUMNS);
         }

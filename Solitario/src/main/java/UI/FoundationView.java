@@ -22,17 +22,6 @@ public class FoundationView extends StackPane implements Clickable {
         setOnMouseClicked(this::handleFoundationClick);
     }
 
-//    private void buildFoundation(){
-//        if(!foundation.isEmpty()) {
-//            ImageView image = cardView.getImage(foundation.getLast());
-//            getChildren().add(image);
-//        } else {
-//            ImageView image = cardView.getFoundationImage(suit);
-//            image.setStyle("-fx-opacity: 10%");
-//            getChildren().add(image);
-//        }
-//    }
-
     private void buildFoundation(){
         if(!foundation.isEmpty()) {
             CardView image = new CardView(foundation.getLast(), foundation.cardCount()-1);

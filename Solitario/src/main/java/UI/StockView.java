@@ -6,7 +6,6 @@ import javafx.scene.layout.HBox;
 
 public class StockView extends HBox{
 
-//    CardView cardView = new CardView();
 
     public Button showStock() {
         Button button = new Button();

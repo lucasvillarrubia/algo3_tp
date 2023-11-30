@@ -49,17 +49,21 @@ public abstract class GameUI {
 
     public void handleFoundationClick(MouseEvent event) {
         FoundationView foundationView = (FoundationView) ((StackPane) event.getSource()).getChildren().get(0);
-        clickedFoundationView = foundationView;
-        clickState = ClickState.CLICKED;
-        try {
-            acceptMoveToFoundation();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (clickState == ClickState.NO_CLICK) {
+            clickedFoundationView = foundationView;
+            clickState = ClickState.CLICKED;
+        }
+        else {
+            try {
+                acceptMoveToFoundation(foundationView);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public void acceptMoveToColumn(ColumnView columnView){
-        if (clickState == ClickState.CLICKED) {
+        if (clickState == ClickState.CLICKED && clickedFoundationView == null) {
             Column targetColumn = columnView.getColumn();
             clickedCard.toggleCardClick();
             clickState = ClickState.NO_CLICK;
@@ -71,12 +75,13 @@ public abstract class GameUI {
             updateColumnView(clickedColumnView);
             updateColumnView(columnView);
         }
+        clickState = ClickState.NO_CLICK;
     }
 
-    public void checkWinningCondition(String file_path) throws IOException {
+    public void checkWinningCondition() throws IOException {
         if (game.gameStatus()) {
             showWinScene(LocalStage);
-            File file = new File(file_path);
+            File file = new File(FILE_PATH);
             if (file.exists()) {
                 file.deleteOnExit();
             }
@@ -154,7 +159,7 @@ public abstract class GameUI {
 
     public abstract void handleStockClick(MouseEvent event);
 
-    public abstract void acceptMoveToFoundation() throws IOException;
+    public abstract void acceptMoveToFoundation(FoundationView foundationView) throws IOException;
 
     public abstract void updateStockButton();
 
