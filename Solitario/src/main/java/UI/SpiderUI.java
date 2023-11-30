@@ -69,6 +69,7 @@ public class SpiderUI extends GameUI{
 
     @Override
     public void handleStockClick(MouseEvent event) {
+        if (clickState == ClickState.CLICKED) clickState = ClickState.NO_CLICK;
         if(game.drawCardFromStock()){
             updateTableauView(AMOUNT_COLUMNS);
         }

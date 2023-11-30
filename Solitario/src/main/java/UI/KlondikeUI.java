@@ -62,9 +62,9 @@ public class KlondikeUI extends GameUI{
                     updateFoundations(AMOUNT_FOUNDATIONS);
                 }
 //                clickedCard.toggleCardClick();
-                ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
+                // ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
                 clickedColumnView = null;
-                ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
+                // ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
                 clickedFoundationView = null;
                 clickState = ClickState.NO_CLICK;
             } else if (wasteIsClicked) {
@@ -73,12 +73,12 @@ public class KlondikeUI extends GameUI{
                     stockIndex--;
                     game.drawCardFromStock();
                     updateWaste();
-                    ((CardView)waste.getChildren().get(0)).toggleCardClick();
+                    // ((CardView)waste.getChildren().get(0)).toggleCardClick();
                     if (stockIndex == 0) waste.getChildren().clear();
                 }
                 wasteIsClicked = false;
-                if (stockIndex != 0) ((CardView)waste.getChildren().get(0)).toggleCardClick();
-                ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
+                // if (stockIndex != 0) ((CardView)waste.getChildren().get(0)).toggleCardClick();
+                // ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
                 clickedFoundationView = null;
                 clickState = ClickState.NO_CLICK;
             }
@@ -96,21 +96,21 @@ public class KlondikeUI extends GameUI{
                 stockIndex--;
                 game.drawCardFromStock();
                 updateWaste();
-                ((CardView)waste.getChildren().get(0)).toggleCardClick();
+                // ((CardView)waste.getChildren().get(0)).toggleCardClick();
                 if (stockIndex == 0) waste.getChildren().clear();
             }
             wasteIsClicked = false;
-            if (stockIndex != 0) ((CardView)waste.getChildren().get(0)).toggleCardClick();
-            ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
+            // if (stockIndex != 0) ((CardView)waste.getChildren().get(0)).toggleCardClick();
+            // ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
             updateColumnView(clickedColumnView);
         } else if (clickedFoundationView != null) {
             clickedColumnView = columnView;
             if (game.makeAMove(new Movement(clickedFoundationView.getFoundation(), clickedColumnView.getColumn()))) {
                 updateFoundations(AMOUNT_FOUNDATIONS);
             }
-            ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
+            // ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
             updateColumnView(clickedColumnView);
-            ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
+            // ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
         }
         clickedColumnView = null;
         clickedCard = null;
@@ -146,6 +146,7 @@ public class KlondikeUI extends GameUI{
 
     @Override
     public void handleStockClick(MouseEvent event){
+        if (clickState == ClickState.CLICKED) clickState = ClickState.NO_CLICK;
         stockIndex++;
         game.drawCardFromStock();
         updateStockButton();
@@ -153,8 +154,22 @@ public class KlondikeUI extends GameUI{
     }
 
     private void handleWasteCardClick(MouseEvent event) {
-        clickState = ClickState.CLICKED;
-        wasteIsClicked = true;
+        if (clickState == ClickState.NO_CLICK) {
+            wasteIsClicked = true;
+            clickState = ClickState.CLICKED;
+        }
+        else {
+            if(clickedColumnView != null) {
+            //     ((CardView)waste.getChildren().get(0)).toggleCardClick();
+            //     ((CardView)clickedColumnView.getChildren().get(clickedColumnView.getChildren().size()-1)).toggleCardClick();
+                clickedColumnView = null;
+            } else if(clickedFoundationView != null) {
+                // ((CardView)waste.getChildren().get(0)).toggleCardClick();
+                // ((CardView)clickedFoundationView.getChildren().get(0)).toggleCardClick();
+                clickedFoundationView = null;
+            }
+            clickState = ClickState.NO_CLICK;
+        }
     }
 
 
@@ -167,6 +182,15 @@ public class KlondikeUI extends GameUI{
             waste.setOnMouseClicked(this::handleWasteCardClick);
         } else if(game.getStock().isEmpty()){
             waste.getChildren().clear();
+        }
+    }
+
+    public void desclickearTodo() {
+        for (int i = 0; i < AMOUNT_COLUMNS; i++) {
+
+        }
+        for (int j = 0; j < AMOUNT_FOUNDATIONS; j++) {
+            ((CardView)((StackPane)foundations.getChildren().get(j)).getChildren().get(0)).toggleCardClick();
         }
     }
 

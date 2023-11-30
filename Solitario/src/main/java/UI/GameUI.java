@@ -49,12 +49,16 @@ public abstract class GameUI {
 
     public void handleFoundationClick(MouseEvent event) {
         FoundationView foundationView = (FoundationView) ((StackPane) event.getSource()).getChildren().get(0);
-        clickedFoundationView = foundationView;
-        clickState = ClickState.CLICKED;
-        try {
-            acceptMoveToFoundation();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (clickState == ClickState.NO_CLICK) {
+            clickedFoundationView = foundationView;
+            clickState = ClickState.CLICKED;
+        }
+        else {
+            try {
+                acceptMoveToFoundation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -73,10 +77,10 @@ public abstract class GameUI {
         }
     }
 
-    public void checkWinningCondition(String file_path) throws IOException {
+    public void checkWinningCondition(String filePath) throws IOException {
         if (game.gameStatus()) {
             showWinScene(LocalStage);
-            File file = new File(file_path);
+            File file = new File(filePath);
             if (file.exists()) {
                 file.deleteOnExit();
             }
