@@ -71,22 +71,6 @@ public abstract class GameUI {
         }
     }
 
-//    protected void updateDeckView2 (Clickable deckView) {
-//        int deckIndex = deckView.getIndex();
-//        Visitable deck = deckView.getDeck();
-//        if (deckView instanceof ColumnView) {
-//            ColumnView updatedView = new ColumnView((Column)deck, deckIndex);
-//            StackPane stackPane = (StackPane) tableau.getChildren().get(deckIndex);
-//            stackPane.getChildren().clear();
-//            stackPane.getChildren().add(updatedView);
-//        }
-//        else if (deckView instanceof FoundationView) {
-//            FoundationView updatedView = new FoundationView((Foundation)deck, deckIndex);
-//            StackPane stackPane = (StackPane) foundations.getChildren().get(deckIndex);
-//            stackPane.getChildren().clear();
-//            stackPane.getChildren().add(updatedView);
-//        }
-//    }
 
     protected void updateDeckView (Clickable deckView) {
         int deckIndex = deckView.getIndex();
