@@ -1,15 +1,13 @@
 package UI;
 
-import Elements.Foundation;
+import Base.Deck;
 import Solitaire.Game;
-import Solitaire.Movement;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
@@ -23,7 +21,6 @@ public class SpiderUI extends GameUI{
 
     @Override
     public void setUpGame(Stage stage, Game game) throws IOException {
-        this.clickState = ClickState.NO_CLICK;
         this.LocalStage = stage;
         this.game = game;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/SpiderBase.fxml"));
@@ -49,29 +46,11 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void acceptMoveToFoundation(FoundationView foundationView) throws IOException{
-        if (clickedColumnView != null) {
-            Foundation targetFoundation = foundationView.getFoundation();
-            if (clickedCard == null) clickedCard = getClickedCard(clickedColumnView);
-            if(clickedCard != null) {
-                clickedCard.toggleCardClick();
-                if (game.makeAMove(new Movement(clickedColumnView.getColumn(), targetFoundation, 12))) {
-                    updateColumnView(clickedColumnView);
-                    updateFoundations(AMOUNT_FOUNDATIONS);
-                }
-                clickedCard = null;
-            }
-            clickedColumnView = null;
-        }
-        clickedFoundationView = null;
-        clickState = ClickState.NO_CLICK;
-        updateFoundations(AMOUNT_FOUNDATIONS);
-        checkWinningCondition();
-    }
-
-    @Override
     public void handleStockClick(MouseEvent event) {
-        if (clickState == ClickState.CLICKED) clickState = ClickState.NO_CLICK;
+        if (sourceDeck != null) {
+            if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
+            sourceDeck = null;
+        }
         if(game.drawCardFromStock()){
             updateTableauView(AMOUNT_COLUMNS);
         }

@@ -2,28 +2,21 @@ package UI;
 
 import Base.Card;
 import Elements.Column;
-import javafx.scene.input.MouseEvent;
+import Elements.Visitable;
 import javafx.scene.layout.StackPane;
 
 
 public class ColumnView extends StackPane implements Clickable {
 
     private final static int OFFSET = 20;
-
     private final Column column;
+    private final int index;
+    private int clickedCardViewIndex;
 
-    private int number;
-
-    private boolean clickState;
-
-    public ColumnView(Column column) {
+    public ColumnView(Column column, int index) {
         this.column = column;
+        this.index = index;
         buildColumn(column);
-        clickState = false;
-    }
-
-    public Column getColumn(){
-        return column;
     }
 
     private void buildColumn(Column column) {
@@ -35,35 +28,38 @@ public class ColumnView extends StackPane implements Clickable {
             offset++;
             getChildren().add(cardView);
         }
-        setOnMouseClicked(this::handleColumnClick);
     }
 
     public CardView getCardView(int i){
          return (CardView) this.getChildren().get(i);
     }
 
-    public void toggleColumnClick() {
-        clickState = !clickState;
-    }
-
-    public void handleColumnClick(MouseEvent event) {
-        toggleColumnClick();
-    }
-
-
-    @Override
-    public boolean isClicked() {
-        return clickState;
-    }
-
-    @Override
-    public void setIndex(int i) {
-        this.number = i;
-    }
-
     @Override
     public int getIndex() {
-        return number;
+        return index;
+    }
+
+    @Override
+    public int getClickedCardIndex() {
+        for(int i = column.cardCount()-1; 0<=i ; i--){
+            CardView card = getCardView(i);
+            if (card.isClicked()) {
+                clickedCardViewIndex = i;
+                return card.getIndex();
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public Visitable getDeck() { return column; }
+
+    @Override
+    public void turnOffSelectedCard() {
+        if (!getChildren().isEmpty()) {
+            getClickedCardIndex();
+            ((CardView) getChildren().get(clickedCardViewIndex)).unselectCard();
+        }
     }
 
 }

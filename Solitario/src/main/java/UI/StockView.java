@@ -1,11 +1,12 @@
 package UI;
 
+
 import javafx.scene.control.Button;
+
 import javafx.scene.layout.HBox;
 
 
 public class StockView extends HBox{
-
 
     public Button showStock() {
         Button button = new Button();

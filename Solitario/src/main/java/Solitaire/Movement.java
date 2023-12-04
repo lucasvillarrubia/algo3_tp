@@ -51,7 +51,7 @@ public class Movement implements DeckVisitor {
 
     @Override
     public void visit(Stock s) {
-        if (!sourceChecked) this.validMove = rules.givesCard(s);
+        if (!sourceChecked) this.validMove = rules.givesCard(s) && !s.isEmpty();
         else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(s, sequenceToMove);
         else if (cardIndex == 0) this.validMove = rules.acceptsCard(s, ((Deck)from).getLast());
         else validMove = false;
@@ -59,7 +59,7 @@ public class Movement implements DeckVisitor {
 
     @Override
     public void visit(Foundation f) {
-        if (!sourceChecked) this.validMove = rules.givesCard(f);
+        if (!sourceChecked) this.validMove = rules.givesCard(f) && !f.isEmpty();
         else if (cardIndex != 0 && sequenceToMove != null) this.validMove = rules.admitsSequence(f, sequenceToMove);
         else if (cardIndex == 0) this.validMove = rules.acceptsCard(f, ((Deck)from).getLast());
         else validMove = false;
@@ -68,7 +68,7 @@ public class Movement implements DeckVisitor {
     @Override
     public void visit(Column c) {
         if (!sourceChecked) {
-            this.validMove = rules.givesCard(c);
+            this.validMove = rules.givesCard(c) && !c.isEmpty();
             if (cardIndex != 0){
                 this.sequenceToMove = c.getSequence(cardIndex);
             }

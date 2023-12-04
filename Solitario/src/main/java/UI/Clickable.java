@@ -1,12 +1,14 @@
 package UI;
 
-
+import Elements.Visitable;
 public interface Clickable {
 
-    boolean isClicked();
-
-    void setIndex(int i);
-
     int getIndex();
+
+    int getClickedCardIndex();
+
+    Visitable getDeck();
+
+    void turnOffSelectedCard();
 
 }
