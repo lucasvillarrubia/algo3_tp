@@ -9,6 +9,8 @@ public class WasteView extends StackPane implements Clickable {
 
     private final Stock stock;
     private final int index;
+    private static final int ERROR = -1;
+    private static final int OK = 0;
 
     public WasteView(Stock stock){
         this.stock = stock;
@@ -33,8 +35,8 @@ public class WasteView extends StackPane implements Clickable {
 
     @Override
     public int getClickedCardIndex() {
-        if (getChildren().isEmpty()) return -1;
-        else return 0;
+        if (getChildren().isEmpty()) return ERROR;
+        else return OK;
     }
 
     @Override

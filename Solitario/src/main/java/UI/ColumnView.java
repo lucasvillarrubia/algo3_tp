@@ -12,6 +12,7 @@ public class ColumnView extends StackPane implements Clickable {
     private final Column column;
     private final int index;
     private int clickedCardViewIndex;
+    private static final int ERROR = -1;
 
     public ColumnView(Column column, int index) {
         this.column = column;
@@ -48,7 +49,7 @@ public class ColumnView extends StackPane implements Clickable {
                 return card.getIndex();
             }
         }
-        return -1;
+        return ERROR;
     }
 
     @Override

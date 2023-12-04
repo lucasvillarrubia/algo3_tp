@@ -10,6 +10,8 @@ public class FoundationView extends StackPane implements Clickable {
     Suit suit;
     Foundation foundation;
     private final int index;
+    private static final int ERROR = -1;
+    private static final int OK = 0;
 
     public FoundationView(Foundation foundation, int index) {
         this.suit = foundation.getSuit();
@@ -36,8 +38,8 @@ public class FoundationView extends StackPane implements Clickable {
 
     @Override
     public int getClickedCardIndex() {
-        if (foundation.isEmpty()) return -1;
-        else return 0;
+        if (foundation.isEmpty()) return ERROR;
+        else return OK;
     }
 
     @Override

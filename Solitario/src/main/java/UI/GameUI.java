@@ -38,12 +38,14 @@ public abstract class GameUI {
     protected Clickable goalDeck;
     protected int clickedCardIndex;
 
+    private static final int ERROR = -1;
+
 
     protected void handleClick (MouseEvent event) throws IOException {
         Clickable deckView = (Clickable) ((StackPane)event.getSource()).getChildren().get(0);
         if (sourceDeck == null && deckView != null) {
             int index = deckView.getClickedCardIndex();
-            if (index != -1) {
+            if (index != ERROR) {
                 sourceDeck = deckView;
                 clickedCardIndex = deckView.getClickedCardIndex();
             }
