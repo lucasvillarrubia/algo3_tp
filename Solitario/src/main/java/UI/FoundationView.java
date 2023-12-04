@@ -2,24 +2,22 @@ package UI;
 
 import Base.Suit;
 import Elements.Foundation;
-import javafx.scene.input.MouseEvent;
+import Elements.Visitable;
 import javafx.scene.layout.StackPane;
-
 
 public class FoundationView extends StackPane implements Clickable {
 
-
     Suit suit;
     Foundation foundation;
-    private boolean clickState;
-    private int number;
+    private final int index;
+    private static final int ERROR = -1;
+    private static final int OK = 0;
 
-    public FoundationView(Foundation foundation) {
+    public FoundationView(Foundation foundation, int index) {
         this.suit = foundation.getSuit();
         this.foundation = foundation;
-        this.clickState = false;
+        this.index = index;
         buildFoundation();
-        setOnMouseClicked(this::handleFoundationClick);
     }
 
     private void buildFoundation(){
@@ -33,29 +31,23 @@ public class FoundationView extends StackPane implements Clickable {
         }
     }
 
-    public void toggleFoundationClick() { clickState = !clickState; }
-
-    private void handleFoundationClick(MouseEvent event) {
-        toggleFoundationClick();
-    }
-
-    public Foundation getFoundation() {
-        return foundation;
-    }
-
-
-    @Override
-    public boolean isClicked() {
-        return clickState;
-    }
-
-    @Override
-    public void setIndex(int id) {
-        this.number = id;
-    }
-
     @Override
     public int getIndex() {
-        return number;
+        return index;
     }
+
+    @Override
+    public int getClickedCardIndex() {
+        if (foundation.isEmpty()) return ERROR;
+        else return OK;
+    }
+
+    @Override
+    public Visitable getDeck() { return foundation; }
+
+    @Override
+    public void turnOffSelectedCard() {
+        if (!getChildren().isEmpty()) ((CardView) getChildren().get(getClickedCardIndex())).unselectCard();
+    }
+
 }

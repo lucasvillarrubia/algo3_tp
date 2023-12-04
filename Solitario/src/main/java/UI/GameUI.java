@@ -1,7 +1,9 @@
 package UI;
 
+import Base.Deck;
 import Elements.Column;
 import Elements.Foundation;
+import Elements.Visitable;
 import Solitaire.Game;
 import Solitaire.Movement;
 import javafx.fxml.FXML;
@@ -27,58 +29,70 @@ public abstract class GameUI {
     @FXML
     HBox stockPile;
     @FXML
-    Text moves ;
+    Text moves;
 
     protected Game game;
-    protected ClickState clickState;
-    protected ColumnView clickedColumnView;
-    protected FoundationView clickedFoundationView;
-    protected CardView clickedCard;
     protected Stage LocalStage;
-    protected static final String FILE_PATH = "savedGame.txt";
+    protected static final String FILE_PATH = "savedGame.ser";
+    protected Clickable sourceDeck;
+    protected Clickable goalDeck;
+    protected int clickedCardIndex;
 
-    public void handleColumnClick(MouseEvent event){
-        ColumnView columnView = (ColumnView) ((StackPane)event.getSource()).getChildren().get(0);
-        if (clickState == ClickState.NO_CLICK) {
-            columnView.toggleColumnClick();
-            clickedColumnView = columnView;
-            clickState = ClickState.CLICKED;
-            clickedCard = getClickedCard(clickedColumnView);
-        } else acceptMoveToColumn(columnView);
-    }
+    private static final int ERROR = -1;
 
-    public void handleFoundationClick(MouseEvent event) {
-        FoundationView foundationView = (FoundationView) ((StackPane) event.getSource()).getChildren().get(0);
-        if (clickState == ClickState.NO_CLICK) {
-            clickedFoundationView = foundationView;
-            clickState = ClickState.CLICKED;
+
+    protected void handleClick (MouseEvent event) throws IOException {
+        Clickable deckView = (Clickable) ((StackPane)event.getSource()).getChildren().get(0);
+        if (sourceDeck == null && deckView != null) {
+            int index = deckView.getClickedCardIndex();
+            if (index != ERROR) {
+                sourceDeck = deckView;
+                clickedCardIndex = deckView.getClickedCardIndex();
+            }
         }
-        else {
-            try {
-                acceptMoveToFoundation(foundationView);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        else if (deckView != null) {
+            if (deckView != sourceDeck) {
+                goalDeck = deckView;
+                if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
+                if (!((Deck)goalDeck.getDeck()).isEmpty()) goalDeck.turnOffSelectedCard();
+                if (game.makeAMove(new Movement(sourceDeck.getDeck(), goalDeck.getDeck(), clickedCardIndex))) {
+                    updateDeckView(sourceDeck);
+                    updateDeckView(goalDeck);
+                    checkWinningCondition();
+                }
+                sourceDeck = null;
+                goalDeck = null;
+            }
+            else {
+                if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
+                if (!((Deck)deckView.getDeck()).isEmpty()) deckView.turnOffSelectedCard();
+                sourceDeck = null;
             }
         }
     }
 
-    public void acceptMoveToColumn(ColumnView columnView){
-        if (clickState == ClickState.CLICKED && clickedFoundationView == null) {
-            Column targetColumn = columnView.getColumn();
-            clickedCard.toggleCardClick();
-            clickState = ClickState.NO_CLICK;
-            if (clickedCard.getIndex() == 0){
-                game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn));
-            } else{
-                game.makeAMove(new Movement(clickedColumnView.getColumn(), targetColumn, clickedCard.getIndex()));
-            }
-            updateColumnView(clickedColumnView);
-            updateColumnView(columnView);
+
+    protected void updateDeckView (Clickable deckView) {
+        int deckIndex = deckView.getIndex();
+        Visitable deck = deckView.getDeck();
+        if (deckView instanceof ColumnView) {
+            ColumnView updatedView = new ColumnView((Column)deck, deckIndex);
+            updatePane(tableau, updatedView);
         }
-        clickState = ClickState.NO_CLICK;
+        else if (deckView instanceof FoundationView) {
+            FoundationView updatedView = new FoundationView((Foundation)deck, deckIndex);
+            updatePane(foundations, updatedView);
+        }
     }
 
-    public void checkWinningCondition() throws IOException {
+    protected void updatePane (Pane editedPane, Clickable updatedView) {
+        int deckIndex = updatedView.getIndex();
+        StackPane stackPane = (StackPane) editedPane.getChildren().get(deckIndex);
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add((StackPane)updatedView);
+    }
+
+    protected void checkWinningCondition() throws IOException {
         if (game.gameStatus()) {
             showWinScene(LocalStage);
             File file = new File(FILE_PATH);
@@ -88,63 +102,49 @@ public abstract class GameUI {
         }
     }
 
-    public void setEventHandlers(int columns, int foundation){
+    protected void setEventHandlers(int columns, int foundation){
         for(int i = 0; i < columns; i++){
-            tableau.getChildren().get(i).setOnMouseClicked(this::handleColumnClick);
+            tableau.getChildren().get(i).setOnMouseClicked(event -> {
+                try {
+                    handleClick(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
         for(int j = 0; j < foundation; j++){
-            foundations.getChildren().get(j).setOnMouseClicked(this::handleFoundationClick);
+            foundations.getChildren().get(j).setOnMouseClicked(event -> {
+                try {
+                    handleClick(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
         stockPile.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
 
-    public CardView getClickedCard (ColumnView cv) {
-        for(int i = cv.getColumn().cardCount()-1; 0<=i ; i--){
-            CardView card = cv.getCardView(i);
-            if (card.isClicked()) {
-                return card;
-            }
-        }
-        return null;
-    }
-
-    public void updateTableauView(int amountColumns){
+    protected void updateTableauView(int amountColumns){
         for(int i = 0 ;i< amountColumns; i++){
             Column column =game.getColumn(i);
-            ColumnView columnView = new ColumnView(column);
-            columnView.setIndex(i);
+            ColumnView columnView = new ColumnView(column, i);
             StackPane stackPane =(StackPane) tableau.getChildren().get(i);
             stackPane.getChildren().clear();
             stackPane.getChildren().add(columnView);
         }
     }
 
-    public void updateFoundations(int amountFoundations){
+    protected void updateFoundations(int amountFoundations){
         for (int i = 0; i < amountFoundations; i++) {
             Foundation foundation = game.getFoundation(i);
-            FoundationView foundationView = new FoundationView(foundation);
-            foundationView.setIndex(i);
+            FoundationView foundationView = new FoundationView(foundation, i);
             StackPane stackPane = (StackPane) foundations.getChildren().get(i);
             stackPane.getChildren().clear();
             stackPane.getChildren().add(foundationView);
         }
     }
 
-    public void updateColumnView(ColumnView columnView){
-        int columnIndex = columnView.getIndex();
-        Column column = game.getColumn(columnIndex);
-        boolean isClicked = columnView.isClicked();
-        ColumnView updatedColumnView = new ColumnView(column);
-        updatedColumnView.setIndex(columnIndex);
-        if (isClicked) {
-            updatedColumnView.toggleColumnClick();
-        }
-        StackPane stackPane = (StackPane) tableau.getChildren().get(columnIndex);
-        stackPane.getChildren().clear();
-        stackPane.getChildren().add(updatedColumnView);
-    }
-
-    public void showWinScene(Stage stage) throws IOException {
+    protected void showWinScene(Stage stage) throws IOException {
         FXMLLoader winLoader = new FXMLLoader(getClass().getResource("/WinScene.fxml"));
         winLoader.setController(this);
         Parent winRoot = winLoader.load();
@@ -157,10 +157,8 @@ public abstract class GameUI {
 
     public abstract void setUpGame(Stage stage, Game game) throws IOException;
 
-    public abstract void handleStockClick(MouseEvent event);
+    protected abstract void handleStockClick(MouseEvent event);
 
-    public abstract void acceptMoveToFoundation(FoundationView foundationView) throws IOException;
-
-    public abstract void updateStockButton();
+    protected abstract void updateStockButton();
 
 }

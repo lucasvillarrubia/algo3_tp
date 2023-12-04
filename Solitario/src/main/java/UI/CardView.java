@@ -1,5 +1,6 @@
 package UI;
 
+
 import Base.Card;
 import Base.Suit;
 import javafx.scene.effect.DropShadow;
@@ -11,7 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class CardView extends ImageView implements Clickable{
+
+public class CardView extends ImageView {
 
     private static final Map<Card, Image> cards = new HashMap<>();
     private static final String IMAGE_LOCATION = "images/cards/";
@@ -21,14 +23,12 @@ public class CardView extends ImageView implements Clickable{
     private int cardIndex;
     private static final int H = 96;
     private static final int W = 74;
-
     private static final DropShadow SELECTED_EFFECT = new DropShadow();
     static {
         SELECTED_EFFECT.setColor(Color.YELLOW);
         SELECTED_EFFECT.setWidth(W);
         SELECTED_EFFECT.setHeight(H);
     }
-
 
     public CardView() {
         this.clickState = false;
@@ -64,30 +64,17 @@ public class CardView extends ImageView implements Clickable{
     }
 
     public void handleCardClick() {
-        toggleCardClick();
+        setEffect(SELECTED_EFFECT);
+        clickState = true;
     }
 
-
-    public void toggleCardClick() {
-        this.clickState = !clickState;
-        if(clickState) setEffect(SELECTED_EFFECT);
-        else setEffect(null);
+    public void unselectCard() {
+        setEffect(null);
+        clickState = false;
     }
 
-    @Override
-    public boolean isClicked() {
-        return clickState;
-    }
+    public boolean isClicked() { return clickState; }
 
-
-    @Override
-    public void setIndex(int i) {
-        this.cardIndex = i;
-    }
-
-    @Override
-    public int getIndex() {
-        return cardIndex;
-    }
+    public int getIndex() { return cardIndex; }
 
 }

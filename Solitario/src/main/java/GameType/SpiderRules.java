@@ -7,6 +7,7 @@ import Elements.Column;
 import Elements.Foundation;
 import Elements.Stock;
 import Solitaire.Rules;
+import Solitaire.SolitaireType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -152,7 +153,7 @@ public class SpiderRules implements Rules, Serializable {
         return true;
     }
 
-    public String getRulesString(){
-        return "Spider";
+    public SolitaireType getRulesString(){
+        return SolitaireType.SPIDER;
     }
 }

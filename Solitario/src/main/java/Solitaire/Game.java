@@ -110,7 +110,7 @@ public class Game implements Serializable {
     }
 
     public void serialize() throws IOException {
-        File file = new File("savedGame.txt");
+        File file = new File("savedGame.ser");
         try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(file))) {
             objectOutStream.writeObject(this);
             objectOutStream.flush();
@@ -138,7 +138,7 @@ public class Game implements Serializable {
         else return false;
     }
 
-    public String getGameRules(){
+    public SolitaireType getGameRules(){
         return gameRules.getRulesString();
     }
 
