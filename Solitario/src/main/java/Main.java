@@ -102,7 +102,7 @@ public class Main extends Application {
         Random random = new Random();
         if (SolitaireType.KLONDIKE ==selectedGame) {
             KlondikeUI klondikeUI = new KlondikeUI();
-            Game game = new Game(new KlondikeRules(),10);
+            Game game = new Game(new KlondikeRules(), random.nextInt());
             klondikeUI.setUpGame(stage, game);
         } else if (SolitaireType.SPIDER == selectedGame) {
             SpiderUI spiderUI = new SpiderUI();
