@@ -48,17 +48,24 @@ public abstract class GameUI {
                 clickedCardIndex = deckView.getClickedCardIndex();
             }
         }
-        else if (deckView != null && deckView != sourceDeck) {
-            goalDeck = deckView;
-            if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
-            if (!((Deck)goalDeck.getDeck()).isEmpty()) goalDeck.turnOffSelectedCard();
-            if (game.makeAMove(new Movement(sourceDeck.getDeck(), goalDeck.getDeck(), clickedCardIndex))) {
-                updateDeckView(sourceDeck);
-                updateDeckView(goalDeck);
-                checkWinningCondition();
+        else if (deckView != null) {
+            if (deckView != sourceDeck) {
+                goalDeck = deckView;
+                if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
+                if (!((Deck)goalDeck.getDeck()).isEmpty()) goalDeck.turnOffSelectedCard();
+                if (game.makeAMove(new Movement(sourceDeck.getDeck(), goalDeck.getDeck(), clickedCardIndex))) {
+                    updateDeckView(sourceDeck);
+                    updateDeckView(goalDeck);
+                    checkWinningCondition();
+                }
+                sourceDeck = null;
+                goalDeck = null;
             }
-            sourceDeck = null;
-            goalDeck = null;
+            else {
+                if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
+                if (!((Deck)deckView.getDeck()).isEmpty()) deckView.turnOffSelectedCard();
+                sourceDeck = null;
+            }
         }
     }
 
