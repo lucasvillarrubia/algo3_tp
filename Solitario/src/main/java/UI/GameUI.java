@@ -39,7 +39,7 @@ public abstract class GameUI {
     protected int clickedCardIndex;
 
 
-    public void handleClick (MouseEvent event) throws IOException {
+    protected void handleClick (MouseEvent event) throws IOException {
         Clickable deckView = (Clickable) ((StackPane)event.getSource()).getChildren().get(0);
         if (sourceDeck == null && deckView != null) {
             int index = deckView.getClickedCardIndex();
@@ -69,24 +69,44 @@ public abstract class GameUI {
         }
     }
 
-    public void updateDeckView (Clickable deckView) {
+//    protected void updateDeckView2 (Clickable deckView) {
+//        int deckIndex = deckView.getIndex();
+//        Visitable deck = deckView.getDeck();
+//        if (deckView instanceof ColumnView) {
+//            ColumnView updatedView = new ColumnView((Column)deck, deckIndex);
+//            StackPane stackPane = (StackPane) tableau.getChildren().get(deckIndex);
+//            stackPane.getChildren().clear();
+//            stackPane.getChildren().add(updatedView);
+//        }
+//        else if (deckView instanceof FoundationView) {
+//            FoundationView updatedView = new FoundationView((Foundation)deck, deckIndex);
+//            StackPane stackPane = (StackPane) foundations.getChildren().get(deckIndex);
+//            stackPane.getChildren().clear();
+//            stackPane.getChildren().add(updatedView);
+//        }
+//    }
+
+    protected void updateDeckView (Clickable deckView) {
         int deckIndex = deckView.getIndex();
         Visitable deck = deckView.getDeck();
         if (deckView instanceof ColumnView) {
             ColumnView updatedView = new ColumnView((Column)deck, deckIndex);
-            StackPane stackPane = (StackPane) tableau.getChildren().get(deckIndex);
-            stackPane.getChildren().clear();
-            stackPane.getChildren().add(updatedView);
+            updatePane(tableau, updatedView);
         }
         else if (deckView instanceof FoundationView) {
             FoundationView updatedView = new FoundationView((Foundation)deck, deckIndex);
-            StackPane stackPane = (StackPane) foundations.getChildren().get(deckIndex);
-            stackPane.getChildren().clear();
-            stackPane.getChildren().add(updatedView);
+            updatePane(foundations, updatedView);
         }
     }
 
-    public void checkWinningCondition() throws IOException {
+    protected void updatePane (Pane editedPane, Clickable updatedView) {
+        int deckIndex = updatedView.getIndex();
+        StackPane stackPane = (StackPane) editedPane.getChildren().get(deckIndex);
+        stackPane.getChildren().clear();
+        stackPane.getChildren().add((StackPane)updatedView);
+    }
+
+    protected void checkWinningCondition() throws IOException {
         if (game.gameStatus()) {
             showWinScene(LocalStage);
             File file = new File(FILE_PATH);
@@ -96,7 +116,7 @@ public abstract class GameUI {
         }
     }
 
-    public void setEventHandlers(int columns, int foundation){
+    protected void setEventHandlers(int columns, int foundation){
         for(int i = 0; i < columns; i++){
             tableau.getChildren().get(i).setOnMouseClicked(event -> {
                 try {
@@ -118,7 +138,7 @@ public abstract class GameUI {
         stockPile.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }
 
-    public void updateTableauView(int amountColumns){
+    protected void updateTableauView(int amountColumns){
         for(int i = 0 ;i< amountColumns; i++){
             Column column =game.getColumn(i);
             ColumnView columnView = new ColumnView(column, i);
@@ -128,7 +148,7 @@ public abstract class GameUI {
         }
     }
 
-    public void updateFoundations(int amountFoundations){
+    protected void updateFoundations(int amountFoundations){
         for (int i = 0; i < amountFoundations; i++) {
             Foundation foundation = game.getFoundation(i);
             FoundationView foundationView = new FoundationView(foundation, i);
@@ -138,7 +158,7 @@ public abstract class GameUI {
         }
     }
 
-    public void showWinScene(Stage stage) throws IOException {
+    protected void showWinScene(Stage stage) throws IOException {
         FXMLLoader winLoader = new FXMLLoader(getClass().getResource("/WinScene.fxml"));
         winLoader.setController(this);
         Parent winRoot = winLoader.load();
@@ -151,8 +171,8 @@ public abstract class GameUI {
 
     public abstract void setUpGame(Stage stage, Game game) throws IOException;
 
-    public abstract void handleStockClick(MouseEvent event);
+    protected abstract void handleStockClick(MouseEvent event);
 
-    public abstract void updateStockButton();
+    protected abstract void updateStockButton();
 
 }

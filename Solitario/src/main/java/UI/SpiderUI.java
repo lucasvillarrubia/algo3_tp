@@ -47,7 +47,7 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void handleStockClick(MouseEvent event) {
+    protected void handleStockClick(MouseEvent event) {
         if (sourceDeck != null) {
             if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
             sourceDeck = null;
@@ -59,7 +59,7 @@ public class SpiderUI extends GameUI{
     }
 
     @Override
-    public void updateStockButton(){
+    protected void updateStockButton(){
         StockView stockView = new StockView();
         if(game.getStock().isEmpty()){
             Button stockButton = stockView.showEmptyStock();

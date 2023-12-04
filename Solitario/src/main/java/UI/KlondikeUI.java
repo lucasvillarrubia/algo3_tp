@@ -55,7 +55,7 @@ public class KlondikeUI extends GameUI{
     }
 
     @Override
-    public void updateDeckView(Clickable deckView) {
+    protected void updateDeckView(Clickable deckView) {
         super.updateDeckView(deckView);
         if (deckView instanceof WasteView) {
             if (stockIndex != 0) stockIndex--;
@@ -68,7 +68,7 @@ public class KlondikeUI extends GameUI{
     }
 
     @Override
-    public void setEventHandlers(int columns, int foundation) {
+    protected void setEventHandlers(int columns, int foundation) {
         super.setEventHandlers(AMOUNT_COLUMNS, AMOUNT_FOUNDATIONS);
         waste.setOnMouseClicked(event -> {
             try {
@@ -80,7 +80,7 @@ public class KlondikeUI extends GameUI{
     }
 
     @Override
-    public void updateStockButton(){
+    protected void updateStockButton(){
         StockView stockView = new StockView();
         if(game.getStock().isEmpty()){
             Button stockButton = stockView.showEmptyStock();
@@ -111,7 +111,7 @@ public class KlondikeUI extends GameUI{
     }
 
     @Override
-    public void handleStockClick(MouseEvent event){
+    protected void handleStockClick(MouseEvent event){
         if (sourceDeck != null) {
             if (!((Deck)sourceDeck.getDeck()).isEmpty()) sourceDeck.turnOffSelectedCard();
             sourceDeck = null;
