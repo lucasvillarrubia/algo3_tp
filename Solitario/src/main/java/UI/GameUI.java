@@ -33,13 +33,13 @@ public abstract class GameUI {
 
     protected Game game;
     protected Stage LocalStage;
-    protected static final String FILE_PATH = "savedGame.txt";
+    protected static final String FILE_PATH = "savedGame.ser";
     protected Clickable sourceDeck;
     protected Clickable goalDeck;
     protected int clickedCardIndex;
 
 
-    public void handleClick (MouseEvent event) {
+    public void handleClick (MouseEvent event) throws IOException {
         Clickable deckView = (Clickable) ((StackPane)event.getSource()).getChildren().get(0);
         if (sourceDeck == null && deckView != null) {
             int index = deckView.getClickedCardIndex();
@@ -55,7 +55,7 @@ public abstract class GameUI {
             if (game.makeAMove(new Movement(sourceDeck.getDeck(), goalDeck.getDeck(), clickedCardIndex))) {
                 updateDeckView(sourceDeck);
                 updateDeckView(goalDeck);
-//                checkWinningCondition();
+                checkWinningCondition();
             }
             sourceDeck = null;
             goalDeck = null;
@@ -91,10 +91,22 @@ public abstract class GameUI {
 
     public void setEventHandlers(int columns, int foundation){
         for(int i = 0; i < columns; i++){
-            tableau.getChildren().get(i).setOnMouseClicked(this::handleClick);
+            tableau.getChildren().get(i).setOnMouseClicked(event -> {
+                try {
+                    handleClick(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
         for(int j = 0; j < foundation; j++){
-            foundations.getChildren().get(j).setOnMouseClicked(this::handleClick);
+            foundations.getChildren().get(j).setOnMouseClicked(event -> {
+                try {
+                    handleClick(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
         stockPile.getChildren().get(0).setOnMouseClicked(this::handleStockClick);
     }

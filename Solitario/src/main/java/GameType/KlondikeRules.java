@@ -137,8 +137,8 @@ public class KlondikeRules implements Rules,Serializable{
         }
 
 
-        public String getRulesString(){
-                return "Klondike";
+        public SolitaireType getRulesString(){
+                return SolitaireType.KLONDIKE;
         }
 
 }

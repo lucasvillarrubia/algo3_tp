@@ -2,6 +2,7 @@ package Solitaire;
 
 import Base.Card;
 import Elements.*;
+import GameType.SolitaireType;
 
 import java.util.List;
 
@@ -30,6 +31,6 @@ public interface Rules {
 
         boolean isSequenceValid(Card prev, Card next);
 
-        String getRulesString();
+        SolitaireType getRulesString();
 }
 

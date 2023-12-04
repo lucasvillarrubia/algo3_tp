@@ -42,6 +42,7 @@ public class SpiderUI extends GameUI{
                 e.printStackTrace();
             }
         });
+        stage.setResizable(false);
         stage.show();
     }
 

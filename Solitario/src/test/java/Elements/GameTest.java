@@ -151,7 +151,7 @@ public class GameTest {
         KlondikeRules k = new KlondikeRules();
         Game game = new Game(k, foundations, tableau, new Stock());
         game.addMovement();
-        File saveFile = new File("savedGame.txt");
+        File saveFile = new File("savedGame.ser");
         game.serialize();
         Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
@@ -169,7 +169,7 @@ public class GameTest {
         Game game = new Game(kr, false, false, cant,stock, foundations, tableau);
         game.addMovement();
         game.serialize();
-        File saveFile = new File("savedGame.txt");
+        File saveFile = new File("savedGame.ser");
         Game deserializedGame = Game.deserialize(saveFile);
         assertNotNull(deserializedGame);
         assertEquals(deserializedGame.getCantMovements(), 21);
@@ -199,7 +199,7 @@ public class GameTest {
         assertFalse(game.makeAMove(new Movement(game.getColumn(1),game.getColumn(2), 1 )));
 
         game.serialize();
-        File saveFile = new File("savedGame.txt");
+        File saveFile = new File("savedGame.ser");
         game = Game.deserialize(saveFile);
         assertEquals(4, game.getCantMovements());
 

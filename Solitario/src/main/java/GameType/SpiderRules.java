@@ -152,7 +152,7 @@ public class SpiderRules implements Rules, Serializable {
         return true;
     }
 
-    public String getRulesString(){
-        return "Spider";
+    public SolitaireType getRulesString(){
+        return SolitaireType.SPIDER;
     }
 }

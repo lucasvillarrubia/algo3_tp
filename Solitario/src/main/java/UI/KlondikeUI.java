@@ -50,6 +50,7 @@ public class KlondikeUI extends GameUI{
                 e.printStackTrace();
             }
         });
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -69,7 +70,13 @@ public class KlondikeUI extends GameUI{
     @Override
     public void setEventHandlers(int columns, int foundation) {
         super.setEventHandlers(AMOUNT_COLUMNS, AMOUNT_FOUNDATIONS);
-        waste.setOnMouseClicked(this::handleClick);
+        waste.setOnMouseClicked(event -> {
+            try {
+                handleClick(event);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
@@ -115,6 +122,8 @@ public class KlondikeUI extends GameUI{
         updateWaste();
     }
 
-    private void updateWaste() { ((WasteView) waste.getChildren().get(0)).update(); }
+    private void updateWaste() {
+        ((WasteView) waste.getChildren().get(0)).update();
+    }
 
 }
