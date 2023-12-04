@@ -1,6 +1,6 @@
 
 import GameType.KlondikeRules;
-import GameType.SolitaireType;
+import Solitaire.SolitaireType;
 import GameType.SpiderRules;
 import Solitaire.Game;
 import UI.KlondikeUI;

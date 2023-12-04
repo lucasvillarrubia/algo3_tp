@@ -7,6 +7,7 @@ import java.util.List;
 import Base.*;
 import Elements.*;
 import Solitaire.Rules;
+import Solitaire.SolitaireType;
 
 public class KlondikeRules implements Rules,Serializable{
 

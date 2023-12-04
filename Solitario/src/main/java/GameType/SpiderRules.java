@@ -7,6 +7,7 @@ import Elements.Column;
 import Elements.Foundation;
 import Elements.Stock;
 import Solitaire.Rules;
+import Solitaire.SolitaireType;
 
 import java.io.Serializable;
 import java.util.ArrayList;

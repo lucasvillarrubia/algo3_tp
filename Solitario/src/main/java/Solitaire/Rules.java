@@ -2,7 +2,6 @@ package Solitaire;
 
 import Base.Card;
 import Elements.*;
-import GameType.SolitaireType;
 
 import java.util.List;
 

@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.List;
 import Elements.*;
 import Base.Suit;
-import GameType.SolitaireType;
 
 
 public class Game implements Serializable {
