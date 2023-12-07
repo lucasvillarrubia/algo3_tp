@@ -1,16 +1,14 @@
-package Elements;
+package Solitaire;
 
 import java.io.*;
 import java.util.List;
-import Solitaire.Rules;
-import Base.Deck;
-import Base.Card;
+import Elements.*;
 import Base.Suit;
 
 
 public class Game implements Serializable {
 
-    private Rules gameRules;
+    private final Rules gameRules;
     private boolean gameOver;
     private boolean gameWon;
     private int cantMovements;
@@ -18,22 +16,13 @@ public class Game implements Serializable {
     private final List<Column> tableau;
     private final Stock stock;
 
+
     public Game(Rules rules, int seed) {
         this.gameRules = rules;
         this.stock = gameRules.initStock();
         this.stock.shuffle(seed);
         this.tableau = gameRules.initTableau(this.stock);
         this.foundations = gameRules.initFoundations();
-        this.gameOver = false;
-        this.gameWon = false;
-        this.cantMovements = 0;
-    }
-
-    public Game(Rules rules, List<Foundation> foundations, List<Column> tableau, Stock stock) {
-        this.gameRules = rules;
-        this.foundations = foundations;
-        this.tableau = tableau;
-        this.stock = stock;
         this.gameOver = false;
         this.gameWon = false;
         this.cantMovements = 0;
@@ -49,6 +38,10 @@ public class Game implements Serializable {
         this.tableau = tableau;
     }
 
+    public Game(Rules rules, List<Foundation> foundations, List<Column> tableau, Stock stock) {
+        this(rules, false, false, 0, stock, foundations, tableau);
+    }
+
     public boolean isGameWon() {
         return gameWon;
     }
@@ -58,14 +51,14 @@ public class Game implements Serializable {
     }
 
     public void winGame(){
-        if (areAllFoundationsFull() && stock.isEmpty() && tableau.isEmpty()) {
+        if (areAllFoundationsFull() && stock.isEmpty() && areAllColumnsEmpty()) {
             gameWon = true;
             gameOver = true;
         }
     }
 
     public boolean gameStatus() {
-        return gameOver;
+        return gameOver && gameWon;
     }
 
     public int getCantMovements() {
@@ -76,7 +69,7 @@ public class Game implements Serializable {
         cantMovements++;
     }
 
-    public Foundation getFoundationBySuit (Suit suit) {
+    public Foundation getFoundation(Suit suit) {
         Foundation foundation = null;
         for (Foundation foundationBySuit: foundations) {
             if (foundationBySuit.getSuit() == suit) {
@@ -84,6 +77,10 @@ public class Game implements Serializable {
             }
         }
         return foundation;
+    }
+
+    public Foundation getFoundation(int index) {
+        return foundations.get(index);
     }
 
     public Stock getStock() {
@@ -103,44 +100,47 @@ public class Game implements Serializable {
         return true;
     }
 
-    public void serialize(OutputStream os) throws IOException {
-        ObjectOutputStream objectOutStream = new ObjectOutputStream(os);
-        objectOutStream.writeObject(this);
-        objectOutStream.flush();
+    public boolean areAllColumnsEmpty() {
+        for (Column column: tableau) {
+            if (!column.isEmpty()){
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static Game deserialize(InputStream is) throws IOException, ClassNotFoundException {
-        ObjectInputStream objectInStream = new ObjectInputStream(is);
-        return (Game) objectInStream.readObject();
+    public void serialize() throws IOException {
+        File file = new File("savedGame.ser");
+        try (ObjectOutputStream objectOutStream = new ObjectOutputStream(new FileOutputStream(file))) {
+            objectOutStream.writeObject(this);
+            objectOutStream.flush();
+        }
+    }
+
+    public static Game deserialize(File file) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInStream = new ObjectInputStream(new FileInputStream(file))) {
+            return (Game) objectInStream.readObject();
+        }
     }
 
     public boolean drawCardFromStock(){
-        return gameRules.drawCardFromStock(this);
+        addMovement();
+        return gameRules.drawCardFromStock(this.stock, this.tableau);
     }
 
-    public boolean moveCards(Deck from, Deck to) {
-        if (!from.givesCard(gameRules)) return false;
-        Card moved = from.getLast();
-        if (moved == null) { return false; }
-        else if (to.acceptCard(gameRules, moved)) {
-            from.drawCard();
+
+    public boolean makeAMove (Movement move) {
+        if (move.checkMoveByRules(gameRules)) {
             addMovement();
             winGame();
             return true;
         }
-        return false;
+        else return false;
     }
 
-    public boolean moveCards(Column from, Deck to, int index) {
-        if (!from.givesCard(gameRules)) return false;
-        Column moved = from.getSequence(index);
-        if (moved == null) { return false; }
-        else if (to.acceptSequence(gameRules, moved)) {
-            addMovement();
-            winGame();
-            return from.removeSequence(moved);
-        }
-        return false;
+    public SolitaireType getGameRules(){
+        return gameRules.getRulesString();
     }
+
 
 }

@@ -1,49 +1,21 @@
 package Elements;
 
-import Base.Deck;
-import Solitaire.Rules;
 import Base.Card;
-import java.util.ArrayList;
-import java.util.Collection;
+import Base.Deck;
 
-public class Column extends Deck {
-
-        private boolean isFilling;
-
-        public Column () {
-                super();
-                this.isFilling = true;
-        }
-
-        public void toggleFillingState() {
-                this.isFilling = !isFilling;
-        }
-
-        public boolean isBeingFilled() {
-                return this.isFilling;
-        }
+public class Column extends Deck implements Visitable {
 
         public Card getCard(int pos){
+                if (pos > cardCount()) return null;
                 return deck.get(pos);
         }
 
         public Column getSequence(int upToIndex) {
-                if(!getCard(upToIndex).isFaceUp()) return null;
+                if (upToIndex == 0 || getCard(upToIndex) == null || upToIndex > cardCount()) return null;
+                if (!getCard(upToIndex).isFaceUp()) return null;
                 Column subColumn = new Column();
-                subColumn.toggleFillingState();
-                if (!subColumn.addCards(deck.subList(0, upToIndex))) return null;
+                if (!subColumn.addCards(deck.subList(0, upToIndex+1))) return null;
                 return subColumn;
-        }
-
-        @Override
-        protected boolean addCards(Card card) {
-                return super.addCards(card);
-        }
-
-        private boolean addCards(Collection<Card> cards) {
-                if (cards == null) return false;
-                deck.addAll(0, cards);
-                return true;
         }
 
         @Override
@@ -53,9 +25,9 @@ public class Column extends Deck {
                 return drawn;
         }
 
-        public boolean removeSequence(Column cards) {
-                for (int i = 0; i < cards.cardCount(); i++) {
-                        if(!deck.get(i).isTheSameAs(cards.getCard(i))) {
+        public boolean removeSequence(Column sequence) {
+                for (int i = 0; i < sequence.cardCount(); i++) {
+                        if(!deck.get(0).isTheSameAs(sequence.getCard(i))) {
                                 return false;
                         }
                         drawCard();
@@ -64,27 +36,8 @@ public class Column extends Deck {
                 return true;
         }
 
-        @Override
-        public boolean acceptCard(Rules gameRules, Card card) {
-                if (gameRules.acceptsCard(this, card)) return addCards(card);
-                else return false;
-        }
-
-        @Override
-        public boolean acceptSequence(Rules gameRules, Column cards) {
-                if (gameRules.admitsSequence(this, cards)) {
-                        Collection<Card> cardsCollection = new ArrayList<>();
-                        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
-                                cardsCollection.add(cards.getCard(i));
-                        }
-                        return addCards(cardsCollection);
-                }
-                else return false;
-        }
-
-        @Override
-        public boolean givesCard(Rules gameRules) {
-                return gameRules.givesCard(this);
+        @Override public void accept(DeckVisitor visitor) {
+                visitor.visit(this);
         }
 
 

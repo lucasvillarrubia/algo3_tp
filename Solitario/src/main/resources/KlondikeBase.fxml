@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane prefHeight="718.0" prefWidth="789.0" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+      <Pane fx:id="stock" layoutX="20.0" layoutY="14.0" prefHeight="96.0" prefWidth="169.0">
+         <children>
+            <HBox fx:id="stockPile" layoutX="2.0" layoutY="1.0" prefHeight="96.0" prefWidth="74.0" />
+            <StackPane fx:id="waste" layoutX="87.0" layoutY="1.0" prefHeight="96.0" prefWidth="74.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="foundations" layoutX="406.0" layoutY="14.0">
+         <children>
+            <StackPane prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+            <StackPane layoutX="89.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+            <StackPane layoutX="178.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+            <StackPane layoutX="267.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+         </children>
+      </Pane>
+      <Pane fx:id="tableau" layoutX="61.0" layoutY="139.0" prefHeight="96.0" prefWidth="668.0">
+         <children>
+             <StackPane prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="98.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="192.0" prefHeight="96.0" prefWidth="75.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="291.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="391.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="487.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+             <StackPane layoutX="581.0" prefHeight="96.0" prefWidth="74.0" style="-fx-background-color: #046512; -fx-border-color: black; -fx-border-radius: 2;" />
+         </children>
+      </Pane>
+        </children>
+</AnchorPane>

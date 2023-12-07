@@ -14,4 +14,4 @@ Etapa 1: Entregado.
 
 Etapa 2: Entregado.
 
-Etapa 3: Próximamante.
+Etapa 3: Entregado.

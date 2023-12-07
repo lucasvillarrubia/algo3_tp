@@ -3,9 +3,10 @@ package Elements;
 import Base.Card;
 import Base.Suit;
 import Base.Value;
-import GameType.KlondikeRules;
 import org.junit.Test;
 
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -40,7 +41,7 @@ public class ColumnTest {
         Column subColumn = column.getSequence(2);
 
         assertNotNull(subColumn);
-        assertEquals(2, subColumn.cardCount());
+        assertEquals(3, subColumn.cardCount());
         assertEquals(card2, subColumn.getCard(1));
         assertEquals(card3, subColumn.getCard(0));
     }
@@ -75,8 +76,6 @@ public class ColumnTest {
         assertEquals(card, column.getLast());
     }
 
-
-
     @Test
     public void getLastTest() {
         Column column = new Column();
@@ -101,7 +100,8 @@ public class ColumnTest {
     @Test
     public void drawNullCardTest() {
         Column column = new Column();
-        column.addCards(null);
+        Card nullCard = null;
+        column.addCards(nullCard);
         Card drawnCard = column.drawCard();
         assertNull(drawnCard);
         assertNull(null);
@@ -140,38 +140,40 @@ public class ColumnTest {
     }
 
     @Test
-    public void acceptSequenceKlondikeTest() {
+    public void addSequenceTest() {
         Column cards = new Column();
-        KlondikeRules k= new KlondikeRules();
         Card card1 = new Card(Suit.HEART, Value.KING);
         Card card2 = new Card(Suit.SPADES, Value.QUEEN);
         cards.addCards(card1);
         cards.addCards(card2);
         Column to = new Column();
-        assertTrue(to.acceptSequence(k, cards));
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, cards.getCard(i));
+        }
+        assertTrue(to.addCards(cardsCollection));
     }
 
     @Test
-    public void rejectSequenceKlondikeTest() {
+    public void removeSequenceTest() {
         Column cards = new Column();
-        Column wrongSequence = new Column();
-        Card card3 = new Card(Suit.SPADES, Value.TEN);
-        Card card4 = new Card(Suit.HEART, Value.NINE);
-        Card card5 = new Card(Suit.CLUBS, Value.EIGHT);
-        wrongSequence.addCards(card3);
-        wrongSequence.addCards(card4);
-        wrongSequence.addCards(card5);
-        KlondikeRules k= new KlondikeRules();
         Card card1 = new Card(Suit.HEART, Value.KING);
         Card card2 = new Card(Suit.SPADES, Value.QUEEN);
         cards.addCards(card1);
         cards.addCards(card2);
-        cards.toggleFillingState();
-        wrongSequence.toggleFillingState();
         Column to = new Column();
-        to.toggleFillingState();
-        assertTrue(to.acceptSequence(k, cards));
-        assertFalse(to.acceptSequence(k, wrongSequence));
+        ArrayList<Card> cardsCollection = new ArrayList<>();
+        for (int i = cards.cardCount() - 1; i >= 0;  i--) {
+            cardsCollection.add(0, cards.getCard(i));
+        }
+        assertTrue(to.addCards(cardsCollection));
+        assertFalse(to.isEmpty());
+        assertEquals(cards.getCard(0), card2);
+        assertEquals(cards.getCard(1), card1);
+        assertTrue(to.getCard(1).isTheSameAs(card1));
+        assertTrue(to.getCard(0).isTheSameAs(card2));
+        assertTrue(to.removeSequence(cards));
+        assertTrue(to.isEmpty());
     }
 
 }
